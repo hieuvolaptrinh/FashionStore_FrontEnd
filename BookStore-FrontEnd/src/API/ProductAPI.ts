@@ -33,14 +33,17 @@ async function getProduct(url: string): Promise<ProductPage> {
   return { products: result, totalPages: totalPages, quantity: quantity };
 }
 
-export async function getAllProducts(): Promise<ProductPage> {
-  const url: string =
-    "http://localhost:8080/products?page=0&size=20&sort=productId,desc";
+export async function getAllProducts(
+  currentPage: number
+): Promise<ProductPage> {
+  const url: string = `http://localhost:8080/products?page=${
+    currentPage - 1
+  }&size=3&sort=productId,desc`;
   return getProduct(url);
 }
 
 export async function getNewProducts(): Promise<ProductPage> {
   const url: string =
-    "http://localhost:8080/product?size=5&sort=productId,desc";
+    "http://localhost:8080/product?size=3&sort=productId,desc";
   return getProduct(url);
 }

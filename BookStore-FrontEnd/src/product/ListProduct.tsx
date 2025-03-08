@@ -6,18 +6,22 @@ import { Pagination } from "./../components/Pagination";
 
 const ListProduct: React.FC = () => {
   const [listProduct, setListProduct] = useState<ProductModel[]>([]);
-
   const [loanding, setLoading] = useState(true);
-
   const [error, setError] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>();
+
   // pagination
-  const onPageChange = (page: number) => {};
+  const onPageChange = (page: number) => setCurrentPage(page);
+
   // lấy dữ liệu
   useEffect(
     () => {
-      getAllProducts()
+      getAllProducts(currentPage)
         .then((result) => {
           setListProduct(result.products);
+          setTotalPages(result.totalPages);
           setLoading(false);
         })
         .catch((error) => {
@@ -25,7 +29,7 @@ const ListProduct: React.FC = () => {
           setLoading(false);
         });
     },
-    [] // chạy 1 lần duy nhất khi component được render
+    [currentPage] // chạy 1 lần duy nhất khi component được render
   );
 
   if (loanding) {
@@ -60,8 +64,8 @@ const ListProduct: React.FC = () => {
         </div>
         <div className="d-flex justify-content-center mt-4">
           <Pagination
-            currentPage={6}
-            totalPages={8}
+            currentPage={currentPage}
+            totalPages={totalPages ?? 0}
             onPageChange={onPageChange}
           />
         </div>

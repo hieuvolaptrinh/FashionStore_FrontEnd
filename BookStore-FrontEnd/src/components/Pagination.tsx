@@ -2,8 +2,8 @@ import React from "react";
 
 // làm viêc với props nên sử dụng interface để định nghĩa kiểu dữ liệu của props
 interface PaginationProps {
-  totalPages: number; // Tổng số trang
-  currentPage: number; // Trang hiện tại
+  totalPages: number;
+  currentPage: number;
   onPageChange: (page: number) => void;
 }
 
@@ -45,7 +45,11 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
               </button>
             </li>
           ))}
-          <li className="page-item">
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? "disabled" : ""
+            }`}
+          >
             <button
               className="page-link"
               onClick={() => onPageChange(currentPage + 1)}

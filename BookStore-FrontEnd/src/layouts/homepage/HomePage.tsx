@@ -1,10 +1,10 @@
 import React from "react";
-import Banner from "./components/Carousel";
+import Carousel from "./components/Carousel";
 import ListProduct from "../../product/ListProduct";
 function HomePage() {
   return (
     <>
-      <Banner />
+      <Carousel />
       <ListProduct />
     </>
   );
