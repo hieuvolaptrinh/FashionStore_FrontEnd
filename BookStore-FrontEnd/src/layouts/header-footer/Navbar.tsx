@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-import "../../assets/css/bootstrap.min.css";
-import "../../assets/css/style.css";
+
 
 function Navbar() {
   const [isVerticalOpen, setIsVerticalOpen] = useState(false);

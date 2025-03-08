@@ -1,7 +1,5 @@
 import React from "react";
 
-import "../../../assets/css/style.css";
-
 const Carousel: React.FC = () => {
   return (
     <div className="container-fluid mb-3">
