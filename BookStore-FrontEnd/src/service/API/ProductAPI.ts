@@ -1,5 +1,5 @@
-import ProductModel from "../models/ProductModel";
-import { request } from "./Request";
+import { request } from "../Request";
+import ProductModel from "../../models/ProductModel";
 
 interface ProductPage {
   products: ProductModel[];
@@ -17,6 +17,7 @@ async function getProduct(url: string): Promise<ProductPage> {
   // lấy thông tin trang
   const totalPages = response.page.totalPages;
   const quantity = response.page.totalElements;
+  console.log("in dữ liệu thử :" + response.json());
 
   for (const item of responseData) {
     const product = new ProductModel(
@@ -31,6 +32,16 @@ async function getProduct(url: string): Promise<ProductPage> {
     result.push(product);
   }
   return { products: result, totalPages: totalPages, quantity: quantity };
+}
+
+export async function searchProduct(productName: string): Promise<ProductPage> {
+  let url: string = `http://localhost:8080/products/search/findByProductNameContaining?page=0&size=8&sort=productId,desc`;
+
+  if (productName != "") {
+    url = `http://localhost:8080/products/search/findByProductNameContaining?page=0&size=8&sort=productId,desc&productName=${productName}`;
+  }
+
+  return getProduct(url);
 }
 
 export async function getAllProducts(

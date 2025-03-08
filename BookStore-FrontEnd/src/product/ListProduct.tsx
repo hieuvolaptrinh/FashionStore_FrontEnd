@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./components/ProductCard";
 import ProductModel from "../models/ProductModel";
-import { getAllProducts } from "../API/ProductAPI";
+import { getAllProducts } from "../service/API/ProductAPI";
 import { Pagination } from "./../components/Pagination";
 
 const ListProduct: React.FC = () => {
