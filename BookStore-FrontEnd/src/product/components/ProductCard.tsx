@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductModel from "../../models/ProductModel";
 import ImageModel from "../../models/ImageModel";
-import { fetchProductImages } from "../../API/ImageAPI";
+import { fetchProductImages } from "../../service/API/ImageAPI";
 
 const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
   const [images, setImages] = useState<ImageModel[]>([]);

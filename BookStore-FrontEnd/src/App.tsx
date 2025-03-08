@@ -1,11 +1,11 @@
-
-import Navbar from "./layouts/header-footer/Navbar";
-import Footer from "./layouts/header-footer/Footer";
+import Navbar from "./layouts/Navbar";
+import Footer from "./layouts/Footer";
 import HomePage from "./layouts/homepage/HomePage";
-
+import Header from "./layouts/Header";
 function App() {
   return (
     <>
+      <Header />
       <Navbar />
       <HomePage />
       <Footer />
