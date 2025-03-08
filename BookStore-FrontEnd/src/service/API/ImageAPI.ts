@@ -11,6 +11,9 @@ async function fetchProductImage(url: string): Promise<ImageModel[]> {
 
   console.log("responseData: ", responseData);
 
+  // const data = await response.json(); //Chờ dữ liệu mà ts nó bị lỗi gì đó
+  // console.log("Dữ liệu thử:", data); // In dữ liệu đúng
+
   for (const image of responseData) {
     result.push({
       imageId: image.imageId,

@@ -1,6 +1,18 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  keyword: string;
+  setKeyword: (keyword: string) => void;
+}
+const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
+  const [tmp, setTmp] = useState("");
+  const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTmp(e.target.value); // để ấn search thì mới set keyword
+  };
+
+  const handelSearch = () => {
+    setKeyword(tmp);
+  };
   return (
     <>
       <div className="container-fluid">
@@ -114,21 +126,22 @@ const Header: React.FC = () => {
               </span>
             </a>
           </div>
+          {/* search */}
           <div className="col-lg-4 col-6 text-left">
-            <form action="">
-              <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search for products"
-                />
-                <div className="input-group-append">
-                  <span className="input-group-text bg-transparent text-primary">
-                    <i className="fa fa-search"></i>
-                  </span>
-                </div>
-              </div>
-            </form>
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Tìm kiếm sản phẩm"
+                onChange={onSearchInputChange}
+                value={tmp}
+              />
+              <button className="btn " type="submit" onClick={handelSearch}>
+                <span className="input-group-text bg-transparent text-primary">
+                  <i className="fa fa-search"></i>
+                </span>
+              </button>
+            </div>
           </div>
           <div className="col-lg-4 col-6 text-right">
             <p className="m-0">Chăm Sóc Khách Hàng</p>

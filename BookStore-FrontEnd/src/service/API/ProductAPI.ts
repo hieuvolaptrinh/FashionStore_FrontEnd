@@ -17,7 +17,7 @@ async function getProduct(url: string): Promise<ProductPage> {
   // lấy thông tin trang
   const totalPages = response.page.totalPages;
   const quantity = response.page.totalElements;
-  console.log("in dữ liệu thử :" + response.json());
+  console.log("in dữ liệu thử :" + response);
 
   for (const item of responseData) {
     const product = new ProductModel(

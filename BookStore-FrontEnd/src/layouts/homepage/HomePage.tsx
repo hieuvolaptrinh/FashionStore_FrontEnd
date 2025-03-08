@@ -1,11 +1,13 @@
 import React from "react";
 import Carousel from "./components/Carousel";
 import ListProduct from "../../product/ListProduct";
-function HomePage() {
+
+// viết như này thì không cần inter
+function HomePage(props: { keyword: string }) {
   return (
     <>
       <Carousel />
-      <ListProduct />
+      <ListProduct keyword={props.keyword} />
     </>
   );
 }

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./components/ProductCard";
 import ProductModel from "../models/ProductModel";
-import { getAllProducts } from "../service/API/ProductAPI";
+import { getAllProducts, searchProduct } from "../service/API/ProductAPI";
 import { Pagination } from "./../components/Pagination";
 
-const ListProduct: React.FC = () => {
+// interface ListProductProps {
+//   keyword: string;
+// }
+function ListProduct(props: { keyword: string }) {
   const [listProduct, setListProduct] = useState<ProductModel[]>([]);
   const [loanding, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,18 +21,34 @@ const ListProduct: React.FC = () => {
   // lấy dữ liệu
   useEffect(
     () => {
-      getAllProducts(currentPage)
-        .then((result) => {
-          setListProduct(result.products);
-          setTotalPages(result.totalPages);
-          setLoading(false);
-        })
-        .catch((error) => {
-          setError(error);
-          setLoading(false);
-        });
+      if (props.keyword === "") {
+        console.log("không có tìm kiếm");
+        getAllProducts(currentPage)
+          .then((result) => {
+            setListProduct(result.products);
+            setTotalPages(result.totalPages);
+            setLoading(false);
+          })
+          .catch((error) => {
+            setError(error);
+            setLoading(false);
+          });
+      } else {
+        console.log("có tìm kiếm");
+        console.log(props.keyword);
+        searchProduct(props.keyword)
+          .then((result) => {
+            setListProduct(result.products);
+            setTotalPages(result.totalPages);
+            setLoading(false);
+          })
+          .catch((error) => {
+            setError(error);
+            setLoading(false);
+          });
+      }
     },
-    [currentPage] // chạy 1 lần duy nhất khi component được render
+    [currentPage, props.keyword] // chạy 1 lần duy nhất khi component được render, khi currentPage hoặc keyword thay đổi thì chạy lại
   );
 
   if (loanding) {
@@ -48,7 +67,7 @@ const ListProduct: React.FC = () => {
     return (
       <div>
         <div className="d-flex justify-content-center mt-5">
-          <h2>Gặp lỗi :{error}</h2>
+          <h2>Gặp lỗi </h2>
         </div>
       </div>
     );
@@ -58,9 +77,15 @@ const ListProduct: React.FC = () => {
     <>
       <div className="container">
         <div className="row mt-4">
-          {listProduct.map((product) => (
-            <ProductCard key={product.productId} product={product} />
-          ))}
+          {listProduct.length != 0 ? (
+            listProduct.map((product) => (
+              <ProductCard key={product.productId} product={product} />
+            ))
+          ) : (
+            <div className="d-flex justify-content-center mt-5">
+              <h2>Không tìm thấy sản phẩm</h2>
+            </div>
+          )}
         </div>
         <div className="d-flex justify-content-center mt-4">
           <Pagination
@@ -72,5 +97,5 @@ const ListProduct: React.FC = () => {
       </div>
     </>
   );
-};
+}
 export default ListProduct;
