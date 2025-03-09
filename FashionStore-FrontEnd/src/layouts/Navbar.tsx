@@ -1,25 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Type from "../models/Type";
+import { getTypes } from "../service/API/TypeAPI";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [isVerticalOpen, setIsVerticalOpen] = useState(false);
-  const [isPagesOpen, setIsPagesOpen] = useState(false);
 
+  const [types, setTypes] = useState<Type[]>([]);
+
+  useEffect(() => {
+    getTypes()
+      .then((data) => {
+        setTypes(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <>
-     
       {/* navbar */}
       <div className="container-fluid bg-dark mb-30">
         <div className="row px-xl-5">
           <div className="col-lg-3 d-none d-lg-block">
             <button
               className="btn d-flex align-items-center justify-content-between bg-primary w-100"
-              onClick={() => setIsVerticalOpen(!isVerticalOpen)}
               style={{ height: "65px", padding: "0 30px" }}
             >
               <h6 className="text-dark m-0">
-                <i className="fa fa-bars mr-2"></i>Sản phẩm bán chạy
+                <i
+                  className="fa fa-bars mr-2"
+                  onClick={() => setIsVerticalOpen(!isVerticalOpen)}
+                ></i>
+                <Link
+                  to={"/"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Sản phẩm bán chạy
+                </Link>
               </h6>
-              <i className="fa fa-angle-down text-dark"></i>
+              <i
+                className="fa fa-angle-down text-dark"
+                onClick={() => setIsVerticalOpen(!isVerticalOpen)}
+              ></i>
             </button>
             {isVerticalOpen && (
               <nav
@@ -27,56 +50,16 @@ function Navbar() {
                 style={{ width: "calc(100% - 30px)", zIndex: 999 }}
               >
                 <div className="navbar-nav w-100">
-                  <div className="nav-item dropdown">
-                    <a
-                      href="#"
-                      className="nav-link"
-                      onClick={() => setIsPagesOpen(!isPagesOpen)}
+                  {types.map((type) => (
+                    // sử dụng link thay cho a để không load lại trang trong react router
+                    <Link
+                      key={type.typeId}
+                      to={type.typeId?.toString() || ""}
+                      className="nav-item nav-link"
                     >
-                      Dresses{" "}
-                      <i className="fa fa-angle-right float-right mt-1"></i>
-                    </a>
-                    {isPagesOpen && (
-                      <div className="dropdown-menu position-absolute rounded-0 border-0 m-0">
-                        <a href="" className="dropdown-item">
-                          Men's Dresses
-                        </a>
-                        <a href="" className="dropdown-item">
-                          Women's Dresses
-                        </a>
-                        <a href="" className="dropdown-item">
-                          Baby's Dresses
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                  <a href="" className="nav-item nav-link">
-                    Shirts
-                  </a>
-                  <a href="" className="nav-item nav-link">
-                    Jeans
-                  </a>
-                  <a href="" className="nav-item nav-link">
-                    Swimwear
-                  </a>
-                  <a href="" className="nav-item nav-link">
-                    Sleepwear
-                  </a>
-                  <a href="" className="nav-item nav-link">
-                    Sportswear
-                  </a>
-                  <a href="" className="nav-item nav-link">
-                    Jumpsuits
-                  </a>
-                  <a href="" className="nav-item nav-link">
-                    Blazers
-                  </a>
-                  <a href="" className="nav-item nav-link">
-                    Jackets
-                  </a>
-                  <a href="" className="nav-item nav-link">
-                    Shoes
-                  </a>
+                      {type.typeName}
+                    </Link>
+                  ))}
                 </div>
               </nav>
             )}

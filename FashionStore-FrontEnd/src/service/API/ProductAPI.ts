@@ -1,5 +1,6 @@
 import { request } from "../Request";
 import ProductModel from "../../models/ProductModel";
+import { API_CONFIG } from "../../apiConfig";
 
 interface ProductPage {
   products: ProductModel[];
@@ -34,11 +35,18 @@ async function getProduct(url: string): Promise<ProductPage> {
   return { products: result, totalPages: totalPages, quantity: quantity };
 }
 
-export async function searchProduct(productName: string): Promise<ProductPage> {
-  let url: string = `http://localhost:8080/products/search/findByProductNameContaining?page=0&size=8&sort=productId,desc`;
+export async function searchProduct(
+  productName: string,
+  typeId: number
+): Promise<ProductPage> {
+  let url: string = `${API_CONFIG.products}/search/findByProductNameContaining?page=0&size=8&sort=productId,desc`;
 
-  if (productName != "") {
-    url = `http://localhost:8080/products/search/findByProductNameContaining?page=0&size=8&sort=productId,desc&productName=${productName}`;
+  if (productName != "" && typeId === 0) {
+    url = `${API_CONFIG.products}/search/findByProductNameContaining?page=0&size=8&sort=productId,desc&productName=${productName}`;
+  } else if (productName != "" && typeId > 0) {
+    url = `${API_CONFIG.products}/search/findByProductNameContainingAndListTypes_TypeId?page=0&size=8&sort=productId,desc&productName=${productName}&typeId=${typeId}`;
+  } else {
+    url = `${API_CONFIG.products}/search/findByListTypes_TypeId?page=0&size=8&sort=productId,desc&typeId=${typeId}`;
   }
 
   return getProduct(url);

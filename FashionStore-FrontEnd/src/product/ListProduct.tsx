@@ -4,10 +4,11 @@ import ProductModel from "../models/ProductModel";
 import { getAllProducts, searchProduct } from "../service/API/ProductAPI";
 import { Pagination } from "./../components/Pagination";
 
-// interface ListProductProps {
-//   keyword: string;
-// }
-function ListProduct(props: { keyword: string }) {
+interface ListProductProps {
+  keyword: string;
+  typeId: number;
+}
+function ListProduct({ keyword, typeId }: ListProductProps) {
   const [listProduct, setListProduct] = useState<ProductModel[]>([]);
   const [loanding, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,8 +22,9 @@ function ListProduct(props: { keyword: string }) {
   // lấy dữ liệu
   useEffect(
     () => {
-      if (props.keyword === "") {
-        console.log("không có tìm kiếm");
+      if (keyword === "" && typeId === 0) {
+        console.log("không có tìm kiếm và không có typeId");
+
         getAllProducts(currentPage)
           .then((result) => {
             setListProduct(result.products);
@@ -35,8 +37,8 @@ function ListProduct(props: { keyword: string }) {
           });
       } else {
         console.log("có tìm kiếm");
-        console.log(props.keyword);
-        searchProduct(props.keyword)
+        console.log(keyword);
+        searchProduct(keyword, typeId)
           .then((result) => {
             setListProduct(result.products);
             setTotalPages(result.totalPages);
@@ -48,7 +50,7 @@ function ListProduct(props: { keyword: string }) {
           });
       }
     },
-    [currentPage, props.keyword] // chạy 1 lần duy nhất khi component được render, khi currentPage hoặc keyword thay đổi thì chạy lại
+    [currentPage, keyword, typeId] // chạy 1 lần duy nhất khi component được render, khi currentPage hoặc keyword thay đổi thì chạy lại
   );
 
   if (loanding) {
