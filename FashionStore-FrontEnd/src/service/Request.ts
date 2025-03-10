@@ -8,22 +8,22 @@ export async function request(url: string) {
 }
 
 // tổng quát hóa hàm request
-// export async function request1<T>(url: string, method: string = "GET", body?: unknown): Promise<T> {
-//   const options: RequestInit = {
-//       method,
-//       headers: {
-//           "Content-Type": "application/json",
-//       },
-//   };
+export async function request1<T>(url: string, method: string = "GET", body?: unknown): Promise<T> {
+  const options: RequestInit = {
+      method,
+      headers: {
+          "Content-Type": "application/json",
+      },
+  };
 
-//   if (body) {
-//       options.body = JSON.stringify(body);
-//   }
+  if (body) {
+      options.body = JSON.stringify(body);
+  }
 
-//   const response = await fetch(url, options);
+  const response = await fetch(url, options);
 
-//   if (!response.ok) {
-//       throw new Error(`Không thể truy cập API ${url}`);
-//   }
-//   return response.json();
-// }
+  if (!response.ok) {
+      throw new Error(`Không thể truy cập API ${url}`);
+  }
+  return response.json();
+}

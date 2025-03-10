@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ProductModel from "../models/ProductModel";
-import ImageModel from "../models/ImageModel";
-import { fetchProductImages } from "../service/API/ImageAPI";
+
 import { useParams } from "react-router-dom";
 import { getProductById } from "../service/API/ProductAPI";
+import ProductImage from "../components/ProductImage";
+import Review from "../components/Review";
 
 const ProductDetail: React.FC = () => {
   // lấy productId từ URL
@@ -14,20 +15,12 @@ const ProductDetail: React.FC = () => {
   } catch (error) {
     console.error("Lỗi lấy productId từ URL: ", error);
   }
-  const [activeTab, setActiveTab] = useState("description");
+  const [activeTab, setActiveTab] = useState("reviews");
   const [product, setProduct] = useState<ProductModel | null>(null);
-  const [images, setImages] = useState<ImageModel[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetchProductImages(productIdNumber)
-      .then((res) => {
-        setImages(res);
-      })
-      .catch((error) => {
-        setError(error);
-      });
     getProductById(productIdNumber)
       .then((res) => {
         setProduct(res);
@@ -38,7 +31,7 @@ const ProductDetail: React.FC = () => {
         setLoading(false);
       });
   }, []);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
   if (!product) {
     return (
       <div>
@@ -69,74 +62,11 @@ const ProductDetail: React.FC = () => {
     );
   }
 
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
-  };
   return (
     <div className="container-fluid pb-5">
       <div className="row px-xl-5">
-        {/* <img src="/images/product-4.jpg" alt="Kids Fashion" /> */}
-
-        {/* hình */}
         <div className="col-lg-5 mb-30">
-          <div
-            id="product-carousel"
-            className="carousel slide"
-            data-bs-ride="carousel"
-          >
-            <div className="carousel-inner bg-light">
-              {images.map((image, index) => (
-                <div
-                  key={index}
-                  className={`carousel-item ${
-                    index === currentIndex ? "active" : ""
-                  }`}
-                  style={{ width: "100%", height: "500px" }}
-                >
-                  <img
-                    style={{
-                      objectFit: "contain", // Giữ hình ảnh không bị méo, hiển thị trọn vẹn
-                      width: "100%", // Đảm bảo ảnh full khung
-                      maxHeight: "100%", // Chiều cao không vượt quá khung
-                    }}
-                    className="w-100 h-100"
-                    src={`/images/${image.link}`}
-                    alt="Product"
-                  />
-                </div>
-              ))}
-            </div>
-            <button className=" carousel-control-prev" onClick={handlePrev}>
-              <span
-                className="carousel-control-prev-icon"
-                aria-hidden="true"
-                style={{
-                  filter:
-                    "invert(70%) sepia(100%) saturate(300%) hue-rotate(10deg)",
-                }}
-              ></span>
-              <span className="visually-hidden">Previous</span>
-            </button>
-            <button className="carousel-control-next" onClick={handleNext}>
-              <span
-                className="carousel-control-next-icon"
-                aria-hidden="true"
-                style={{
-                  filter:
-                    "invert(70%) sepia(100%) saturate(300%) hue-rotate(10deg)",
-                }}
-              ></span>
-              <span className="visually-hidden">Next</span>
-            </button>
-          </div>
+          <ProductImage productId={productIdNumber}></ProductImage>
         </div>
 
         <div className="col-lg-7 h-auto mb-30">
@@ -333,6 +263,14 @@ const ProductDetail: React.FC = () => {
             <div className="nav nav-tabs mb-4">
               <button
                 className={`nav-item nav-link text-dark ${
+                  activeTab === "reviews" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("reviews")}
+              >
+                Reviews (0)
+              </button>
+              <button
+                className={`nav-item nav-link text-dark ${
                   activeTab === "description" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("description")}
@@ -347,16 +285,12 @@ const ProductDetail: React.FC = () => {
               >
                 Information
               </button>
-              <button
-                className={`nav-item nav-link text-dark ${
-                  activeTab === "reviews" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("reviews")}
-              >
-                Reviews (0)
-              </button>
             </div>
+            {/* content */}
             <div className="tab-content">
+              {activeTab === "reviews" && (
+                <Review productId={productIdNumber} />
+              )}
               {activeTab === "description" && (
                 <div className="tab-pane fade show active">
                   <h4 className="mb-3">Product Description</h4>
@@ -367,12 +301,6 @@ const ProductDetail: React.FC = () => {
                 <div className="tab-pane fade show active">
                   <h4 className="mb-3">Additional Information</h4>
                   <p>Additional product information...</p>
-                </div>
-              )}
-              {activeTab === "reviews" && (
-                <div className="tab-pane fade show active">
-                  <h4 className="mb-3">Customer Reviews</h4>
-                  <p>No reviews yet. Be the first to write one!</p>
                 </div>
               )}
             </div>

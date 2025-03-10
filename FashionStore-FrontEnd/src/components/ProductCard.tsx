@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import ProductModel from "../../models/ProductModel";
-import ImageModel from "../../models/ImageModel";
-import { fetchProductImages } from "../../service/API/ImageAPI";
+import ProductModel from "../models/ProductModel";
+import ImageModel from "../models/ImageModel";
+import { fetchProductImages } from "../service/API/ImageAPI";
 import { Link } from "react-router-dom";
 
 const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
@@ -49,7 +49,7 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
       </div>
     );
   }
-  
+
   return (
     <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
       <div className="product-item bg-light mb-4">

@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { About } from "./pages/About";
 import Carousel from "./layouts/homepage/components/Carousel";
 import ProductDetail from "./pages/ProductDetail";
+import Trademark from "./pages/Trademark";
 
 function App() {
   const [keyword, setKeyword] = useState("");
@@ -24,6 +25,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/product/:productId" element={<ProductDetail />}></Route>
         </Routes>
+        <Trademark />
         <Footer />
       </BrowserRouter>
     </>

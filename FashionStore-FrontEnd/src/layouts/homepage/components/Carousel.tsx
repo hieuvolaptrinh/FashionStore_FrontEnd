@@ -31,7 +31,7 @@ const Carousel: React.FC = () => {
               >
                 <img
                   className="position-absolute w-100 h-100"
-                  src="images/carousel-1.jpg"
+                  src="/images/carousel-1.jpg"
                   style={{ objectFit: "cover" }}
                   alt="Men Fashion"
                 />
@@ -61,7 +61,7 @@ const Carousel: React.FC = () => {
               >
                 <img
                   className="position-absolute w-100 h-100"
-                  src="images/carousel-2.jpg"
+                  src="/images/carousel-2.jpg"
                   style={{ objectFit: "cover" }}
                   alt="Women Fashion"
                 />
@@ -91,7 +91,7 @@ const Carousel: React.FC = () => {
               >
                 <img
                   className="position-absolute w-100 h-100"
-                  src="images/carousel-3.jpg"
+                  src="/images/carousel-3.jpg"
                   style={{ objectFit: "cover" }}
                   alt="Kids Fashion"
                 />
