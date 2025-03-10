@@ -1,6 +1,6 @@
 import React from "react";
 
-import ListProduct from "../../product/ListProduct";
+import ListProduct from "../../pages/ListProduct";
 import { useParams } from "react-router-dom";
 
 // viết như này thì không cần inter

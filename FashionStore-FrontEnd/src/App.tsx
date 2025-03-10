@@ -6,6 +6,8 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { About } from "./pages/About";
 import Carousel from "./layouts/homepage/components/Carousel";
+import ProductDetail from "./pages/ProductDetail";
+
 function App() {
   const [keyword, setKeyword] = useState("");
 
@@ -20,6 +22,7 @@ function App() {
           <Route path="/" element={<HomePage keyword={keyword} />} />
           <Route path="/:typeId" element={<HomePage keyword={keyword} />} />
           <Route path="/about" element={<About />} />
+          <Route path="/product/:productId" element={<ProductDetail />}></Route>
         </Routes>
         <Footer />
       </BrowserRouter>

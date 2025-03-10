@@ -55,14 +55,36 @@ export async function searchProduct(
 export async function getAllProducts(
   currentPage: number
 ): Promise<ProductPage> {
-  const url: string = `http://localhost:8080/products?page=${
+  const url: string = `${API_CONFIG.products}?page=${
     currentPage - 1
-  }&size=3&sort=productId,desc`;
+  }&size=3&sort=productId,asc`;
   return getProduct(url);
 }
 
 export async function getNewProducts(): Promise<ProductPage> {
-  const url: string =
-    "http://localhost:8080/product?size=3&sort=productId,desc";
+  const url: string = `${API_CONFIG.products}?size=3&sort=productId,asc`;
   return getProduct(url);
+}
+
+export async function getProductById(
+  productId: number
+): Promise<ProductModel | null> {
+  const url = `${API_CONFIG.products}/${productId}`;
+
+  try {
+    const response = await request(url);
+
+    return new ProductModel(
+      response.productId,
+      response.productName,
+      response.description,
+      response.originalPrice,
+      response.salePrice,
+      response.quantity,
+      response.avgStars
+    );
+  } catch (error) {
+    console.error("Lỗi:", error);
+    return null;
+  }
 }

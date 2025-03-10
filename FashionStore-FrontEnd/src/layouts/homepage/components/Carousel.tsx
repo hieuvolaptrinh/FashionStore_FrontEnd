@@ -31,7 +31,7 @@ const Carousel: React.FC = () => {
               >
                 <img
                   className="position-absolute w-100 h-100"
-                  src="./images/carousel-1.jpg"
+                  src="images/carousel-1.jpg"
                   style={{ objectFit: "cover" }}
                   alt="Men Fashion"
                 />
@@ -61,7 +61,7 @@ const Carousel: React.FC = () => {
               >
                 <img
                   className="position-absolute w-100 h-100"
-                  src="./images/carousel-2.jpg"
+                  src="images/carousel-2.jpg"
                   style={{ objectFit: "cover" }}
                   alt="Women Fashion"
                 />
@@ -91,7 +91,7 @@ const Carousel: React.FC = () => {
               >
                 <img
                   className="position-absolute w-100 h-100"
-                  src="./images/carousel-3.jpg"
+                  src="images/carousel-3.jpg"
                   style={{ objectFit: "cover" }}
                   alt="Kids Fashion"
                 />
@@ -122,7 +122,7 @@ const Carousel: React.FC = () => {
           <div className="product-offer mb-30" style={{ height: 200 }}>
             <img
               className="img-fluid"
-              src="./images/offer-1.jpg"
+              src="/images/offer-1.jpg"
               alt="Offer 1"
             />
             <div className="offer-text">
@@ -136,7 +136,7 @@ const Carousel: React.FC = () => {
           <div className="product-offer mb-30" style={{ height: 200 }}>
             <img
               className="img-fluid"
-              src="./images/offer-2.jpg"
+              src="/images/offer-2.jpg"
               alt="Offer 2"
             />
             <div className="offer-text">

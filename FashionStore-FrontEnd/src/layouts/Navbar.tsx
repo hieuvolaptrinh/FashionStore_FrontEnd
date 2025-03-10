@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Type from "../models/Type";
 import { getTypes } from "../service/API/TypeAPI";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function Navbar() {
   const [isVerticalOpen, setIsVerticalOpen] = useState(false);
@@ -87,24 +87,24 @@ function Navbar() {
                 id="navbarCollapse"
               >
                 <div className="navbar-nav mr-auto py-0">
-                  <a href="index.html" className="nav-item nav-link active">
+                  <NavLink to="/" className="nav-item nav-link active">
                     Trang Chủ
-                  </a>
-                  <a href="shop.html" className="nav-item nav-link">
+                  </NavLink>
+                  <NavLink to="/shop" className="nav-item nav-link">
                     Shop
-                  </a>
-                  <a href="detail.html" className="nav-item nav-link">
+                  </NavLink>
+                  <NavLink to="/product/1" className="nav-item nav-link">
                     Chi Tiết Sản Phẩm
-                  </a>
-                  <a href="cart.html" className="nav-item nav-link">
+                  </NavLink>
+                  <NavLink to="/cart" className="nav-item nav-link">
                     Giỏ Hàng
-                  </a>
-                  <a href="checkout.html" className="nav-item nav-link">
+                  </NavLink>
+                  <NavLink to="/checkout" className="nav-item nav-link">
                     Thanh Toán
-                  </a>
-                  <a href="contact.html" className="nav-item nav-link">
+                  </NavLink>
+                  <NavLink to="/contact" className="nav-item nav-link">
                     Liên Hệ
-                  </a>
+                  </NavLink>
                 </div>
                 <div className="navbar-nav ml-auto py-0 d-none d-lg-block">
                   <a href="" className="btn px-0">

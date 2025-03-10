@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductModel from "../../models/ProductModel";
 import ImageModel from "../../models/ImageModel";
 import { fetchProductImages } from "../../service/API/ImageAPI";
+import { Link } from "react-router-dom";
 
 const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
   const [images, setImages] = useState<ImageModel[]>([]);
@@ -27,8 +28,7 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
   console.log("hình ảnh: ", images);
   // lấy hình ảnh đại diện của sản phẩm
   const icon =
-    images.find((img) => img.icon === true)?.data || images[0]?.data || null;
-
+    images.find((img) => img.icon === true)?.link || images[0]?.link || null;
   if (error) {
     return (
       <div>
@@ -49,13 +49,14 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
       </div>
     );
   }
+  
   return (
     <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
       <div className="product-item bg-light mb-4">
         <div className="product-img position-relative overflow-hidden">
           <img
             className="img-fluid w-100"
-            src={icon ? `${icon}` : "images/product-4.jpg"}
+            src={icon ? `images/${icon}` : "/images/product-4.jpg"}
             alt={product.productName || "Product"}
             style={{
               objectFit: "cover", // Giữ hình ảnh không bị méo
@@ -73,9 +74,12 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
             <a className="btn btn-outline-dark btn-square" href="">
               <i className="fa fa-sync-alt"></i>
             </a>
-            <a className="btn btn-outline-dark btn-square" href="">
-              <i className="fa fa-search"></i>
-            </a>
+            <Link
+              className="btn btn-outline-dark btn-square"
+              to={`product/${product.productId}`}
+            >
+              <i className="fa-solid fa-circle-info"></i>
+            </Link>
           </div>
         </div>
         <div className="text-center py-4">
