@@ -66,7 +66,7 @@ const ProductDetail: React.FC = () => {
     <div className="container-fluid pb-5">
       <div className="row px-xl-5">
         <div className="col-lg-5 mb-30">
-          <ProductImage productId={productIdNumber}></ProductImage>
+          <ProductImage productId={productIdNumber}/>
         </div>
 
         <div className="col-lg-7 h-auto mb-30">
@@ -88,9 +88,15 @@ const ProductDetail: React.FC = () => {
               </small>
             </div>
             {/* giá */}
-            <h3 className="font-weight-semi-bold mb-4">
-              {product.salePrice} vnđ
-            </h3>
+            <div className="d-flex flex-column justify-content-center mt-2 ">
+              {product.originalPrice &&
+                product.originalPrice > product.salePrice! && (
+                  <h6 className="text-muted ml-2">
+                    <del>{product.originalPrice.toFixed(2)} vnđ</del>
+                  </h6>
+                )}
+              <h3>{product.salePrice?.toFixed(2) || "0.00"} vnđ</h3>
+            </div>
             <p className="mb-4">{product.description}</p>
             <div className="d-flex mb-3">
               <strong className="text-dark mr-3">Sizes:</strong>
@@ -267,7 +273,7 @@ const ProductDetail: React.FC = () => {
                 }`}
                 onClick={() => setActiveTab("reviews")}
               >
-                Reviews (0)
+                Reviews
               </button>
               <button
                 className={`nav-item nav-link text-dark ${
