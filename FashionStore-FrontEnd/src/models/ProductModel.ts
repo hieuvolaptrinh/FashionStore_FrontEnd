@@ -2,6 +2,7 @@ class ProductModel {
   productId: number;
   productName?: string; // có thể bị null
   description?: string;
+  productionInfor?: string;
   originalPrice?: number;
   salePrice?: number;
   quantity?: number;
@@ -11,6 +12,7 @@ class ProductModel {
     productID: number,
     productName: string,
     description: string,
+    productionInfor: string,
     originalPrice: number,
     salePrice: number,
     quantity: number,
@@ -23,6 +25,7 @@ class ProductModel {
     this.salePrice = salePrice;
     this.quantity = quantity;
     this.avgStars = avgStars;
+    this.productionInfor = productionInfor;
   }
 }
 

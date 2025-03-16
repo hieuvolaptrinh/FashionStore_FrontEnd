@@ -8,22 +8,31 @@ export async function request(url: string) {
 }
 
 // tổng quát hóa hàm request
-export async function request1<T>(url: string, method: string = "GET", body?: unknown): Promise<T> {
+export async function request1<T>(
+  url: string,
+  method: string = "GET",
+  body?: unknown
+): Promise<T> {
   const options: RequestInit = {
-      method,
-      headers: {
-          "Content-Type": "application/json",
-      },
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: body ? JSON.stringify(body) : undefined, // Chỉ thêm body nếu có
   };
 
-  if (body) {
-      options.body = JSON.stringify(body);
-  }
+  try {
+    const response = await fetch(url, options);
 
-  const response = await fetch(url, options);
+    if (!response.ok) {
+      // Lấy chi tiết lỗi từ API nếu có
+      const errorText = await response.text();
+      throw new Error(`Lỗi API ${url}: ${response.status} - ${errorText}`);
+    }
 
-  if (!response.ok) {
-      throw new Error(`Không thể truy cập API ${url}`);
+    return await response.json(); // Trả về dữ liệu đã parse JSON
+  } catch (error) {
+    console.error("Lỗi khi gọi API:", error);
+    throw new Error(`Lỗi khi fetch dữ liệu từ ${url}: ${error}`);
   }
-  return response.json();
 }
