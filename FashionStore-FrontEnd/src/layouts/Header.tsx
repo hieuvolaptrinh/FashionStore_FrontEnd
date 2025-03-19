@@ -1,10 +1,12 @@
 import React, { ChangeEvent, useState } from "react";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
   keyword: string;
   setKeyword: (keyword: string) => void;
 }
 const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
+  // research product
   const [tmp, setTmp] = useState("");
   const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTmp(e.target.value); // để ấn search thì mới set keyword
@@ -12,6 +14,13 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
 
   const handelSearch = () => {
     setKeyword(tmp);
+  };
+
+  // Dropdown tài khoản
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
   };
   return (
     <>
@@ -39,18 +48,20 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
                 <button
                   type="button"
                   className="btn btn-sm btn-light dropdown-toggle"
-                  data-toggle="dropdown"
+                  onClick={toggleDropdown} // Bắt sự kiện click để mở/đóng dropdown
                 >
                   Tài Khoản
                 </button>
-                <div className="dropdown-menu dropdown-menu-right">
-                  <button className="dropdown-item" type="button">
-                    Đăng nhập
-                  </button>
-                  <button className="dropdown-item" type="button">
-                    Đăng kí
-                  </button>
-                </div>
+                {isOpen && (
+                  <div className="dropdown-menu dropdown-menu-right show">
+                    <button className="dropdown-item" type="button">
+                      <Link to={"/login"}> Đăng nhập</Link>
+                    </button>
+                    <button className="dropdown-item" type="button">
+                      <Link to={"/register"}> Đăng kí</Link>
+                    </button>
+                  </div>
+                )}
               </div>
               <div className="btn-group mx-2">
                 <button
@@ -117,14 +128,14 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
         </div>
         <div className="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
           <div className="col-lg-4">
-            <a href="" className="text-decoration-none">
+            <Link to={"/"} className="text-decoration-none">
               <span className="h1 text-uppercase text-primary bg-dark px-2">
                 UTE
               </span>
               <span className="h1 text-uppercase text-dark bg-primary px-2 ml-n1">
                 Fashion
               </span>
-            </a>
+            </Link>
           </div>
           {/* search */}
           <div className="col-lg-4 col-6 text-left">

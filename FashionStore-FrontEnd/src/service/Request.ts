@@ -1,4 +1,4 @@
-export async function request(url: string) {
+export async function request1(url: string) {
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -8,15 +8,17 @@ export async function request(url: string) {
 }
 
 // tổng quát hóa hàm request
-export async function request1<T>(
+export async function request<T = unknown>(
   url: string,
   method: string = "GET",
+  headers: Record<string, string> = {}, // Headers tùy chỉnh, mình cố tình làm như thế này để mở rộng hơn
   body?: unknown
 ): Promise<T> {
   const options: RequestInit = {
     method,
     headers: {
       "Content-Type": "application/json",
+      ...headers, // Hợp nhất headers tùy chỉnh với headers mặc định
     },
     body: body ? JSON.stringify(body) : undefined, // Chỉ thêm body nếu có
   };

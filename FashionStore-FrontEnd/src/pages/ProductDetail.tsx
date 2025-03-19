@@ -7,10 +7,11 @@ import ProductImage from "../components/ProductImage";
 
 import QuantityInput from "../components/QuantityInput";
 import { ReviewModel } from "../models/ReviewModel";
-import { UserModel } from "../service/API/UserModel";
+import { UserModel } from "../models/UserModel";
 import { getReviewsWithUser } from "../service/API/ReviewAPI";
 import InforProduct from "../components/InforProduct";
 import { Carousel } from "react-responsive-carousel";
+import Navbar from "../layouts/Navbar";
 
 const ProductDetail: React.FC = () => {
   // lấy productId từ URL
@@ -96,7 +97,9 @@ const ProductDetail: React.FC = () => {
 
   return (
     <>
+      <Navbar />
       <Carousel />
+
       <div className="container-fluid pb-5">
         <div className="row px-xl-5">
           <div className="col-lg-5 mb-30">

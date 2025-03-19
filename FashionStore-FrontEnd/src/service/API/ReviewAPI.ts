@@ -1,8 +1,7 @@
-
 import { API_BASE_URL } from "../../apiConfig";
 import { ReviewModel } from "../../models/ReviewModel";
-import { request1 } from "../Request";
-import { UserModel } from "./UserModel";
+import { request } from "../Request";
+import { UserModel } from "../../models/UserModel";
 
 // pick: chỉ lấy ra vài thuộc tính của 1 object
 // http://localhost:8080/api/review-list/product/{productId}
@@ -14,16 +13,16 @@ export async function getReviewsWithUser(productId: number): Promise<
   })[]
 > {
   try {
-    console.log(`${API_BASE_URL}/api/review-list/product/${productId}`);
+    const url = `${API_BASE_URL}/api/v1/review-list/product/${productId}`;
 
-    return await request1<
+    return await request<
       {
         reviewId: number;
         content: string;
         stars: number;
         user: { firstName: string; lastName: string; email: string };
       }[]
-    >(`${API_BASE_URL}/api/review-list/product/${productId}`);
+    >(url);
   } catch (error) {
     console.error("lỗi quần què:", error);
 

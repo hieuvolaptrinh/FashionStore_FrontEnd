@@ -3,6 +3,9 @@ import React from "react";
 import ListProduct from "../pages/ListProduct";
 import { useParams } from "react-router-dom";
 
+import Navbar from "./Navbar";
+import Carousel from "./homepage/Carousel";
+
 // viết như này thì không cần inter
 function HomePage(props: { keyword: string }) {
   // nó sẽ lấy từ url
@@ -21,6 +24,8 @@ function HomePage(props: { keyword: string }) {
 
   return (
     <>
+      <Navbar />
+      <Carousel />
       <ListProduct keyword={props.keyword} typeId={typeIdNumber} />
     </>
   );

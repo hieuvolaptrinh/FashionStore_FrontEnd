@@ -7,33 +7,32 @@ interface ProductPage {
   totalPages: number;
   quantity: number;
 }
+// Định nghĩa kiểu dữ liệu chính xác từ API
+interface ProductResponse {
+  _embedded: { products: ProductModel[] };
+  page: { totalPages: number; totalElements: number };
+}
 
 async function getProduct(url: string): Promise<ProductPage> {
-  const result: ProductModel[] = [];
+  const response = await request<ProductResponse>(url);
 
-  const response = await request(url);
-  //   lấy ra json
-  const responseData = response._embedded.products;
-
-  // lấy thông tin trang
-  const totalPages = response.page.totalPages;
-  const quantity = response.page.totalElements;
-  console.log("in dữ liệu thử :" + response);
-
-  for (const item of responseData) {
-    const product = new ProductModel(
-      item.productId,
-      item.productName,
-      item.description,
-      item.productionInfor,
-      item.originalPrice,
-      item.salePrice,
-      item.quantity,
-      item.avgStars
-    );
-    result.push(product);
-  }
-  return { products: result, totalPages: totalPages, quantity: quantity };
+  return {
+    products: response._embedded.products.map(
+      (item) =>
+        new ProductModel(
+          item.productId,
+          item.productName,
+          item.description,
+          item.productionInfor,
+          item.originalPrice,
+          item.salePrice,
+          item.quantity,
+          item.avgStars
+        )
+    ),
+    totalPages: response.page.totalPages,
+    quantity: response.page.totalElements,
+  };
 }
 
 export async function searchProduct(
@@ -73,7 +72,7 @@ export async function getProductById(
   const url = `${API_CONFIG.products}/${productId}`;
 
   try {
-    const response = await request(url);
+    const response = await request<ProductModel>(url);
 
     return new ProductModel(
       response.productId,

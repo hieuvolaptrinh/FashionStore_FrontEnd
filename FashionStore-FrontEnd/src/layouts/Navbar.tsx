@@ -54,7 +54,7 @@ function Navbar() {
                     // sử dụng link thay cho a để không load lại trang trong react router
                     <Link
                       key={type.typeId}
-                      to={type.typeId?.toString() || ""}
+                      to={"/" + type.typeId?.toString() || ""}
                       className="nav-item nav-link"
                     >
                       {type.typeName}
