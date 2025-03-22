@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../apiConfig";
 import { Link } from "react-router-dom";
 import { validatePassword, validateRePassword } from "../utils/Validation";
-import { checkEmail, checkUserName } from "../service/API/UserAPI";
+import {
+  checkEmail,
+  checkUserName,
+  registerUser,
+} from "../service/API/UserAPI";
 
 export const Register: React.FC = () => {
   const [userName, setUserName] = useState("");
@@ -98,32 +101,15 @@ export const Register: React.FC = () => {
 
     // Nếu không có lỗi, thực hiện submit dữ liệu
 
-    try {
-      const url = `${API_BASE_URL}/api/v1/users/register`;
-      console.log("url: ", url);
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          lastName: lastName,
-          firstName: firstName,
-          email: email,
-          userName: userName,
-          password: password,
-          phoneNumber: phone,
-        }),
-      });
-      console.log("response: ", response.json());
-      if (response.ok) {
-        setNotification("Đã đăng kí thành công");
-      } else {
-        setNotification("Đã xảy ra lỗi trong quá trình đăng kí");
-      }
-    } catch (error) {
-      console.error(`Bị lỗi trong quá trình đăng kí ${error}`);
-    }
+    const message = await registerUser({
+      email: email,
+      phoneNumber: phone,
+      lastName: lastName,
+      firstName: firstName,
+      userName: userName,
+      password: password,
+    });
+    setNotification(message);
   };
 
   return (

@@ -11,10 +11,11 @@ function Navbar() {
   useEffect(() => {
     getTypes()
       .then((data) => {
+        console.log("lấy data thành công:", data);
         setTypes(data);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Lỗi khi lấy dữ liệu:", error.message);
       });
   }, []);
   return (
@@ -87,7 +88,7 @@ function Navbar() {
                 id="navbarCollapse"
               >
                 <div className="navbar-nav mr-auto py-0">
-                  <NavLink to="/" className="nav-item nav-link active">
+                  <NavLink to="/" className="nav-item nav-link ">
                     Trang Chủ
                   </NavLink>
                   <NavLink to="/shop" className="nav-item nav-link">

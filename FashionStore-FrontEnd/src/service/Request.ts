@@ -11,28 +11,34 @@ export async function request1(url: string) {
 export async function request<T = unknown>(
   url: string,
   method: string = "GET",
-  headers: Record<string, string> = {}, // Headers tùy chỉnh, mình cố tình làm như thế này để mở rộng hơn
+  // headers: {
+  //   "Content-Type": "application/json";
+  // },
   body?: unknown
 ): Promise<T> {
   const options: RequestInit = {
     method,
     headers: {
       "Content-Type": "application/json",
-      ...headers, // Hợp nhất headers tùy chỉnh với headers mặc định
     },
-    body: body ? JSON.stringify(body) : undefined, // Chỉ thêm body nếu có
+    body: body ? JSON.stringify(body) : undefined,
   };
 
   try {
     const response = await fetch(url, options);
 
     if (!response.ok) {
-      // Lấy chi tiết lỗi từ API nếu có
       const errorText = await response.text();
       throw new Error(`Lỗi API ${url}: ${response.status} - ${errorText}`);
     }
 
-    return await response.json(); // Trả về dữ liệu đã parse JSON
+    const contentType = response.headers.get("Content-Type");
+
+    if (contentType && contentType.includes("application/json")) {
+      return (await response.json()) as T; // ✅ Parse JSON nếu đúng định dạng
+    } else {
+      return (await response.text()) as T;
+    }
   } catch (error) {
     console.error("Lỗi khi gọi API:", error);
     throw new Error(`Lỗi khi fetch dữ liệu từ ${url}: ${error}`);

@@ -4,15 +4,14 @@ import { request } from "../Request";
 async function fetchProductImage(url: string): Promise<ImageModel[]> {
   const result: ImageModel[] = [];
 
-  const response = await request(url);
-  // lấy ra json sách
-  const responseData = response?._embedded?.images || [];
-  // const responseData = response.images;
+  // Định nghĩa kiểu dữ liệu của API response
+  type ApiResponse = { content: ImageModel[] };
 
-  console.log("responseData: ", responseData);
+  // Gọi request với kiểu dữ liệu cụ thể
+  const response = await request<ApiResponse>(url);
 
-  // const data = await response.json(); //Chờ dữ liệu mà ts nó bị lỗi gì đó
-  // console.log("Dữ liệu thử:", data); // In dữ liệu đúng
+  // Lấy dữ liệu hình ảnh từ response (nếu có)
+  const responseData = response?.content || [];
 
   for (const image of responseData) {
     result.push({
@@ -24,13 +23,14 @@ async function fetchProductImage(url: string): Promise<ImageModel[]> {
       productId: image.productId,
     });
   }
+
   return result;
 }
 
 export async function fetchProductImages(
   productId: number
 ): Promise<ImageModel[]> {
-  const url: string = `http://localhost:8080/products/${productId}/listImages?page=0&size=1`;
+  const url: string = `http://localhost:8080/api/v1/products/${productId}/listImages?page=0&size=12`;
 
   return fetchProductImage(url);
 }

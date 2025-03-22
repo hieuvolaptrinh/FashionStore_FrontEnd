@@ -1,5 +1,5 @@
 class Type {
-  typeId?: number;
+  typeId: number;
   typeName: string;
 
   constructor(typeId: number, typeName: string) {

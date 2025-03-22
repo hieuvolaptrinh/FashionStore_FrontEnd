@@ -27,7 +27,7 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
 
         getAllProducts(currentPage)
           .then((result) => {
-            setListProduct(result.products);
+            setListProduct(result.content);
             setTotalPages(result.totalPages);
             setLoading(false);
           })
@@ -46,6 +46,7 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
           })
           .catch((error) => {
             setError(error);
+            console.log("looix cho nay " + error.message);
             setLoading(false);
           });
       }
@@ -69,7 +70,7 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
     return (
       <div>
         <div className="d-flex justify-content-center mt-5">
-          <h2>Gặp lỗi </h2>
+          <h2>Gặp lỗi {error} </h2>
         </div>
       </div>
     );
