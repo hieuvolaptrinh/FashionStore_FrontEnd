@@ -47,7 +47,7 @@ export const Register: React.FC = () => {
       .catch((error) => {
         console.error("Lỗi: ", error);
       });
-  }, [email, userName]);
+  }, [email, userName, password, rePassword]);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -85,7 +85,6 @@ export const Register: React.FC = () => {
     const passwordError = validatePassword(password);
     if (passwordError) {
       setErrorPassword(passwordError);
-      hasError = true;
     }
 
     const rePasswordError = validateRePassword(password, rePassword);

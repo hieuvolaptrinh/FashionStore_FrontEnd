@@ -31,7 +31,7 @@ export const registerUser = async (
   userData: Omit<UserModel, "userId">
 ): Promise<string> => {
   try {
-    await request(`${API_BASE_URL}/api/v1/user/register`, "POST", {}, userData);
+    await request(`${API_BASE_URL}/api/v1/user/register`, "POST", userData);
     return "Đã đăng ký thành công";
   } catch (error) {
     console.error("Lỗi đăng ký:", error);

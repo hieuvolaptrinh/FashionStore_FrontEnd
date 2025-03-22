@@ -37,6 +37,7 @@ interface ProductPage2 {
   totalElements: number;
 }
 
+// api RepositoryRestResource
 async function getProduct2(url: string): Promise<ProductPage2> {
   console.log("url", url);
   try {
