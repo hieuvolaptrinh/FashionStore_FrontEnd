@@ -32,9 +32,29 @@ export const registerUser = async (
 ): Promise<string> => {
   try {
     await request(`${API_BASE_URL}/api/v1/user/register`, "POST", userData);
-    return "Đã đăng ký thành công";
+    return "Đã đăng ký thành công vui lòng kiểm tra email để kích hoạt tài khoản";
   } catch (error) {
     console.error("Lỗi đăng ký:", error);
     return `Bị lỗi trong quá trình đăng ký tài khoản: ${error}`;
+  }
+};
+export const activateAccount = async (
+  email: string,
+  activationCode: string
+): Promise<string> => {
+  const params = new URLSearchParams({ email, activationCode });
+  const url = `${API_BASE_URL}/api/v1/user/activateAccount?${params}`;
+
+  try {
+    const response = await fetch(url, { method: "GET" });
+    const responseText = await response.json();
+
+    if (response.ok) {
+      return responseText.message;
+    }
+    return "Kích hoạt tài khoản thất bại!";
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return "Không thể kết nối đến server";
   }
 };

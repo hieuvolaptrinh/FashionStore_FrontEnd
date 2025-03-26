@@ -33,7 +33,6 @@ export async function request<T = unknown>(
     }
 
     const contentType = response.headers.get("Content-Type");
-
     if (contentType && contentType.includes("application/json")) {
       return (await response.json()) as T; // ✅ Parse JSON nếu đúng định dạng
     } else {

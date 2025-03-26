@@ -9,6 +9,7 @@ import ProductDetail from "./pages/ProductDetail";
 import Trademark from "./pages/Trademark";
 import { Register } from "./layouts/Register";
 import Login from "./layouts/Login";
+import ActivateAccount from "./pages/ActivateAccount";
 
 function App() {
   const [keyword, setKeyword] = useState("");
@@ -25,11 +26,15 @@ function App() {
           <Route path="/product/:productId" element={<ProductDetail />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/login" element={<Login />}></Route>
+          <Route
+            path="/activateAccount/:email/:activationCode"
+            element={<ActivateAccount />}
+          ></Route>
         </Routes>
         <Trademark />
         <Footer />
       </BrowserRouter>
-    </>
+  </>
   );
 }
 

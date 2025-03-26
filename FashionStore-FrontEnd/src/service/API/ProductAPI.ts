@@ -108,17 +108,17 @@ export async function getProductById(
   const url = `${API_CONFIG.products}/${productId}`;
 
   try {
-    const response = await request<ProductModel>(url);
-
+    const response = await fetch(url);
+    const responseData = await response.json();
     return new ProductModel(
-      response.productId,
-      response.productName,
-      response.description,
-      response.productionInfor,
-      response.originalPrice,
-      response.salePrice,
-      response.quantity,
-      response.avgStars
+      responseData.productId,
+      responseData.productName,
+      responseData.description,
+      responseData.productionInfor,
+      responseData.originalPrice,
+      responseData.salePrice,
+      responseData.quantity,
+      responseData.avgStars
     );
   } catch (error) {
     console.error("Lỗi:", error);
