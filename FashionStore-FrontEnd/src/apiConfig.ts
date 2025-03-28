@@ -5,3 +5,4 @@ const API_CONFIG = {
   reviews: `${API_BASE_URL}/review-list`,
 };
 export { API_BASE_URL, API_CONFIG };
+

@@ -11,9 +11,6 @@ export async function request1(url: string) {
 export async function request<T = unknown>(
   url: string,
   method: string = "GET",
-  // headers: {
-  //   "Content-Type": "application/json";
-  // },
   body?: unknown
 ): Promise<T> {
   const options: RequestInit = {
@@ -34,7 +31,7 @@ export async function request<T = unknown>(
 
     const contentType = response.headers.get("Content-Type");
     if (contentType && contentType.includes("application/json")) {
-      return (await response.json()) as T; // ✅ Parse JSON nếu đúng định dạng
+      return (await response.json()) as T;
     } else {
       return (await response.text()) as T;
     }

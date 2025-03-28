@@ -1,20 +1,51 @@
 import React, { useState } from "react";
-
+import { API_BASE_URL } from "../apiConfig";
 
 export default function Login() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    userName: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // e.target.name: e.target là phần tử DOM mà sự kiện này xảy ra trên đó,
+    // trong trường hợp này là một ô input. e.target.name lấy tên của trường (attribute name của input field) trong form.
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
+  const handleSubmit = async () => {
+    const loginRequest = {
+      userName: formData.userName,
+      password: formData.password,
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginRequest),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const { token, username, roles } = data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("username", username);
+        localStorage.setItem("roles", roles);
+        setError("đăng nhập thành công");
+        return data;
+      } else {
+        const errorText = await response.text(); // lấy lỗi dưới dạng văn bản
+        setError(errorText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Có lỗi xảy ra, vui lòng thử lại.");
+    }
   };
 
   return (
@@ -22,8 +53,8 @@ export default function Login() {
       <div className="row justify-content-center">
         <div className="col-md-6">
           <div className="card p-4 shadow-sm">
-            <h2 className="text-center mb-4">Sign Up</h2>
-            <form onSubmit={handleSubmit}>
+            <h2 className="text-center mb-4">Đăng nhập ngay</h2>
+            <div onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">
                   Name
@@ -32,26 +63,13 @@ export default function Login() {
                   type="text"
                   className="form-control"
                   id="name"
-                  name="name"
-                  value={formData.name}
+                  name="userName"
+                  value={formData.userName}
                   onChange={handleChange}
                   placeholder="Enter your name"
                 />
               </div>
-              <div className="mb-3">
-                <label htmlFor="email" className="form-label">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                />
-              </div>
+
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
                   Password
@@ -66,10 +84,19 @@ export default function Login() {
                   placeholder="Enter your password"
                 />
               </div>
-              <button type="submit" className="btn btn-primary w-100">
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
+              <button
+                type="submit"
+                className="btn btn-primary w-100"
+                onClick={handleSubmit}
+              >
                 Sign Up
               </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
