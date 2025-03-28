@@ -15,7 +15,7 @@ function Navbar() {
         setTypes(data);
       })
       .catch((error) => {
-        console.error("Lỗi khi lấy dữ liệu:", error.message);
+        console.error("ddLỗi khi lấy dữ liệu:", error.message);
       });
   }, []);
   return (
