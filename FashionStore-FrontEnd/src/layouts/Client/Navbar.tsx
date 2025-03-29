@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Type from "../models/Type";
-import { getTypes } from "../service/API/TypeAPI";
+
 import { Link, NavLink } from "react-router-dom";
+import Type from "../../models/Type";
+import { getTypes } from "../../service/API/TypeAPI";
 
 function Navbar() {
   const [isVerticalOpen, setIsVerticalOpen] = useState(false);

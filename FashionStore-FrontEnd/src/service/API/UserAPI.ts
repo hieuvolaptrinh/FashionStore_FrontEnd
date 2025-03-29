@@ -58,3 +58,40 @@ export const activateAccount = async (
     return "Không thể kết nối đến server";
   }
 };
+
+// login
+export const login = async (
+  userName: string,
+  password: string
+): Promise<{ success: boolean; message: string }> => {
+  const loginRequest = {
+    userName: userName,
+    password: password,
+  };
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginRequest),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const { token, username, roles } = data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+      localStorage.setItem("roles", JSON.stringify(roles));
+
+      return { success: true, message: "Đăng nhập thành công" };
+    } else {
+      const errorText = await response.text();
+      return { success: false, message: errorText };
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    return { success: false, message: "Có lỗi xảy ra, vui lòng thử lại." };
+  }
+};

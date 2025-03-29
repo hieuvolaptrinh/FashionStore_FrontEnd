@@ -1,6 +1,6 @@
 import React from "react";
 
-// làm viêc với props nên sử dụng interface để định nghĩa kiểu dữ liệu của props
+
 interface PaginationProps {
   totalPages: number;
   currentPage: number;

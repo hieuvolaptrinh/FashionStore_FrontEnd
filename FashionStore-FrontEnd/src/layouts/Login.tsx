@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { API_BASE_URL } from "../apiConfig";
+import { login } from "../service/API/UserAPI";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,7 @@ export default function Login() {
     password: "",
   });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // e.target.name: e.target là phần tử DOM mà sự kiện này xảy ra trên đó,
@@ -15,36 +17,15 @@ export default function Login() {
   };
 
   const handleSubmit = async () => {
-    const loginRequest = {
-      userName: formData.userName,
-      password: formData.password,
-    };
+    const { userName, password } = formData;
+    const response = await login(userName, password);
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginRequest),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const { token, username, roles } = data;
-
-        localStorage.setItem("token", token);
-        localStorage.setItem("username", username);
-        localStorage.setItem("roles", roles);
-        setError("đăng nhập thành công");
-        return data;
-      } else {
-        const errorText = await response.text(); // lấy lỗi dưới dạng văn bản
-        setError(errorText);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Có lỗi xảy ra, vui lòng thử lại.");
+    if (response.success) {
+      setSuccess(response.message); // hiển thị thông báo thành công
+      setError("");
+    } else {
+      setError(response.message); // hiển thị thông báo lỗi
+      setSuccess("");
     }
   };
 
@@ -87,6 +68,12 @@ export default function Login() {
               {error && (
                 <div className="alert alert-danger" role="alert">
                   {error}
+                </div>
+              )}
+              {success && (
+                <div className="alert alert-success" role="alert">
+                  {success}
+                  <Link to={"/"}>Mua sắm ngay</Link>
                 </div>
               )}
               <button
