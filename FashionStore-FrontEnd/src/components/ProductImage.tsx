@@ -45,7 +45,8 @@ const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
           {images.length > 0 && (
             <img
               // src={`/images/${images[currentIndex].link}`}
-              src={`data:image/jpeg;base64,${images[currentIndex].data}`}
+              src={images[currentIndex].link}
+              // src={`data:image/jpeg;base64,${images[currentIndex].data}`}
               alt=""
               className="img-fluid rounded"
               style={{ maxHeight: "400px", objectFit: "cover" }}
@@ -89,8 +90,10 @@ const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
               style={{ cursor: "pointer" }}
             >
               <img
-                // src={`/images/${img.link}`}
-                src={`data:image/jpeg;base64,${img.data}`}
+
+                src={`${img.link}`}
+
+                // src={`data:image/jpeg;base64,${img.data}`}
                 alt=""
                 className={`img-thumbnail ${
                   currentIndex === index ? "border-primary" : ""

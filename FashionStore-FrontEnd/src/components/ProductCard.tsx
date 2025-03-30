@@ -56,7 +56,7 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
         <div className="product-img position-relative overflow-hidden">
           <img
             className="img-fluid w-100"
-            src={icon ? `images/${icon}` : "/images/product-4.jpg"}
+            src={icon ? `${icon}` : "/images/product-4.jpg"}
             alt={product.productName || "Product"}
             style={{
               objectFit: "cover", // Giữ hình ảnh không bị méo

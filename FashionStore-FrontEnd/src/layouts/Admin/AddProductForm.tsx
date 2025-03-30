@@ -3,7 +3,7 @@ import Type from "../../models/Type";
 import { getTypes } from "../../service/API/TypeAPI";
 import RequireAdmin from "./RequireAdmin";
 import { createProduct } from "../../service/API/AdminAPI";
-import getBase64 from "../../utils/getBase64";
+import uploadToGoogleDrive from "../../service/API/DriveAPI";
 
 const AddProductForm: React.FC = () => {
   const [types, setTypes] = useState<Type[]>([]);
@@ -65,22 +65,21 @@ const AddProductForm: React.FC = () => {
   // submit form
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      // Convert ảnh sang base64
-      const base64Images = await Promise.all(
-        formData.listImages.map((file) => getBase64(file))
+      // Upload tất cả ảnh lên Google Drive
+      const imageLinks = await Promise.all(
+        formData.listImages.map((file) => uploadToGoogleDrive(file))
       );
 
       const productToSend = {
         ...formData,
-        listImages: base64Images.filter((image): image is string => image !== null), // loại null nếu có
+        listImages: imageLinks, // chỉ gửi link ảnh
       };
 
-      const message = await createProduct(productToSend); // API gửi JSON
+      const message = await createProduct(productToSend);
       alert(message);
     } catch (error) {
-      console.error("Submit error:", error);
+      console.error("Lỗi submit:", error);
       alert("Lỗi khi thêm sản phẩm!");
     }
   };
