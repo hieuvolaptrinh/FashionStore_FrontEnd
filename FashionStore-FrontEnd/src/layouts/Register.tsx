@@ -18,8 +18,6 @@ export const Register: React.FC = () => {
   const [phone, setPhone] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  // const [address, setAddress] = useState("");
-
   // error
   const [errorUserName, setErrorUserName] = useState("");
   const [errorEmail, setErrorEmail] = useState("");

@@ -15,6 +15,7 @@ const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
     fetchProductImages(productId)
       .then((res) => {
         setImages(res);
+        console.log("Hình ảnh sản phẩm: ", res);
       })
       .catch((error) => console.error("Lỗi lấy hình ảnh: ", error));
   }, [productId]);
@@ -43,7 +44,8 @@ const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
         <div className="border p-3 shadow-sm rounded position-relative">
           {images.length > 0 && (
             <img
-              src={`/images/${images[currentIndex].link}`}
+              // src={`/images/${images[currentIndex].link}`}
+              src={`data:image/jpeg;base64,${images[currentIndex].data}`}
               alt=""
               className="img-fluid rounded"
               style={{ maxHeight: "400px", objectFit: "cover" }}
@@ -87,7 +89,8 @@ const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
               style={{ cursor: "pointer" }}
             >
               <img
-                src={`/images/${img.link}`}
+                // src={`/images/${img.link}`}
+                src={`data:image/jpeg;base64,${img.data}`}
                 alt=""
                 className={`img-thumbnail ${
                   currentIndex === index ? "border-primary" : ""

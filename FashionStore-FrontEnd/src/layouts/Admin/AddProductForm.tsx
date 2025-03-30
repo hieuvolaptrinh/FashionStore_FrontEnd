@@ -3,6 +3,7 @@ import Type from "../../models/Type";
 import { getTypes } from "../../service/API/TypeAPI";
 import RequireAdmin from "./RequireAdmin";
 import { createProduct } from "../../service/API/AdminAPI";
+import getBase64 from "../../utils/getBase64";
 
 const AddProductForm: React.FC = () => {
   const [types, setTypes] = useState<Type[]>([]);
@@ -64,33 +65,23 @@ const AddProductForm: React.FC = () => {
   // submit form
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data:", formData);
+
     try {
-      const message = await createProduct({
+      // Convert ảnh sang base64
+      const base64Images = await Promise.all(
+        formData.listImages.map((file) => getBase64(file))
+      );
+
+      const productToSend = {
         ...formData,
-      });
+        listImages: base64Images.filter((image): image is string => image !== null), // loại null nếu có
+      };
+
+      const message = await createProduct(productToSend); // API gửi JSON
       alert(message);
-      if (message.includes("thành công")) {
-        // Reset form
-        setFormData({
-          productName: "",
-          description: "",
-          originalPrice: 0,
-          productionInfor: "",
-          salePrice: 0,
-          quantity: 0,
-          manufactureDate: "",
-          listImages: [],
-          listTypes: [],
-        });
-        setImagePreviews([]);
-        // Reload types nếu cần
-        const refreshedTypes = await getTypes();
-        setTypes(refreshedTypes);
-      }
     } catch (error) {
-      console.error("Error submitting product:", error);
-      alert("Có lỗi xảy ra khi thêm sản phẩm!");
+      console.error("Submit error:", error);
+      alert("Lỗi khi thêm sản phẩm!");
     }
   };
 
@@ -101,7 +92,6 @@ const AddProductForm: React.FC = () => {
         onSubmit={handleSubmit}
         className="border p-4 rounded shadow bg-light"
       >
-
         <div className="mb-3">
           <label className="form-label">Tên sản phẩm</label>
           <input

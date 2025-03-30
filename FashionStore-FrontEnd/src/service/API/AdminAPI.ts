@@ -8,8 +8,8 @@ interface ProductProps {
   salePrice: number;
   quantity: number;
   manufactureDate: string;
-  // listImages: string[];
   listTypes: number[];
+  listImages: string[];
 }
 export async function createProduct(product: ProductProps): Promise<string> {
   const token = localStorage.getItem("token") || "";

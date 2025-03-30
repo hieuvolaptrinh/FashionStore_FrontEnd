@@ -32,7 +32,7 @@ export async function fetchProductImages(
 ): Promise<ImageModel[]> {
   const url: string = `http://localhost:8080/api/v1/products/${productId}/listImages?page=0&size=12`;
 
-  return fetchProductImage(url);
+  return await fetchProductImage(url);
 }
 
 // tổng quát hóa
