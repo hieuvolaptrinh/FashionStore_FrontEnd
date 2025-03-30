@@ -3,10 +3,10 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import Type from "../../models/Type";
 import { getTypes } from "../../service/API/TypeAPI";
 import { API_BASE_URL } from "../../apiConfig";
+import RequireAdmin from "./RequireAdmin";
 
 const AddProductForm: React.FC = () => {
   const [types, setTypes] = useState<Type[]>([]);
-
   const [formData, setFormData] = useState({
     productId: "",
     productName: "",
@@ -69,7 +69,7 @@ const AddProductForm: React.FC = () => {
     console.log("Form data:", formData);
     const token = localStorage.getItem("token") || "";
     if (token) {
-      fetch(`${API_BASE_URL}/api/v1/products/create`, {
+      fetch(`${API_BASE_URL}/api/v1/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -262,4 +262,6 @@ const AddProductForm: React.FC = () => {
   );
 };
 
-export default AddProductForm;
+const AddProductForm_Admin = RequireAdmin(AddProductForm); // Bọc component bằng RequireAdmin
+
+export default AddProductForm_Admin;

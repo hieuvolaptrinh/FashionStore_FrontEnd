@@ -10,8 +10,9 @@ import { ReviewModel } from "../models/ReviewModel";
 import { UserModel } from "../models/UserModel";
 import { getReviewsWithUser } from "../service/API/ReviewAPI";
 import InforProduct from "../components/InforProduct";
-import { Carousel } from "react-responsive-carousel";
+
 import Navbar from "../layouts/Client/Navbar";
+import Carousel from "../layouts/homepage/Carousel";
 
 const ProductDetail: React.FC = () => {
   // lấy productId từ URL

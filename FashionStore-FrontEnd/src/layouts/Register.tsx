@@ -8,6 +8,8 @@ import {
 } from "../service/API/UserAPI";
 
 export const Register: React.FC = () => {
+  const [avatar, setAvatar] = useState<File | null>(null);
+
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
@@ -22,8 +24,8 @@ export const Register: React.FC = () => {
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   const [errorRePassword, setErrorRePassword] = useState("");
-
   const [notification, setNotification] = useState("");
+
   useEffect(() => {
     checkEmail(email)
       .then((res) => {
@@ -48,6 +50,14 @@ export const Register: React.FC = () => {
         console.error("Lỗi: ", error);
       });
   }, [email, userName, password, rePassword]);
+
+  // xử lý ảnh đại diện
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatar(file);
+    }
+  };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -92,7 +102,6 @@ export const Register: React.FC = () => {
       setErrorRePassword(rePasswordError);
       hasError = true;
     }
-
     if (hasError) {
       console.log("Form có lỗi, không submit!");
       return;
@@ -259,7 +268,39 @@ export const Register: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                    {/* HÌNH ẢNH */}
+                    <div className="col-12">
+                      <div className="mb-3">
+                        <label className="form-label">Ảnh đại diện</label>
+                        <input
+                          type="file"
+                          className="form-control"
+                          onChange={handleAvatarChange}
+                          accept="image/*"
+                        />
+                      </div>
 
+                      {avatar && (
+                        <div className="mb-3">
+                          <label className="form-label d-block">
+                            Xem trước ảnh
+                          </label>
+                          <div className="d-flex">
+                            <img
+                              // src={avatar}
+                              src={URL.createObjectURL(avatar)}
+                              alt="preview"
+                              width={100}
+                              height={100}
+                              style={{
+                                objectFit: "cover",
+                                border: "1px solid #ddd",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                     {/* Điều khoản và điều kiện */}
                     <div className="col-12 mb-3">
                       <div className="form-check">

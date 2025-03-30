@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import ProductModel from "../models/ProductModel";
 import { getAllProducts, searchProduct } from "../service/API/ProductAPI";
-import { Pagination } from "../utils/Pagination";
+import { Pagination } from "../components/Pagination";
 
 interface ListProductProps {
   keyword: string;
@@ -24,7 +24,6 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
     () => {
       if (keyword === "" && typeId === 0) {
         console.log("không có tìm kiếm và không có typeId");
-
         getAllProducts(currentPage)
           .then((result) => {
             setListProduct(result.content);

@@ -1,11 +1,22 @@
-import React, { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 interface HeaderProps {
   keyword: string;
   setKeyword: (keyword: string) => void;
 }
 const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
+  const [isViOpen, setIsViOpen] = useState(false);
+  const [isEnOpen, setIsEnOpen] = useState(false);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    setUsername(storedUsername);
+  }, []);
+
   // research product
   const [tmp, setTmp] = useState("");
   const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -16,12 +27,6 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
     setKeyword(tmp);
   };
 
-  // Dropdown tài khoản
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
   return (
     <>
       <div className="container-fluid">
@@ -42,36 +47,68 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
               </a>
             </div>
           </div>
+          {/* đăng kí đăng nhập - đăng xuất */}
           <div className="col-lg-6 text-center text-lg-right">
             <div className="d-inline-flex align-items-center">
               <div className="btn-group">
                 <button
                   type="button"
                   className="btn btn-sm btn-light dropdown-toggle"
-                  onClick={toggleDropdown} // Bắt sự kiện click để mở/đóng dropdown
+                  onClick={() => {
+                    setIsOpen(!isOpen);
+                  }}
                 >
-                  Tài Khoản
+                  {username ? `Xin chào, ${username}` : "Tài Khoản"}
                 </button>
                 {isOpen && (
                   <div className="dropdown-menu dropdown-menu-right show">
-                    <button className="dropdown-item" type="button">
-                      <Link to={"/login"}> Đăng nhập</Link>
-                    </button>
-                    <button className="dropdown-item" type="button">
-                      <Link to={"/register"}> Đăng kí</Link>
-                    </button>
+                    {!username ? (
+                      <>
+                        <Link to="/login" className="dropdown-item">
+                          Đăng nhập
+                        </Link>
+                        <Link to="/register" className="dropdown-item">
+                          Đăng ký
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link to="/profile" className="dropdown-item">
+                          👤 Chỉnh sửa thông tin
+                        </Link>
+                        <button
+                          className="dropdown-item"
+                          onClick={() => {
+                            localStorage.removeItem("token");
+                            localStorage.removeItem("username");
+                            localStorage.removeItem("roles");
+                            navigate("/login");
+                          }}
+                        >
+                          🚪 Đăng xuất
+                        </button>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
+
               <div className="btn-group mx-2">
                 <button
                   type="button"
                   className="btn btn-sm btn-light dropdown-toggle"
-                  data-toggle="dropdown"
+                  onClick={() => {
+                    setIsViOpen(!isViOpen);
+                    setIsEnOpen(false); // đóng EN nếu đang mở
+                  }}
                 >
                   VI
                 </button>
-                <div className="dropdown-menu dropdown-menu-right">
+                <div
+                  className={`dropdown-menu dropdown-menu-right ${
+                    isViOpen ? "show" : ""
+                  }`}
+                >
                   <button className="dropdown-item" type="button">
                     EUR
                   </button>
@@ -83,15 +120,23 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
                   </button>
                 </div>
               </div>
+
               <div className="btn-group">
                 <button
                   type="button"
                   className="btn btn-sm btn-light dropdown-toggle"
-                  data-toggle="dropdown"
+                  onClick={() => {
+                    setIsEnOpen(!isEnOpen);
+                    setIsViOpen(false);
+                  }}
                 >
                   EN
                 </button>
-                <div className="dropdown-menu dropdown-menu-right">
+                <div
+                  className={`dropdown-menu dropdown-menu-right ${
+                    isEnOpen ? "show" : ""
+                  }`}
+                >
                   <button className="dropdown-item" type="button">
                     FR
                   </button>

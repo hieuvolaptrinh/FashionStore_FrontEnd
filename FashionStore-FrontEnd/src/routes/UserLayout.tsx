@@ -10,6 +10,7 @@ import Test from "../Test/Test";
 import Trademark from "../pages/Trademark";
 import Footer from "../layouts/Client/Footer";
 import Header from "../layouts/Client/Header";
+import ForbiddenPage from "../pages/ForbiddenPage";
 
 function UserLayout() {
   const [keyword, setKeyword] = useState("");
@@ -26,6 +27,7 @@ function UserLayout() {
         <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forbidden" element={<ForbiddenPage />} />
         <Route
           path="/activateAccount/:email/:activationCode"
           element={<ActivateAccount />}

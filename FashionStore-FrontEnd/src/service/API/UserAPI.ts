@@ -83,8 +83,8 @@ export const login = async (
 
       localStorage.setItem("token", token);
       localStorage.setItem("username", username);
-      localStorage.setItem("roles", JSON.stringify(roles));
-
+      localStorage.setItem("roles", JSON.stringify(roles)); // ["ADMIN", "STAFF"]
+      console.log("roles: ", roles);
       return { success: true, message: "Đăng nhập thành công" };
     } else {
       const errorText = await response.text();
