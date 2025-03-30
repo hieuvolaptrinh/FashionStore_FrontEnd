@@ -1,14 +1,12 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-
 import Type from "../../models/Type";
 import { getTypes } from "../../service/API/TypeAPI";
-import { API_BASE_URL } from "../../apiConfig";
 import RequireAdmin from "./RequireAdmin";
+import { createProduct } from "../../service/API/AdminAPI";
 
 const AddProductForm: React.FC = () => {
   const [types, setTypes] = useState<Type[]>([]);
   const [formData, setFormData] = useState({
-    productId: "",
     productName: "",
     description: "",
     originalPrice: 0,
@@ -17,7 +15,7 @@ const AddProductForm: React.FC = () => {
     quantity: 0,
     manufactureDate: "",
     listTypes: [] as number[],
-    // listImages: [] as File[],
+    listImages: [] as File[],
   });
 
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -64,45 +62,35 @@ const AddProductForm: React.FC = () => {
     }
   };
   // submit form
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form data:", formData);
-    const token = localStorage.getItem("token") || "";
-    if (token) {
-      fetch(`${API_BASE_URL}/api/v1/products`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      })
-        .then((response) => {
-          if (response.ok) {
-            alert("Thêm sản phẩm thành công!");
-            setFormData({
-              productId: "",
-              productName: "",
-              description: "",
-              originalPrice: 0,
-              productionInfor: "",
-              salePrice: 0,
-              quantity: 0,
-              manufactureDate: "",
-              listTypes: [],
-              // listImages: [],
-            });
-          } else {
-            alert("Thêm sản phẩm thất bại!");
-            console.error("Lỗi khi thêm sản phẩm:", response);
-          }
-        })
-        .catch((error) => {
-          alert("Có lỗi xảy ra khi thêm sản phẩm!");
-          console.error("Lỗi:", error);
+    try {
+      const message = await createProduct({
+        ...formData,
+      });
+      alert(message);
+      if (message.includes("thành công")) {
+        // Reset form
+        setFormData({
+          productName: "",
+          description: "",
+          originalPrice: 0,
+          productionInfor: "",
+          salePrice: 0,
+          quantity: 0,
+          manufactureDate: "",
+          listImages: [],
+          listTypes: [],
         });
-    } else {
-      alert("Bạn chưa đăng nhập admin!");
+        setImagePreviews([]);
+        // Reload types nếu cần
+        const refreshedTypes = await getTypes();
+        setTypes(refreshedTypes);
+      }
+    } catch (error) {
+      console.error("Error submitting product:", error);
+      alert("Có lỗi xảy ra khi thêm sản phẩm!");
     }
   };
 
@@ -113,12 +101,7 @@ const AddProductForm: React.FC = () => {
         onSubmit={handleSubmit}
         className="border p-4 rounded shadow bg-light"
       >
-        <input
-          type="hidden"
-          id="productId"
-          name="productId"
-          value={formData.productId}
-        />
+
         <div className="mb-3">
           <label className="form-label">Tên sản phẩm</label>
           <input

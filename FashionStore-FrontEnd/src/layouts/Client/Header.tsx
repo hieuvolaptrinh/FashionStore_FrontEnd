@@ -1,26 +1,38 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../apiConfig";
 
 interface HeaderProps {
   keyword: string;
   setKeyword: (keyword: string) => void;
 }
+
 const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // dropdown tài khoản
   const [username, setUsername] = useState<string | null>(null);
-  const [isViOpen, setIsViOpen] = useState(false);
-  const [isEnOpen, setIsEnOpen] = useState(false);
+  const [tmp, setTmp] = useState("");
+  const [avatarBase64, setAvatarBase64] = useState<string | null>(null);
 
   const navigate = useNavigate();
+
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     setUsername(storedUsername);
+    if (storedUsername) {
+      fetch(`${API_BASE_URL}/api/v1/user/${storedUsername}/avatar`)
+        .then((res) => {
+          console.log("HTTP response", res);
+          return res.text();
+        })
+        .then((base64) => {
+          console.log("Base64 avatar", base64);
+          setAvatarBase64(base64);
+        });
+    }
   }, []);
 
-  // research product
-  const [tmp, setTmp] = useState("");
   const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTmp(e.target.value); // để ấn search thì mới set keyword
+    setTmp(e.target.value);
   };
 
   const handelSearch = () => {
@@ -30,148 +42,9 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
   return (
     <>
       <div className="container-fluid">
-        <div className="row bg-secondary py-1 px-xl-5">
-          <div className="col-lg-6 d-none d-lg-block">
-            <div className="d-inline-flex align-items-center h-100">
-              <a className="text-body mr-3" href="">
-                About
-              </a>
-              <a className="text-body mr-3" href="">
-                Contact
-              </a>
-              <a className="text-body mr-3" href="">
-                Help
-              </a>
-              <a className="text-body mr-3" href="">
-                FAQs
-              </a>
-            </div>
-          </div>
-          {/* đăng kí đăng nhập - đăng xuất */}
-          <div className="col-lg-6 text-center text-lg-right">
-            <div className="d-inline-flex align-items-center">
-              <div className="btn-group">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-light dropdown-toggle"
-                  onClick={() => {
-                    setIsOpen(!isOpen);
-                  }}
-                >
-                  {username ? `Xin chào, ${username}` : "Tài Khoản"}
-                </button>
-                {isOpen && (
-                  <div className="dropdown-menu dropdown-menu-right show">
-                    {!username ? (
-                      <>
-                        <Link to="/login" className="dropdown-item">
-                          Đăng nhập
-                        </Link>
-                        <Link to="/register" className="dropdown-item">
-                          Đăng ký
-                        </Link>
-                      </>
-                    ) : (
-                      <>
-                        <Link to="/profile" className="dropdown-item">
-                          👤 Chỉnh sửa thông tin
-                        </Link>
-                        <button
-                          className="dropdown-item"
-                          onClick={() => {
-                            localStorage.removeItem("token");
-                            localStorage.removeItem("username");
-                            localStorage.removeItem("roles");
-                            navigate("/login");
-                          }}
-                        >
-                          🚪 Đăng xuất
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div className="btn-group mx-2">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-light dropdown-toggle"
-                  onClick={() => {
-                    setIsViOpen(!isViOpen);
-                    setIsEnOpen(false); // đóng EN nếu đang mở
-                  }}
-                >
-                  VI
-                </button>
-                <div
-                  className={`dropdown-menu dropdown-menu-right ${
-                    isViOpen ? "show" : ""
-                  }`}
-                >
-                  <button className="dropdown-item" type="button">
-                    EUR
-                  </button>
-                  <button className="dropdown-item" type="button">
-                    GBP
-                  </button>
-                  <button className="dropdown-item" type="button">
-                    CAD
-                  </button>
-                </div>
-              </div>
-
-              <div className="btn-group">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-light dropdown-toggle"
-                  onClick={() => {
-                    setIsEnOpen(!isEnOpen);
-                    setIsViOpen(false);
-                  }}
-                >
-                  EN
-                </button>
-                <div
-                  className={`dropdown-menu dropdown-menu-right ${
-                    isEnOpen ? "show" : ""
-                  }`}
-                >
-                  <button className="dropdown-item" type="button">
-                    FR
-                  </button>
-                  <button className="dropdown-item" type="button">
-                    AR
-                  </button>
-                  <button className="dropdown-item" type="button">
-                    RU
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="d-inline-flex align-items-center d-block d-lg-none">
-              <a href="" className="btn px-0 ml-2">
-                <i className="fas fa-heart text-dark"></i>
-                <span
-                  className="badge text-dark border border-dark rounded-circle"
-                  style={{ paddingBottom: "2px" }}
-                >
-                  0
-                </span>
-              </a>
-              <a href="" className="btn px-0 ml-2">
-                <i className="fas fa-shopping-cart text-dark"></i>
-                <span
-                  className="badge text-dark border border-dark rounded-circle"
-                  style={{ paddingBottom: "2px" }}
-                >
-                  0
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
+        {/* Hàng thứ 2: logo - search - tài khoản */}
         <div className="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
+          {/* Logo */}
           <div className="col-lg-4">
             <Link to={"/"} className="text-decoration-none">
               <span className="h1 text-uppercase text-primary bg-dark px-2">
@@ -182,7 +55,8 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
               </span>
             </Link>
           </div>
-          {/* search */}
+
+          {/* Thanh tìm kiếm */}
           <div className="col-lg-4 col-6 text-left">
             <div className="input-group">
               <input
@@ -192,20 +66,81 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
                 onChange={onSearchInputChange}
                 value={tmp}
               />
-              <button className="btn " type="submit" onClick={handelSearch}>
+              <button className="btn" type="submit" onClick={handelSearch}>
                 <span className="input-group-text bg-transparent text-primary">
                   <i className="fa fa-search"></i>
                 </span>
               </button>
             </div>
           </div>
+
+          {/* Tài khoản */}
           <div className="col-lg-4 col-6 text-right">
-            <p className="m-0">Chăm Sóc Khách Hàng</p>
-            <h5 className="m-0">+012 345 6789</h5>
+            <div className="btn-group">
+              <button
+                type="button"
+                className="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {avatarBase64 && (
+                  <img
+                    src={`data:image/jpeg;base64,${avatarBase64}`}
+                    alt="avatar"
+                    className="rounded-circle border"
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      objectFit: "cover",
+                    }}
+                  />
+                )}
+                <div className="text-start">
+                  <div style={{ fontSize: "0.9rem", fontWeight: "500" }}></div>
+                  {username && (
+                    <div style={{ fontSize: "2rem", color: "#666" }}>
+                      Xin chào, <strong>{username}</strong>
+                    </div>
+                  )}
+                </div>
+              </button>
+
+              {isOpen && (
+                <div className="dropdown-menu dropdown-menu-right show">
+                  {!username ? (
+                    <>
+                      <Link to="/login" className="dropdown-item">
+                        🔐 Đăng nhập
+                      </Link>
+                      <Link to="/register" className="dropdown-item">
+                        📝 Đăng ký
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/profile" className="dropdown-item">
+                        👤 Chỉnh sửa thông tin
+                      </Link>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => {
+                          localStorage.removeItem("token");
+                          localStorage.removeItem("username");
+                          localStorage.removeItem("roles");
+                          navigate("/login");
+                        }}
+                      >
+                        🚪 Đăng xuất
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
     </>
   );
 };
+
 export default Header;

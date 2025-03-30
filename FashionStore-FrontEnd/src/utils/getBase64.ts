@@ -3,7 +3,10 @@ const getBase64 = (file: File): Promise<string | null> => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      resolve(reader.result as string);
+      // Tách và chỉ lấy phần base64 data (phần sau dấu phẩy)
+      const result = reader.result as string;
+      const base64Data = result ? result.split(",")[1] : null;
+      resolve(base64Data);
     };
     reader.onerror = (error) => {
       reject(error);

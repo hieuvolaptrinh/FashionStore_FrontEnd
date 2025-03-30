@@ -6,4 +6,5 @@ export interface UserModel {
   lastName: string;
   password: string;
   userName: string;
+  avatarBase64: string | null;
 }

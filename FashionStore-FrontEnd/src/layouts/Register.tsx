@@ -6,6 +6,7 @@ import {
   checkUserName,
   registerUser,
 } from "../service/API/UserAPI";
+import getBase64 from "../utils/getBase64";
 
 export const Register: React.FC = () => {
   const [avatar, setAvatar] = useState<File | null>(null);
@@ -109,6 +110,8 @@ export const Register: React.FC = () => {
 
     // Nếu không có lỗi, thực hiện submit dữ liệu
 
+    const base64Avatar = avatar ? await getBase64(avatar) : null;
+    console.log("Base64 Avatar: ", base64Avatar);
     const message = await registerUser({
       email: email,
       phoneNumber: phone,
@@ -116,6 +119,7 @@ export const Register: React.FC = () => {
       firstName: firstName,
       userName: userName,
       password: password,
+      avatarBase64: base64Avatar,
     });
     setNotification(message);
   };
