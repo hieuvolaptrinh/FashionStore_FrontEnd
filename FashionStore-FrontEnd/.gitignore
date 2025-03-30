@@ -1,6 +1,7 @@
 # Node modules
 node_modules/
 public/
+.env
 
 # Build output
 dist/

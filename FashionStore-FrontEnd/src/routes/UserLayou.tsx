@@ -1,17 +1,15 @@
-import Footer from "./layouts/Client/Footer";
-
-import Header from "./layouts/Client/Header";
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { About } from "./pages/About";
-import ProductDetail from "./pages/ProductDetail";
-import Trademark from "./pages/Trademark";
-import { Register } from "./layouts/Register";
-import Login from "./layouts/Login";
-import ActivateAccount from "./pages/ActivateAccount";
-import Test from "./Test/Test";
-import HomePage from "./layouts/Client/HomePage";
-
+import HomePage from "../layouts/Client/HomePage";
+import { About } from "../pages/About";
+import ProductDetail from "../pages/ProductDetail";
+import { Register } from "../layouts/Register";
+import Login from "../layouts/Login";
+import ActivateAccount from "../pages/ActivateAccount";
+import Test from "../Test/Test";
+import Trademark from "../pages/Trademark";
+import Footer from "../layouts/Client/Footer";
+import Header from "../layouts/Client/Header";
 
 function UserLayout() {
   const [keyword, setKeyword] = useState("");

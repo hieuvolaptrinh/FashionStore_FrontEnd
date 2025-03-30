@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import UserLayout from "./UserLayou";
-import AdminLayout from "./AdminLayout";
+
+import AdminLayout from "./routes/AdminLayout";
+import UserLayout from "./routes/UserLayou";
 
 function App() {
   return (
