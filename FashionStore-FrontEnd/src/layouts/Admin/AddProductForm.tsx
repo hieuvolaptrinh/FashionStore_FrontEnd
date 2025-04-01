@@ -1,9 +1,10 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import Type from "../../models/Type";
+
 import { getTypes } from "../../service/API/TypeAPI";
 import RequireAdmin from "./RequireAdmin";
 import { createProduct } from "../../service/API/AdminAPI";
 import uploadToGoogleDrive from "../../service/API/DriveAPI";
+import Type from "../../models/Type";
 
 const AddProductForm: React.FC = () => {
   const [types, setTypes] = useState<Type[]>([]);

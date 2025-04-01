@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../../apiConfig";
-import Type from "../../models/Type";
 import { request } from "../Request";
+import Type from "../../models/Type";
 
 export async function getTypes(): Promise<Type[]> {
   try {
@@ -8,11 +8,8 @@ export async function getTypes(): Promise<Type[]> {
       `${API_BASE_URL}/api/v1/products/types`
     );
 
-    const data = response.map(
-      (item: Type) => new Type(item.typeId, item.typeName)
-    );
-
-    return data;
+    // Trả về trực tiếp dữ liệu nhận được từ API mà không cần tạo mới đối tượng
+    return response;
   } catch (error) {
     // Xử lý lỗi nếu có
     console.error("Error fetching types:", error);

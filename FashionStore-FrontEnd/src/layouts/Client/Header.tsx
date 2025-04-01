@@ -82,19 +82,18 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
                 className="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2"
                 onClick={() => setIsOpen(!isOpen)}
               >
+                {" "}
                 {/* Hiển thị avatar nếu có, nếu không hiển thị tên "Tài khoản" */}
-                {avatarBase64 ? (
+                {username ? (
                   <>
-                    <img
-                      src={`data:image/jpeg;base64,${avatarBase64}`}
-                      alt="avatar"
-                      className="rounded-circle border"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        objectFit: "cover",
-                      }}
-                    />
+                    {avatarBase64 && (
+                      <img
+                        src={`data:image/png;base64,${avatarBase64}`}
+                        alt="Avatar"
+                        className="rounded-circle"
+                        style={{ width: "30px", height: "30px" }}
+                      />
+                    )}
                     <div className="text-start">
                       <div
                         style={{ fontSize: "0.9rem", fontWeight: "500" }}
@@ -107,7 +106,9 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
                     </div>
                   </>
                 ) : (
-                  <h5>Tài khoản</h5>
+                  <span className="h5 text-uppercase text-primary bg-dark px-2">
+                    Tài khoản
+                  </span>
                 )}
               </button>
 

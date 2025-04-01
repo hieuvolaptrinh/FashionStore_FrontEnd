@@ -2,35 +2,25 @@ import { request } from "../Request";
 import ProductModel from "../../models/ProductModel";
 import { API_BASE_URL, API_CONFIG } from "../../apiConfig";
 
+// Hàm getProduct đã sửa để phù hợp với cấu trúc Spring Pagination
 interface ProductPage {
   content: ProductModel[];
   totalPages: number;
   totalElements: number;
 }
-
-// Hàm getProduct đã sửa để phù hợp với cấu trúc Spring Pagination
 async function getProduct(url: string): Promise<ProductPage> {
   const response = await request<ProductPage>(url);
 
   return {
-    content: response.content.map(
-      (item) =>
-        new ProductModel(
-          item.productId,
-          item.productName,
-          item.description,
-          item.productionInfor,
-          item.originalPrice,
-          item.salePrice,
-          item.quantity,
-          item.avgStars
-        )
-    ),
+    content: response.content.map((item: ProductModel) => ({
+      ...item, // Đơn giản chỉ cần trả về đối tượng đã nhận từ API, không cần khởi tạo lại
+    })),
     totalPages: response.totalPages,
     totalElements: response.totalElements,
   };
 }
 
+// api RepositoryRestResource
 interface ProductPage2 {
   products: ProductModel[];
   totalPages: number;
@@ -45,19 +35,9 @@ async function getProduct2(url: string): Promise<ProductPage2> {
     const responseData = await response.json();
 
     return {
-      products: responseData._embedded.products.map(
-        (item: ProductModel) =>
-          new ProductModel(
-            item.productId,
-            item.productName,
-            item.description,
-            item.productionInfor,
-            item.originalPrice,
-            item.salePrice,
-            item.quantity,
-            item.avgStars
-          )
-      ),
+      products: responseData._embedded.products.map((item: ProductModel) => ({
+        ...item, // Trả về đối tượng mà không cần khởi tạo lại
+      })),
       totalPages: responseData.page.totalPages,
       totalElements: responseData.page.totalElements,
     };
@@ -110,16 +90,7 @@ export async function getProductById(
   try {
     const response = await fetch(url);
     const responseData = await response.json();
-    return new ProductModel(
-      responseData.productId,
-      responseData.productName,
-      responseData.description,
-      responseData.productionInfor,
-      responseData.originalPrice,
-      responseData.salePrice,
-      responseData.quantity,
-      responseData.avgStars
-    );
+    return responseData; // Trả về đối tượng với kiểu ProductModel
   } catch (error) {
     console.error("Lỗi:", error);
     return null;

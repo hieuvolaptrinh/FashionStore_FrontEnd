@@ -11,6 +11,7 @@ interface ProductProps {
   listTypes: number[];
   listImages: string[];
 }
+
 export async function createProduct(product: ProductProps): Promise<string> {
   const token = localStorage.getItem("token") || "";
   if (!token) {
