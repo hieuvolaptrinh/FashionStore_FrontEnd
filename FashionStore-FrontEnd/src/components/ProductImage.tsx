@@ -42,16 +42,25 @@ const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
         {/* Ảnh lớn */}
 
         <div className="border p-3 shadow-sm rounded position-relative">
-          {images.length > 0 && (
-            <img
-              // src={`/images/${images[currentIndex].link}`}
-              src={images[currentIndex].link}
-              // src={`data:image/jpeg;base64,${images[currentIndex].data}`}
-              alt=""
-              className="img-fluid rounded"
-              style={{ maxHeight: "400px", objectFit: "cover" }}
-            />
-          )}
+          <div
+            className="d-flex justify-content-center align-items-center height-400"
+            style={{ height: "400px" }}
+          >
+            {images.length > 0 && (
+              <img
+                src={images[currentIndex].link}
+                alt=""
+                className="img-fluid rounded text-align-self-center"
+                style={{
+                  maxHeight: "400px", // Giới hạn chiều cao tối đa của ảnh lớn
+                  // width: "100%", // Đảm bảo hình ảnh chiếm toàn bộ chiều rộng của khung
+                  height: "100%", // Đảm bảo hình ảnh chiếm toàn bộ chiều cao của khung
+                  objectFit: "cover", // Đảm bảo hình ảnh sẽ lấp đầy khung mà không bị méo
+                  borderRadius: "10px", // Tạo các góc bo tròn cho ảnh
+                }}
+              />
+            )}
+          </div>
 
           {/* Nút chuyển ảnh */}
           <button
@@ -90,9 +99,7 @@ const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
               style={{ cursor: "pointer" }}
             >
               <img
-
                 src={`${img.link}`}
-
                 // src={`data:image/jpeg;base64,${img.data}`}
                 alt=""
                 className={`img-thumbnail ${

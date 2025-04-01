@@ -82,26 +82,33 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
                 className="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2"
                 onClick={() => setIsOpen(!isOpen)}
               >
-                {avatarBase64 && (
-                  <img
-                    src={`data:image/jpeg;base64,${avatarBase64}`}
-                    alt="avatar"
-                    className="rounded-circle border"
-                    style={{
-                      width: "50px",
-                      height: "50px",
-                      objectFit: "cover",
-                    }}
-                  />
-                )}
-                <div className="text-start">
-                  <div style={{ fontSize: "0.9rem", fontWeight: "500" }}></div>
-                  {username && (
-                    <div style={{ fontSize: "2rem", color: "#666" }}>
-                      Xin chào, <strong>{username}</strong>
+                {/* Hiển thị avatar nếu có, nếu không hiển thị tên "Tài khoản" */}
+                {avatarBase64 ? (
+                  <>
+                    <img
+                      src={`data:image/jpeg;base64,${avatarBase64}`}
+                      alt="avatar"
+                      className="rounded-circle border"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <div className="text-start">
+                      <div
+                        style={{ fontSize: "0.9rem", fontWeight: "500" }}
+                      ></div>
+                      {username && (
+                        <div style={{ fontSize: "1.1rem", color: "#666" }}>
+                          Xin chào, <strong>{username}</strong>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  <h5>Tài khoản</h5>
+                )}
               </button>
 
               {isOpen && (
