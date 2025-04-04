@@ -1,18 +1,38 @@
 import { API_BASE_URL } from "../../apiConfig";
-import { request } from "../Request";
+import RestResponse from "../../models/Response";
+
 import Type from "../../models/Type";
 
 export async function getTypes(): Promise<Type[]> {
-  try {
-    const response = await request<Type[]>(
-      `${API_BASE_URL}/api/v1/products/types`
-    );
+  const url = `${API_BASE_URL}/api/v1/products/types`;
 
-    // Trả về trực tiếp dữ liệu nhận được từ API mà không cần tạo mới đối tượng
-    return response;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Nếu lỗi HTTP (4xx, 5xx)
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw new Error(
+        errorBody?.message ||
+          `HTTP LÔIXXXXXXXXXXXXs! Status: ${response.status}`
+      );
+    }
+
+    // Parse JSON và gán kiểu
+    const json: RestResponse<Type[]> = await response.json();
+
+    if (json.status !== 200) {
+      throw new Error(json.error || "Lỗi không xác định từ server.");
+    }
+
+    return json.data;
   } catch (error) {
-    // Xử lý lỗi nếu có
-    console.error("Error fetching types:", error);
-    throw error; // Rethrow lỗi để caller có thể xử lý nếu cần
+    console.error("Lỗi khi lấy types:", error);
+    throw error;
   }
 }

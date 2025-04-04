@@ -1,6 +1,7 @@
 import { request } from "../Request";
 import ProductModel from "../../models/ProductModel";
 import { API_BASE_URL, API_CONFIG } from "../../apiConfig";
+import RestResponse from "../../models/Response";
 
 // Hàm getProduct đã sửa để phù hợp với cấu trúc Spring Pagination
 interface ProductPage {
@@ -74,6 +75,28 @@ export async function getAllProducts(
   const url: string = `${API_BASE_URL}/api/v1/products?page=${
     currentPage - 1
   }&size=4&sort=productId,asc`;
+
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw new Error(
+        errorBody?.message || `HTTP Lỗi! Status: ${response.status}`
+      );
+    }
+
+    const json: RestResponse<ProductPage> = await response.json();
+    if (json.status !== 200) {
+      throw new Error(json.error || "Lỗi không xác định từ server.");
+    }
+
+    return json.data;
+  } catch (error) {
+    console.error("Lỗi khi lấy products:", error);
+    throw error;
+  }
+
   return getProduct(url);
 }
 
