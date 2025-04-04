@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../../apiConfig";
+import { getAvatar } from "../../service/API/UserAPI";
 
 interface HeaderProps {
   keyword: string;
@@ -18,17 +18,17 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     setUsername(storedUsername);
-    if (storedUsername) {
-      fetch(`${API_BASE_URL}/api/v1/user/${storedUsername}/avatar`)
-        .then((res) => {
-          console.log("HTTP response", res);
-          return res.text();
-        })
-        .then((base64) => {
-          console.log("Base64 avatar", base64);
-          setAvatarBase64(base64);
-        });
-    }
+    getAvatar()
+      .then((result) => {
+        if (result) {
+          setAvatarBase64(result);
+        } else {
+          setAvatarBase64(null);
+        }
+      })
+      .catch((err) => {
+        console.error("Lỗi khi gọi API:", err);
+      });
   }, []);
 
   const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {

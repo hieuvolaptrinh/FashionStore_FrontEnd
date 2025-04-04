@@ -1,14 +1,38 @@
 import { API_BASE_URL } from "../../apiConfig";
+import RestResponse from "../../models/Response";
 import { UserModel } from "../../models/UserModel";
 import { request } from "../Request";
 
+export const getAvatar = async (): Promise<string | null> => {
+  const storedUsername = localStorage.getItem("username");
+  if (!storedUsername) {
+    console.error("Chưa đăng nhập, không thể lấy avatar.");
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/user/${storedUsername}/avatar`
+    );
+
+    if (!response.ok) {
+      throw new Error("Không thể lấy avatar từ server.");
+    }
+    const base64 = await response.text();
+    return base64;
+  } catch (error) {
+    console.error("Lỗi khi gọi API:", error);
+    return null;
+  }
+};
 export const checkUserName = async (userName: string): Promise<boolean> => {
   const url = `${API_BASE_URL}/users/search/existsByUserName?userName=${userName}`;
   try {
     const response = await fetch(url);
-    const data = await response.text();
+    const json: RestResponse<boolean> = await response.json();
+    const data = json.data;
     console.log("data: ", data, typeof data);
-    return data === "true";
+    return data;
   } catch (error) {
     console.error("Lỗi kiểm tra username:", error);
     return false;
@@ -19,9 +43,10 @@ export const checkEmail = async (email: string): Promise<boolean> => {
   const url = `${API_BASE_URL}/users/search/existsByEmail?email=${email}`;
   try {
     const response = await fetch(url);
-    const data = await response.text();
+    const json: RestResponse<boolean> = await response.json();
+    const data = json.data;
     console.log("data: ", data, typeof data);
-    return data === "true";
+    return data;
   } catch (error) {
     console.error("Lỗi kiểm tra email:", error);
     return false;
@@ -59,15 +84,15 @@ export const activateAccount = async (
   }
 };
 
-// login
 export const login = async (
   userName: string,
   password: string
 ): Promise<{ success: boolean; message: string }> => {
   const loginRequest = {
-    userName: userName,
-    password: password,
+    userName,
+    password,
   };
+
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
       method: "POST",
@@ -79,19 +104,22 @@ export const login = async (
 
     if (response.ok) {
       const data = await response.json();
-      const { token, username, roles } = data;
+      const { token, username, roles } = data.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("username", username);
       localStorage.setItem("roles", JSON.stringify(roles)); // ["ADMIN", "STAFF"]
-      console.log("roles: ", roles);
+
       return { success: true, message: "Đăng nhập thành công" };
     } else {
-      const errorText = await response.text();
-      return { success: false, message: errorText };
+      const errorData = await response.json();
+      return {
+        success: false,
+        message: errorData.error || "Tên đăng nhập hoặc mật khẩu sai",
+      };
     }
   } catch (error) {
     console.error("Error:", error);
-    return { success: false, message: "Có lỗi xảy ra, vui lòng thử lại." };
+    return { success: false, error: "Có lỗi xảy ra, vui lòng thử lại." };
   }
 };
