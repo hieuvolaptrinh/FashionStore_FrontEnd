@@ -39,7 +39,7 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
         console.log(keyword);
         searchProduct(keyword, typeId)
           .then((result) => {
-            setListProduct(result.products);
+            setListProduct(result.content);
             setTotalPages(result.totalPages);
             setLoading(false);
           })
