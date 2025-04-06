@@ -12,7 +12,7 @@ import { getReviewsWithUser } from "../service/API/ReviewAPI";
 import InforProduct from "../components/InforProduct";
 
 import Navbar from "../layouts/Client/Navbar";
-import Carousel from "../layouts/homepage/Carousel";
+import Carousel from "../layouts/Carousel";
 
 const ProductDetail: React.FC = () => {
   // lấy productId từ URL
@@ -99,7 +99,6 @@ const ProductDetail: React.FC = () => {
 
   return (
     <>
-      <Navbar />
       <Carousel />
 
       <div className="container-fluid pb-5">

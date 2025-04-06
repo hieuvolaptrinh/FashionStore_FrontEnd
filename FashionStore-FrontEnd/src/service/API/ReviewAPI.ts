@@ -2,7 +2,7 @@ import { API_BASE_URL } from "../../apiConfig";
 import { ReviewModel } from "../../models/ReviewModel";
 
 import { UserModel } from "../../models/UserModel";
-import RestResponse from "../../models/Response";
+import RestResponse from "../../models/RestResponse";
 
 // pick: chỉ lấy ra vài thuộc tính của 1 object
 // http://localhost:8080/api/review-list/product/{productId}

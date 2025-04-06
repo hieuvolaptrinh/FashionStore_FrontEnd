@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "../../apiConfig";
-import RestResponse from "../../models/Response";
+import RestResponse from "../../models/RestResponse";
 import { UserModel } from "../../models/UserModel";
 import { request } from "../Request";
 
@@ -120,6 +120,9 @@ export const login = async (
     }
   } catch (error) {
     console.error("Error:", error);
-    return { success: false, error: "Có lỗi xảy ra, vui lòng thử lại." };
+    return {
+      success: false,
+      message: "Có lỗi xảy ra, vui lòng thử lại." + error,
+    };
   }
 };

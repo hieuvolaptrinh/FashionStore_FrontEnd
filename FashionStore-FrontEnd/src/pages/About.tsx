@@ -4,7 +4,6 @@ import Navbar from "../layouts/Client/Navbar";
 export function About() {
   return (
     <>
-      <Navbar />
       <Carousel />
     </>
   );

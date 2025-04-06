@@ -1,6 +1,6 @@
 import ProductModel from "../../models/ProductModel";
 import { API_BASE_URL } from "../../apiConfig";
-import RestResponse from "../../models/Response";
+import RestResponse from "../../models/RestResponse";
 
 interface ProductPage {
   content: ProductModel[]; // vì backend phân trang

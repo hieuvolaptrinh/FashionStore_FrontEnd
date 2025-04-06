@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 
 import ListProduct from "../../pages/ListProduct";
-import Carousel from "../homepage/Carousel";
+import Carousel from "../Carousel";
 
 // viết như này thì không cần inter
 function HomePage(props: { keyword: string }) {
@@ -23,7 +23,7 @@ function HomePage(props: { keyword: string }) {
 
   return (
     <>
-      <Navbar />
+
       <Carousel />
       <ListProduct keyword={props.keyword} typeId={typeIdNumber} />
     </>

@@ -1,5 +1,5 @@
 import ImageModel from "../../models/ImageModel";
-import RestResponse from "../../models/Response";
+import RestResponse from "../../models/RestResponse";
 
 async function fetchProductImage(url: string): Promise<ImageModel[]> {
   const result: ImageModel[] = [];

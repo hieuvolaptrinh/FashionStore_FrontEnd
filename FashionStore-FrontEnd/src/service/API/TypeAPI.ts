@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "../../apiConfig";
-import RestResponse from "../../models/Response";
+import RestResponse from "../../models/RestResponse";
 
 import Type from "../../models/Type";
 
@@ -13,8 +13,6 @@ export async function getTypes(): Promise<Type[]> {
         "Content-Type": "application/json",
       },
     });
-
-    // Nếu lỗi HTTP (4xx, 5xx)
     if (!response.ok) {
       const errorBody = await response.json();
       throw new Error(
