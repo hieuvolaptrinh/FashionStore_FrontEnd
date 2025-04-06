@@ -11,7 +11,6 @@ import { UserModel } from "../models/UserModel";
 import { getReviewsWithUser } from "../service/API/ReviewAPI";
 import InforProduct from "../components/InforProduct";
 
-import Navbar from "../layouts/Client/Navbar";
 import Carousel from "../layouts/Carousel";
 
 const ProductDetail: React.FC = () => {
@@ -44,8 +43,8 @@ const ProductDetail: React.FC = () => {
     }
   };
 
-   useEffect(() => {
-     getProductById(productIdNumber)
+  useEffect(() => {
+    getProductById(productIdNumber)
       .then((res) => {
         console.log("res:", res);
         setProduct(res);
@@ -196,7 +195,7 @@ const ProductDetail: React.FC = () => {
                   </div>
                 </form>
               </div>
-              {/* Colors */}
+              {/* Số lượng trong csdl */}
               <div className="d-flex mb-4">
                 <strong className="text-dark mr-3">Colors:</strong>
                 <form>
@@ -256,6 +255,11 @@ const ProductDetail: React.FC = () => {
                     </label>
                   </div>
                 </form>
+              </div>
+              <div className="d-flex mb-4">
+                <strong className="text-dark mr-3">
+                  Số lượng còn lại: {product.quantity}
+                </strong>
               </div>
               <div className="d-flex align-items-center mb-4 pt-2">
                 {/* tăng giảm */}
