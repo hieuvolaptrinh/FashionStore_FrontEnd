@@ -31,6 +31,9 @@ const CartItem: React.FC<CartItemProps> = ({ item, onUpdate }) => {
     <>
       <tr>
         <td>
+          <h6>{item.cartDetailId}</h6>
+        </td>
+        <td>
           <div>
             {item.product.mainImage && (
               <img
@@ -60,7 +63,6 @@ const CartItem: React.FC<CartItemProps> = ({ item, onUpdate }) => {
               </button>
             </div>
             <input
-              type="number"
               className="form-control form-control-sm bg-secondary border-0 text-center"
               value={item.quantity}
               min="1"

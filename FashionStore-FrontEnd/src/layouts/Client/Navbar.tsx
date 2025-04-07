@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Link, NavLink } from "react-router-dom";
 import Type from "../../models/Type";
@@ -118,15 +118,15 @@ function Navbar() {
                       0
                     </span>
                   </a>
-                  <a href="" className="btn px-0 ml-3">
+                  <Link to={"/cart"}>
                     <i className="fas fa-shopping-cart text-primary"></i>
                     <span
                       className="badge text-secondary border border-secondary rounded-circle"
                       style={{ paddingBottom: "2px" }}
                     >
-                      0
+                      5
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </nav>

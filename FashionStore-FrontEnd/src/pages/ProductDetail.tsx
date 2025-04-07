@@ -12,6 +12,7 @@ import { getReviewsWithUser } from "../service/API/ReviewAPI";
 import InforProduct from "../components/InforProduct";
 
 import Carousel from "../layouts/Carousel";
+import { addToCart } from "../service/API/CartAPI";
 
 const ProductDetail: React.FC = () => {
   // lấy productId từ URL
@@ -65,7 +66,16 @@ const ProductDetail: React.FC = () => {
         setLoading(false);
       });
   }, []);
-
+  //  add to cart
+  const handleAddToCart = async () => {
+    try {
+      const response = await addToCart(productIdNumber, quantity);
+      alert("Đã thêm sản phâm thành công ");
+      console.log(response);
+    } catch (error) {
+      alert("Không thể thêm sản phẩm vào giỏ hàng" + error);
+    }
+  };
   if (!product) {
     return (
       <div>
@@ -268,7 +278,10 @@ const ProductDetail: React.FC = () => {
                   increaseQuantity={increaseQuantity}
                   decreaseQuantity={decreaseQuantity}
                 />
-                <button className="btn btn-primary px-3">
+                <button
+                  className="btn btn-primary px-3"
+                  onClick={handleAddToCart}
+                >
                   <i className="fa fa-shopping-cart mr-1"></i> Thêm vào giỏ hàng
                 </button>
               </div>

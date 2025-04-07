@@ -55,6 +55,7 @@ function CartPage() {
             <table className="table table-light table-borderless table-hover text-center mb-0">
               <thead className="thead-dark">
                 <tr>
+                  <th>Mã sản phẩm </th>
                   <th>Hình ảnh </th>
                   <th>Sản phẩm </th>
                   <th>Giá </th>
@@ -97,7 +98,7 @@ function CartPage() {
               <div className="border-bottom pb-2">
                 <div className="d-flex justify-content-between mb-3">
                   <h6>Tổng tiền sản phẩm</h6>
-                  <h6>{cart ? cart.totalPrices : 0}</h6>
+                  <h6>{cart ? cart.totalPrices.toLocaleString("vi-VN") : 0}</h6>
                 </div>
                 <div className="d-flex justify-content-between">
                   <h6 className="font-weight-medium">Phí vận chuyển </h6>
@@ -106,11 +107,13 @@ function CartPage() {
               </div>
               <div className="pt-2">
                 <div className="d-flex justify-content-between mt-2">
-                  <h5>Tổng tiền cần thanh toán </h5>
-                  <h5>{cart ? cart.totalPrices : 0}</h5>
+                  <h5>Tổng tiền cần thanh toán: </h5>
+                  <h5>
+                    {cart ? cart.totalPrices.toLocaleString("vi-VN") : 0} vnd
+                  </h5>
                 </div>
                 <button className="btn btn-block btn-primary font-weight-bold my-3 py-3">
-                  Proceed To Checkout
+                  Đặt hàng ngay
                 </button>
               </div>
             </div>
