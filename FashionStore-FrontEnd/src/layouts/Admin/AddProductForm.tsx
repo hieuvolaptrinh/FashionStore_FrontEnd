@@ -8,6 +8,7 @@ import Type from "../../models/Type";
 
 const AddProductForm: React.FC = () => {
   const [types, setTypes] = useState<Type[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     productName: "",
     description: "",
@@ -22,7 +23,7 @@ const AddProductForm: React.FC = () => {
 
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  // Gọi API lấy danh sách loại sản phẩm khi component mount
+  // set types product
   useEffect(() => {
     const fetchTypes = async () => {
       try {
@@ -66,23 +67,46 @@ const AddProductForm: React.FC = () => {
   // submit form
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true); // Bắt đầu loading
     try {
-      // Upload tất cả ảnh lên Google Drive
+      console.log("Đang tải hình ảnh lên Google Drive...");
+
       const imageLinks = await Promise.all(
         formData.listImages.map((file) => uploadToGoogleDrive(file))
       );
 
+      console.log("Đang thêm thông tin sản phẩm...");
       const productToSend = {
         ...formData,
-        listImages: imageLinks, // chỉ gửi link ảnh
+        listImages: imageLinks,
       };
 
       const message = await createProduct(productToSend);
+      setIsLoading(false);
       alert(message);
+
+      resetForm();
     } catch (error) {
-      console.error("Lỗi submit:", error);
-      alert("Lỗi khi thêm sản phẩm!");
+     
+      setIsLoading(false);
+      alert("Lỗi khi thêm sản phẩm!" + error);
     }
+  };
+
+  //  reset form
+  const resetForm = () => {
+    setFormData({
+      productName: "",
+      description: "",
+      originalPrice: 0,
+      productionInfor: "",
+      salePrice: 0,
+      quantity: 0,
+      manufactureDate: "",
+      listTypes: [],
+      listImages: [],
+    });
+    setImagePreviews([]);
   };
 
   return (
@@ -101,6 +125,7 @@ const AddProductForm: React.FC = () => {
             value={formData.productName}
             onChange={handleInputChange}
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -112,6 +137,7 @@ const AddProductForm: React.FC = () => {
             rows={3}
             value={formData.description}
             onChange={handleInputChange}
+            disabled={isLoading}
           ></textarea>
         </div>
 
@@ -123,6 +149,7 @@ const AddProductForm: React.FC = () => {
             name="originalPrice"
             value={formData.originalPrice}
             onChange={handleInputChange}
+            disabled={isLoading}
           />
         </div>
 
@@ -134,6 +161,7 @@ const AddProductForm: React.FC = () => {
             name="salePrice"
             value={formData.salePrice}
             onChange={handleInputChange}
+            disabled={isLoading}
           />
         </div>
 
@@ -145,6 +173,7 @@ const AddProductForm: React.FC = () => {
             name="quantity"
             value={formData.quantity}
             onChange={handleInputChange}
+            disabled={isLoading}
           />
         </div>
 
@@ -156,6 +185,7 @@ const AddProductForm: React.FC = () => {
             name="manufactureDate"
             value={formData.manufactureDate}
             onChange={handleInputChange}
+            disabled={isLoading}
           />
         </div>
 
@@ -167,6 +197,7 @@ const AddProductForm: React.FC = () => {
             rows={3}
             value={formData.productionInfor}
             onChange={handleInputChange}
+            disabled={isLoading}
           ></textarea>
         </div>
 
@@ -182,8 +213,9 @@ const AddProductForm: React.FC = () => {
                   className="form-check-input"
                   type="checkbox"
                   id={`type-${type.typeId}`}
-                  checked={formData.listTypes.includes(type.typeId)} // Kiểm tra xem loại này đã được chọn chưa
-                  onChange={() => handleCheckboxChange(type.typeId)} // Xử lý khi thay đổi checkbox
+                  checked={formData.listTypes.includes(type.typeId)}
+                  onChange={() => handleCheckboxChange(type.typeId)}
+                  disabled={isLoading}
                 />
                 <label
                   className="form-check-label"
@@ -205,6 +237,7 @@ const AddProductForm: React.FC = () => {
             multiple
             onChange={handleImageChange}
             accept="image/*"
+            disabled={isLoading}
           />
         </div>
 
@@ -227,14 +260,33 @@ const AddProductForm: React.FC = () => {
           </div>
         )}
 
-        <button type="submit" className="btn btn-primary w-100">
-          Thêm sản phẩm
+        {/* HIỂN THỊ TRẠNG THÁI LOADING */}
+        {isLoading && (
+          <div className="alert alert-info mb-3" role="alert">
+            <div className="d-flex align-items-center">
+              <div
+                className="spinner-border spinner-border-sm me-2"
+                role="status"
+              >
+                <span className="visually-hidden">Đang xử lý...</span>
+              </div>
+              <span>Đang thêm thông tin sản phẩm...</span>
+            </div>
+          </div>
+        )}
+
+        <button
+          type="submit"
+          className="btn btn-primary w-100"
+          disabled={isLoading}
+        >
+          {isLoading ? "Đang xử lý..." : "Thêm sản phẩm"}
         </button>
       </form>
     </div>
   );
 };
 
-const AddProductForm_Admin = RequireAdmin(AddProductForm); // Bọc component bằng RequireAdmin
+const AddProductForm_Admin = RequireAdmin(AddProductForm);
 
 export default AddProductForm_Admin;

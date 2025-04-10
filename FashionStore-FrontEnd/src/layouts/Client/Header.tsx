@@ -13,6 +13,8 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
   const [tmp, setTmp] = useState("");
   const [avatarBase64, setAvatarBase64] = useState<string | null>(null);
 
+  const roles = localStorage.getItem("roles");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -125,20 +127,45 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
                     </>
                   ) : (
                     <>
-                      <Link to="/profile" className="dropdown-item">
-                        👤 Chỉnh sửa thông tin
-                      </Link>
-                      <button
-                        className="dropdown-item"
-                        onClick={() => {
-                          localStorage.removeItem("token");
-                          localStorage.removeItem("username");
-                          localStorage.removeItem("roles");
-                          navigate("/login");
-                        }}
-                      >
-                        🚪 Đăng xuất
-                      </button>
+                      {roles?.includes("ADMIN") ? (
+                        <>
+                          <Link to="/admin" className="dropdown-item">
+                            Trang admin
+                          </Link>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => {
+                              localStorage.removeItem("token");
+                              localStorage.removeItem("username");
+                              localStorage.removeItem("roles");
+                              navigate("/login");
+                            }}
+                          >
+                            🚪 Đăng xuất
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <Link to="/profile" className="dropdown-item">
+                            👤 Chỉnh sửa thông tin
+                          </Link>
+                          <Link to="/cart" className="dropdown-item">
+                            Giỏ hàng
+                          </Link>
+                          
+                          <button
+                            className="dropdown-item"
+                            onClick={() => {
+                              localStorage.removeItem("token");
+                              localStorage.removeItem("username");
+                              localStorage.removeItem("roles");
+                              navigate("/login");
+                            }}
+                          >
+                            🚪 Đăng xuất
+                          </button>
+                        </>
+                      )}
                     </>
                   )}
                 </div>
