@@ -1,6 +1,4 @@
-
 import { useParams } from "react-router-dom";
-import Navbar from "./Navbar";
 
 import ListProduct from "../../pages/ListProduct";
 import Carousel from "../Carousel";
@@ -23,7 +21,6 @@ function HomePage(props: { keyword: string }) {
 
   return (
     <>
-
       <Carousel />
       <ListProduct keyword={props.keyword} typeId={typeIdNumber} />
     </>

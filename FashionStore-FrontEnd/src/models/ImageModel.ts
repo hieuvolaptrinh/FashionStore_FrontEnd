@@ -1,5 +1,5 @@
 interface ImageModel {
-  imageId?: number; // ID có thể không có khi tạo mới
+imageId?: number;
   imageName: string;
   icon: boolean;
   link?: string; // Optional

@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { CartDetailModel } from "../models/CartModel";
 import { updateCartItem, removeFromCart } from "../service/API/CartAPI";
 
 interface CartItemProps {
   item: CartDetailModel;
   onUpdate: () => void;
+  onSelect: (id: number, isSelected: boolean) => void;
+  selectedItems: Set<number>;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item, onUpdate }) => {
+const CartItem: React.FC<CartItemProps> = ({
+  item,
+  onUpdate,
+  onSelect,
+  selectedItems,
+}) => {
+  const [isChecked, setIsChecked] = useState(
+    selectedItems.has(item.cartDetailId)
+  );
+
   const handleQuantityChange = async (newQuantity: number) => {
     if (newQuantity < 1) return;
     try {
@@ -27,9 +38,22 @@ const CartItem: React.FC<CartItemProps> = ({ item, onUpdate }) => {
     }
   };
 
+  const handleCheckboxChange = () => {
+    const newIsChecked = !isChecked;
+    setIsChecked(newIsChecked);
+    onSelect(item.cartDetailId, newIsChecked);
+  };
+
   return (
     <>
       <tr>
+        <td>
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+          />
+        </td>
         <td>
           <h6>{item.cartDetailId}</h6>
         </td>
@@ -49,7 +73,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, onUpdate }) => {
           <p>{item.product.description}</p>
         </td>
         <td>{item.price.toLocaleString("vi-VN")} vnđ</td>
-        <td className="">
+        <td>
           <div
             className="input-group quantity mx-auto my-auto"
             style={{ width: "100px" }}

@@ -1,7 +1,6 @@
+import { API_BASE_URL } from "../../apiConfig";
 import { CartModel, CartDetailModel } from "../../models/CartModel";
 import RestResponse from "../../models/RestResponse";
-
-const API_URL = "http://localhost:8080/api/v1";
 
 export const getCart = async (): Promise<CartModel> => {
   const token = localStorage.getItem("token");
@@ -9,7 +8,7 @@ export const getCart = async (): Promise<CartModel> => {
     throw new Error("Không tìm thấy token xác thực");
   }
 
-  const response = await fetch(`${API_URL}/cart`, {
+  const response = await fetch(`${API_BASE_URL}/api/v1/cart`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -31,7 +30,7 @@ export const getCartDetails = async (): Promise<CartDetailModel[]> => {
     throw new Error("Không tìm thấy token xác thực");
   }
 
-  const response = await fetch(`${API_URL}/cart/cart-detail`, {
+  const response = await fetch(`${API_BASE_URL}/api/v1/cart/cart-detail`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -47,6 +46,37 @@ export const getCartDetails = async (): Promise<CartDetailModel[]> => {
   return result.data;
 };
 
+// get selected cart details by ids
+export const getSelectedCartDetails = async (
+  ids: number[]
+): Promise<CartDetailModel[]> => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("Không tìm thấy token xác thực");
+  }
+
+  const queryParams = new URLSearchParams();
+  ids.forEach((id) => queryParams.append("ids", id.toString()));
+
+  const response = await fetch(
+    `${API_BASE_URL}/api/v1/cart/selected?${queryParams}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Không thể lấy danh sách sản phẩm đã chọn");
+  }
+
+  const result: RestResponse<CartDetailModel[]> = await response.json();
+  return result.data || [];
+};
+
 export const addToCart = async (
   productId: number,
   quantity: number
@@ -55,7 +85,7 @@ export const addToCart = async (
   if (!token) {
     throw new Error("Không tìm thấy token xác thực");
   }
-  const url = `${API_URL}/cart/add?productId=${productId}&quantity=${quantity}`;
+  const url = `${API_BASE_URL}/api/v1/cart/add?productId=${productId}&quantity=${quantity}`;
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -81,7 +111,7 @@ export const updateCartItem = async (
   if (!token) {
     throw new Error("Không tìm thấy token xác thực");
   }
-  const url = `${API_URL}/cart/update?cartDetailId=${cartDetailId}&quantity=${quantity}`;
+  const url = `${API_BASE_URL}/api/v1/cart/update?cartDetailId=${cartDetailId}&quantity=${quantity}`;
   const response = await fetch(url, {
     method: "PUT",
     headers: {
@@ -106,12 +136,15 @@ export const removeFromCart = async (
     throw new Error("Không tìm thấy token xác thực");
   }
 
-  const response = await fetch(`${API_URL}/cart/remove/${cartDetailId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetch(
+    `${API_BASE_URL}/api/v1/cart/remove/${cartDetailId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Không thể xóa sản phẩm khỏi giỏ hàng");

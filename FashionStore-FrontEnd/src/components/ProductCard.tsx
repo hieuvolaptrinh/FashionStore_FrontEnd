@@ -76,7 +76,8 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
             </a>
             <Link
               className="btn btn-outline-dark btn-square"
-              to={`product/${product.productId}`}
+              // to={`product/${product.productId}`}
+              to={`/product/${product.productId}`} // Sử dụng dấu "/" để chỉ định đường dẫn tuyệt đối
             >
               <i className="fa-solid fa-circle-info"></i>
             </Link>

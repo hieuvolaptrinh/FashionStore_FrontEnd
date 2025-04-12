@@ -14,6 +14,7 @@ import Header from "../layouts/Client/Header";
 import CartPage from "../layouts/Client/CartPage";
 import Navbar from "../layouts/Client/Navbar";
 import LoginRequiredPage from "../pages/LoginRequiredPage";
+import OrderPage from "../layouts/Client/OrderPage";
 
 function UserLayout() {
   const [keyword, setKeyword] = useState("");
@@ -36,6 +37,8 @@ function UserLayout() {
         />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/loginrequired" element={<LoginRequiredPage />} />
+
+        <Route path="/order" element={<OrderPage />} />
       </Routes>
       <Trademark />
       <Footer />
