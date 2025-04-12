@@ -8,7 +8,7 @@ export const getCart = async (): Promise<CartModel> => {
     throw new Error("Không tìm thấy token xác thực");
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/v1/cart`, {
+  const response = await fetch(`${API_BASE_URL}/api/v1/carts`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export const getCartDetails = async (): Promise<CartDetailModel[]> => {
     throw new Error("Không tìm thấy token xác thực");
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/v1/cart/cart-detail`, {
+  const response = await fetch(`${API_BASE_URL}/api/v1/carts/cart-detail`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export const getSelectedCartDetails = async (
   ids.forEach((id) => queryParams.append("ids", id.toString()));
 
   const response = await fetch(
-    `${API_BASE_URL}/api/v1/cart/selected?${queryParams}`,
+    `${API_BASE_URL}/api/v1/carts/selected?${queryParams}`,
     {
       method: "GET",
       headers: {
@@ -85,7 +85,7 @@ export const addToCart = async (
   if (!token) {
     throw new Error("Không tìm thấy token xác thực");
   }
-  const url = `${API_BASE_URL}/api/v1/cart/add?productId=${productId}&quantity=${quantity}`;
+  const url = `${API_BASE_URL}/api/v1/carts/add?productId=${productId}&quantity=${quantity}`;
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -111,7 +111,7 @@ export const updateCartItem = async (
   if (!token) {
     throw new Error("Không tìm thấy token xác thực");
   }
-  const url = `${API_BASE_URL}/api/v1/cart/update?cartDetailId=${cartDetailId}&quantity=${quantity}`;
+  const url = `${API_BASE_URL}/api/v1/carts/update?cartDetailId=${cartDetailId}&quantity=${quantity}`;
   const response = await fetch(url, {
     method: "PUT",
     headers: {
@@ -137,10 +137,11 @@ export const removeFromCart = async (
   }
 
   const response = await fetch(
-    `${API_BASE_URL}/api/v1/cart/remove/${cartDetailId}`,
+    `${API_BASE_URL}/api/v1/carts/remove/${cartDetailId}`,
     {
       method: "DELETE",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     }

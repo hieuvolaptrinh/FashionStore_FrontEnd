@@ -10,6 +10,7 @@ function CartPage() {
   const [cartDetails, setCartDetails] = useState<CartDetailModel[]>();
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
   const navigate = useNavigate();
+
   useEffect(() => {
     getCart()
       .then((response) => {
@@ -19,7 +20,6 @@ function CartPage() {
       .catch((error) => {
         console.error("Error fetching cart data:", error);
       });
-
     getCartDetails()
       .then((response) => {
         setCartDetails(response);
@@ -62,8 +62,8 @@ function CartPage() {
 
   const handleCheckout = () => {
     const selectedIds = Array.from(selectedItems);
+    console.log("Selected IDs:", selectedIds);
     navigate("/order", { state: { selectedIds } });
-    //chuyển hướng đến /order và gửi selectedIds qua state.
   };
 
   return (

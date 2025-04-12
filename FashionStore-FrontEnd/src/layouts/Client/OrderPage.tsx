@@ -1,15 +1,23 @@
-// pages/OrderPage.tsx
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AddressList from "../../components/Order/AddressList";
 import AddressForm from "../../components/Order/AddressForm";
 import OrderSummary from "../../components/Order/OrderSummary";
-
-import { createAddress, getUserAddresses } from "../../service/API/OrderAPI";
+import {
+  createAddress,
+  getUserAddresses,
+  getAllPaymentTypes,
+  getAllShippingMethods,
+  createOrder,
+} from "../../service/API/OrderAPI";
 import { getSelectedCartDetails } from "../../service/API/CartAPI";
-import { CartDetailModel } from "../../models/CartModel";
 import { AddressModel } from "../../models/AddressModel";
-import { OrderModel } from "../../models/OrderModel";
+import { CartDetailModel } from "../../models/CartModel";
+import {
+  OrderModel,
+  PaymentType,
+  ShippingMethod,
+} from "../../models/OrderModel";
 
 const OrderPage: React.FC = () => {
   const location = useLocation();
@@ -20,21 +28,25 @@ const OrderPage: React.FC = () => {
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null
   );
-  const [formData, setFormData] = useState<{
-    name: string;
-    phone: string;
-    paymentMethod: string;
-  }>({
-    name: "",
-    phone: "",
-    paymentMethod: "cash",
-  });
+  const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
+  const [shippingMethods, setShippingMethods] = useState<ShippingMethod[]>([]);
+  const [selectedPaymentType, setSelectedPaymentType] =
+    useState<PaymentType | null>(null);
+  const [selectedShippingMethod, setSelectedShippingMethod] =
+    useState<ShippingMethod | null>(null);
   const [cartDetails, setCartDetails] = useState<CartDetailModel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Lấy danh sách địa chỉ và sản phẩm
   useEffect(() => {
+    console.log("Received selectedIds:", selectedIds);
+
+    if (selectedIds.length === 0) {
+      setError("Không có sản phẩm nào được chọn");
+      setLoading(false);
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -42,37 +54,46 @@ const OrderPage: React.FC = () => {
           throw new Error("Vui lòng đăng nhập để tiếp tục");
         }
 
-        const [addressData, cartData] = await Promise.all([
-          getUserAddresses(),
-          getSelectedCartDetails(selectedIds),
-        ]);
+        const [addressData, cartData, paymentData, shippingData] =
+          await Promise.all([
+            getUserAddresses(),
+            getSelectedCartDetails(selectedIds),
+            getAllPaymentTypes(),
+            getAllShippingMethods(),
+          ]);
+
+        console.log("Fetched cart details:", cartData);
+
+        if (!cartData || cartData.length === 0) {
+          throw new Error("Không tìm thấy sản phẩm được chọn");
+        }
 
         setAddresses(addressData);
         setCartDetails(cartData);
+        setPaymentTypes(paymentData);
+        setShippingMethods(shippingData);
+
         if (addressData.length > 0) {
           setSelectedAddressId(addressData[0].addressId ?? null);
         }
+        if (paymentData.length > 0) {
+          setSelectedPaymentType(paymentData[0]);
+        }
+        if (shippingData.length > 0) {
+          setSelectedShippingMethod(shippingData[0]);
+        }
       } catch (err) {
-        setError(err + "Có lỗi xảy ra khi tải dữ liệu");
+        console.error("Fetch error:", err);
+        setError(
+          err instanceof Error ? err.message : "Có lỗi xảy ra khi tải dữ liệu"
+        );
       } finally {
         setLoading(false);
       }
     };
 
-    if (selectedIds.length > 0) {
-      fetchData();
-    } else {
-      setLoading(false);
-      setError("Không có sản phẩm nào được chọn");
-    }
-  }, [selectedIds]);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    fetchData();
+  }, [selectedIds, navigate]);
 
   const handleAddAddress = async (newAddress: AddressModel) => {
     try {
@@ -80,23 +101,23 @@ const OrderPage: React.FC = () => {
       setAddresses((prev) => [...prev, createdAddress]);
       setSelectedAddressId(createdAddress.addressId ?? null);
     } catch (err) {
-      alert(err + "Không thể thêm địa chỉ mới");
+      alert("Không thể thêm địa chỉ mới: " + err);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.phone) {
-      alert("Vui lòng điền đầy đủ họ tên và số điện thoại");
-      return;
-    }
-    if (!formData.phone.match(/^\d{10}$/)) {
-      alert("Số điện thoại phải có 10 chữ số");
-      return;
-    }
     if (!selectedAddressId) {
       alert("Vui lòng chọn hoặc thêm một địa chỉ giao hàng");
+      return;
+    }
+    if (!selectedPaymentType) {
+      alert("Vui lòng chọn phương thức thanh toán");
+      return;
+    }
+    if (!selectedShippingMethod) {
+      alert("Vui lòng chọn phương thức vận chuyển");
       return;
     }
 
@@ -108,39 +129,24 @@ const OrderPage: React.FC = () => {
     }
 
     const payload: OrderModel = {
-      name: formData.name,
-      phone: formData.phone,
-      paymentMethod: formData.paymentMethod,
       addressId: selectedAddressId,
+      paymentTypeId: selectedPaymentType?.paymentTypeId ?? 0,
+      shippingMethodId: selectedShippingMethod?.shippingMethodId ?? 0,
       selectedIds,
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/v1/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Không thể tạo đơn hàng");
-      }
-
+      await createOrder(payload);
       alert("Đơn hàng đã được xác nhận!");
       navigate("/cart");
     } catch (err) {
-      alert(err + "Có lỗi xảy ra, vui lòng thử lại!");
+      alert("Có lỗi xảy ra, vui lòng thử lại: " + err);
     }
   };
 
   return (
     <div className="container-fluid py-5">
       <div className="row px-xl-5">
-        {/* Cột trái: Địa chỉ và thông tin thanh toán */}
         <div className="col-lg-6 mb-5">
           <div className="card border-0 shadow-sm">
             <div className="card-body">
@@ -162,60 +168,69 @@ const OrderPage: React.FC = () => {
               <AddressForm onAddAddress={handleAddAddress} />
               <form onSubmit={handleSubmit} className="mt-4">
                 <div className="mb-3">
-                  <label htmlFor="name" className="form-label fw-bold">
-                    Họ và Tên
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="Nhập họ và tên"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="phone" className="form-label fw-bold">
-                    Số Điện Thoại
-                  </label>
-                  <input
-                    type="tel"
-                    className="form-control"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="Nhập số điện thoại"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="paymentMethod" className="form-label fw-bold">
+                  <label htmlFor="paymentTypeId" className="form-label fw-bold">
                     Phương Thức Thanh Toán
                   </label>
                   <select
                     className="form-select"
-                    id="paymentMethod"
-                    name="paymentMethod"
-                    value={formData.paymentMethod}
-                    onChange={handleInputChange}
+                    id="paymentTypeId"
+                    name="paymentTypeId"
+                    value={selectedPaymentType?.paymentTypeId || ""}
+                    onChange={(e) => {
+                      const selected = paymentTypes.find(
+                        (pt) => pt.paymentTypeId === Number(e.target.value)
+                      );
+                      setSelectedPaymentType(selected || null);
+                    }}
+                    required
                   >
-                    <option value="cash">Tiền mặt</option>
-                    <option value="card">Thẻ ngân hàng</option>
-                    <option value="momo">Momo</option>
-                    <option value="zalo">Zalo Pay</option>
+                    <option value="" disabled>
+                      Chọn phương thức thanh toán
+                    </option>
+                    {paymentTypes.map((pt) => (
+                      <option key={pt.paymentTypeId} value={pt.paymentTypeId}>
+                        {pt.paymentTypeName} ({pt.fee.toLocaleString("vi-VN")}{" "}
+                        vnđ)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="shippingMethodId"
+                    className="form-label fw-bold"
+                  >
+                    Phương Thức Vận Chuyển
+                  </label>
+                  <select
+                    className="form-select"
+                    id="shippingMethodId"
+                    name="shippingMethodId"
+                    value={selectedShippingMethod?.shippingMethodId || ""}
+                    onChange={(e) => {
+                      const selected = shippingMethods.find(
+                        (sm) => sm.shippingMethodId === Number(e.target.value)
+                      );
+                      setSelectedShippingMethod(selected || null);
+                    }}
+                    required
+                  >
+                    <option value="" disabled>
+                      Chọn phương thức vận chuyển
+                    </option>
+                    {shippingMethods.map((sm) => (
+                      <option
+                        key={sm.shippingMethodId}
+                        value={sm.shippingMethodId}
+                      >
+                        {sm.shippingMethodName} (
+                        {sm.fee.toLocaleString("vi-VN")} vnđ)
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="d-flex justify-content-between">
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary rounded-pill"
-                    onClick={() => navigate(-1)}
-                  >
-                    Hủy
-                  </button>
+              
                   <button
                     type="submit"
                     className="btn text-white rounded-pill"
@@ -230,11 +245,11 @@ const OrderPage: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Cột phải: Sản phẩm thanh toán */}
         <div className="col-lg-6 mb-5">
           <OrderSummary
             cartDetails={cartDetails}
+            selectedPaymentType={selectedPaymentType}
+            selectedShippingMethod={selectedShippingMethod}
             loading={loading}
             error={error}
           />

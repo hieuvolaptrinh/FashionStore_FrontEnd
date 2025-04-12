@@ -14,4 +14,4 @@ interface ProductModel {
 }
 
 export default ProductModel;
-// ProductProps interface để tạo sản phẩm mới
+

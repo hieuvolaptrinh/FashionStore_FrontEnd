@@ -1,4 +1,3 @@
-// components/order/AddressList.tsx
 import React from "react";
 import { AddressModel } from "../../models/AddressModel";
 
@@ -35,7 +34,7 @@ const AddressList: React.FC<AddressListProps> = ({
                   cursor: "pointer",
                 }}
                 onClick={() =>
-                  onSelectAddress(address.addressId ? address.addressId : 0)
+                  address.addressId && onSelectAddress(address.addressId)
                 }
               >
                 <div className="card-body">
@@ -45,9 +44,7 @@ const AddressList: React.FC<AddressListProps> = ({
                       name="address"
                       checked={selectedAddressId === address.addressId}
                       onChange={() =>
-                        onSelectAddress(
-                          address.addressId ? address.addressId : 0
-                        )
+                        address.addressId && onSelectAddress(address.addressId)
                       }
                       className="me-2"
                     />

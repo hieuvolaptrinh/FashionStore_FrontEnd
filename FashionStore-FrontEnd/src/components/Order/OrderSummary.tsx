@@ -1,22 +1,30 @@
 // components/order/OrderSummary.tsx
 import React from "react";
 import { CartDetailModel } from "../../models/CartModel";
+import { PaymentType, ShippingMethod } from "../../models/OrderModel";
 
 interface OrderSummaryProps {
   cartDetails: CartDetailModel[];
+  selectedPaymentType: PaymentType | null;
+  selectedShippingMethod: ShippingMethod | null;
   loading: boolean;
   error: string | null;
 }
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
   cartDetails,
+  selectedPaymentType,
+  selectedShippingMethod,
   loading,
   error,
 }) => {
-  const totalPrice = cartDetails.reduce(
+  const productTotal = cartDetails.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+  const paymentFee = selectedPaymentType?.fee || 0;
+  const shippingFee = selectedShippingMethod?.fee || 0;
+  const totalPrice = productTotal + paymentFee + shippingFee;
 
   return (
     <div className="card border-0 shadow-sm">
@@ -26,7 +34,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             className="text-white px-3 py-1 rounded"
             style={{
               background:
-                "linear-gradient(123deg,rgb(204, 153, 205),rgb(255, 0, 251))",
+                "linear-gradient(123deg, rgb(204, 153, 205), rgb(255, 0, 251))",
             }}
           >
             Sản phẩm thanh toán
@@ -50,7 +58,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                   className="thead-dark"
                   style={{
                     background:
-                      "linear-gradient(123deg,rgb(204, 153, 205),rgb(255, 0, 251))",
+                      "linear-gradient(123deg, rgb(204, 153, 205), rgb(255, 0, 251))",
                   }}
                 >
                   <tr>
@@ -95,11 +103,21 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             <div className="bg-light p-4 mt-4 rounded">
               <div className="d-flex justify-content-between mb-3">
                 <h6>Tổng tiền sản phẩm</h6>
-                <h6>{totalPrice.toLocaleString("vi-VN")} vnđ</h6>
+                <h6>{productTotal.toLocaleString("vi-VN")} vnđ</h6>
               </div>
               <div className="d-flex justify-content-between mb-3">
-                <h6>Phí vận chuyển</h6>
-                <h6>Miễn phí</h6>
+                <h6>
+                  Phí thanh toán (
+                  {selectedPaymentType?.paymentTypeName || "Chưa chọn"})
+                </h6>
+                <h6>{paymentFee.toLocaleString("vi-VN")} vnđ</h6>
+              </div>
+              <div className="d-flex justify-content-between mb-3">
+                <h6>
+                  Phí vận chuyển (
+                  {selectedShippingMethod?.shippingMethodName || "Chưa chọn"})
+                </h6>
+                <h6>{shippingFee.toLocaleString("vi-VN")} vnđ</h6>
               </div>
               <div className="d-flex justify-content-between">
                 <h5>Tổng tiền cần thanh toán:</h5>

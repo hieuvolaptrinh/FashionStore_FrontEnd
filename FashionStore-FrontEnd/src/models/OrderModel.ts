@@ -1,0 +1,19 @@
+export interface OrderModel {
+  addressId: number;
+  paymentTypeId: number;
+  shippingMethodId: number;
+  selectedIds: number[]; // Danh sách cartDetailId
+}
+export interface PaymentType {
+  paymentTypeId?: number;
+  paymentTypeName: string;
+  description: string;
+  fee: number; // phí vận chuyển
+}
+
+export interface ShippingMethod {
+  shippingMethodId?: number;
+  shippingMethodName: string;
+  description: string;
+  fee: number; // phí vận chuyển
+}
