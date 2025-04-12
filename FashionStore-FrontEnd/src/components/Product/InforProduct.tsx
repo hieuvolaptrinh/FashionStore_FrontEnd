@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import ProductModel from "../models/ProductModel";
-import { ReviewModel } from "../models/ReviewModel";
-import { UserModel } from "../models/UserModel";
-
+import ProductModel from "../../models/ProductModel";
+import { ReviewModel } from "../../models/ReviewModel";
+import { UserModel } from "../../models/UserModel";
 type ReviewWithUser = Pick<ReviewModel, "content" | "stars"> & {
   user: Pick<UserModel, "firstName" | "lastName" | "email">;
 };

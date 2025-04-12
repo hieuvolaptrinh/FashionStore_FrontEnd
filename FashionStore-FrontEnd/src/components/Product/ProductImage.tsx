@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import ImageModel from "../models/ImageModel";
-import { fetchProductImages } from "../service/API/ImageAPI";
+import ImageModel from "../../models/ImageModel";
+import { fetchProductImages } from "../../service/API/ImageAPI";
 
 interface ProductImageProps {
   productId: number;

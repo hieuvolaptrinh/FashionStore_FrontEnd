@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { CartDetailModel } from "../models/CartModel";
-import { updateCartItem, removeFromCart } from "../service/API/CartAPI";
+import { CartDetailModel } from "../../models/CartModel";
+import { updateCartItem, removeFromCart } from "../../service/API/CartAPI";
 
 interface CartItemProps {
   item: CartDetailModel;

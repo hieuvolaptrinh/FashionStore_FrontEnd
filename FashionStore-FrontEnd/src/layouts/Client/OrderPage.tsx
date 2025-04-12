@@ -1,29 +1,31 @@
-// OrderPage.tsx
+// pages/OrderPage.tsx
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CartDetailModel } from "../../models/CartModel";
+import AddressList from "../../components/Order/AddressList";
+import AddressForm from "../../components/Order/AddressForm";
+import OrderSummary from "../../components/Order/OrderSummary";
 
-interface OrderFormData {
-  name: string;
-  streetName: string;
-  cityName: string;
-  districtName: string;
-  wardName: string;
-  phone: string;
-  paymentMethod: string;
-}
+import { createAddress, getUserAddresses } from "../../service/API/OrderAPI";
+import { getSelectedCartDetails } from "../../service/API/CartAPI";
+import { CartDetailModel } from "../../models/CartModel";
+import { AddressModel } from "../../models/AddressModel";
+import { OrderModel } from "../../models/OrderModel";
 
 const OrderPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const selectedIds = location.state?.selectedIds || []; // Lấy selectedIds từ state
+  const selectedIds = location.state?.selectedIds || [];
 
-  const [formData, setFormData] = useState<OrderFormData>({
+  const [addresses, setAddresses] = useState<AddressModel[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
+    null
+  );
+  const [formData, setFormData] = useState<{
+    name: string;
+    phone: string;
+    paymentMethod: string;
+  }>({
     name: "",
-    streetName: "",
-    cityName: "",
-    districtName: "",
-    wardName: "",
     phone: "",
     paymentMethod: "cash",
   });
@@ -31,46 +33,34 @@ const OrderPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Gọi API để lấy danh sách sản phẩm đã chọn
+  // Lấy danh sách địa chỉ và sản phẩm
   useEffect(() => {
-    const fetchSelectedItems = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          throw new Error("Không tìm thấy token xác thực");
+          throw new Error("Vui lòng đăng nhập để tiếp tục");
         }
 
-        const queryParams = new URLSearchParams();
-        selectedIds.forEach((id: number) =>
-          queryParams.append("ids", id.toString())
-        );
+        const [addressData, cartData] = await Promise.all([
+          getUserAddresses(),
+          getSelectedCartDetails(selectedIds),
+        ]);
 
-        const response = await fetch(
-          `http://localhost:8080/api/v1/cart/selected?${queryParams}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Không thể lấy danh sách sản phẩm");
+        setAddresses(addressData);
+        setCartDetails(cartData);
+        if (addressData.length > 0) {
+          setSelectedAddressId(addressData[0].addressId ?? null);
         }
-
-        const result = await response.json();
-        setCartDetails(result.data || []);
       } catch (err) {
-        setError(err + "Có lỗi xảy ra khi tải sản phẩm");
+        setError(err + "Có lỗi xảy ra khi tải dữ liệu");
       } finally {
         setLoading(false);
       }
     };
 
     if (selectedIds.length > 0) {
-      fetchSelectedItems();
+      fetchData();
     } else {
       setLoading(false);
       setError("Không có sản phẩm nào được chọn");
@@ -84,8 +74,31 @@ const OrderPage: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleAddAddress = async (newAddress: AddressModel) => {
+    try {
+      const createdAddress = await createAddress(newAddress);
+      setAddresses((prev) => [...prev, createdAddress]);
+      setSelectedAddressId(createdAddress.addressId ?? null);
+    } catch (err) {
+      alert(err + "Không thể thêm địa chỉ mới");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.name || !formData.phone) {
+      alert("Vui lòng điền đầy đủ họ tên và số điện thoại");
+      return;
+    }
+    if (!formData.phone.match(/^\d{10}$/)) {
+      alert("Số điện thoại phải có 10 chữ số");
+      return;
+    }
+    if (!selectedAddressId) {
+      alert("Vui lòng chọn hoặc thêm một địa chỉ giao hàng");
+      return;
+    }
 
     const token = localStorage.getItem("token");
     if (!token) {
@@ -94,8 +107,11 @@ const OrderPage: React.FC = () => {
       return;
     }
 
-    const payload = {
-      ...formData,
+    const payload: OrderModel = {
+      name: formData.name,
+      phone: formData.phone,
+      paymentMethod: formData.paymentMethod,
+      addressId: selectedAddressId,
       selectedIds,
     };
 
@@ -116,36 +132,43 @@ const OrderPage: React.FC = () => {
 
       alert("Đơn hàng đã được xác nhận!");
       navigate("/cart");
-    } catch (error) {
-      alert(error + "Có lỗi xảy ra, vui lòng thử lại!");
+    } catch (err) {
+      alert(err + "Có lỗi xảy ra, vui lòng thử lại!");
     }
   };
-
-  // Tính tổng tiền
-  const totalPrice = cartDetails.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
 
   return (
     <div className="container-fluid py-5">
       <div className="row px-xl-5">
-        {/* Cột trái: Form thông tin thanh toán */}
+        {/* Cột trái: Địa chỉ và thông tin thanh toán */}
         <div className="col-lg-6 mb-5">
-          <div className="card border-0">
+          <div className="card border-0 shadow-sm">
             <div className="card-body">
               <h5 className="section-title position-relative text-uppercase mb-4">
-                <span className="bg-secondary pr-3">Thông tin thanh toán</span>
+                <span
+                  className="px-3 py-1 rounded text-white"
+                  style={{
+                    background: "linear-gradient(90deg, #007bff, #00d4ff)",
+                  }}
+                >
+                  Thông tin giao hàng
+                </span>
               </h5>
-              <form onSubmit={handleSubmit}>
+              <AddressList
+                addresses={addresses}
+                selectedAddressId={selectedAddressId}
+                onSelectAddress={setSelectedAddressId}
+              />
+              <AddressForm onAddAddress={handleAddAddress} />
+              <form onSubmit={handleSubmit} className="mt-4">
                 <div className="mb-3">
-                  <label htmlFor="formName" className="form-label">
+                  <label htmlFor="name" className="form-label fw-bold">
                     Họ và Tên
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    id="formName"
+                    id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
@@ -153,79 +176,14 @@ const OrderPage: React.FC = () => {
                     required
                   />
                 </div>
-
                 <div className="mb-3">
-                  <label htmlFor="formStreetName" className="form-label">
-                    Tên Đường
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="formStreetName"
-                    name="streetName"
-                    value={formData.streetName}
-                    onChange={handleInputChange}
-                    placeholder="Nhập tên đường"
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="formCityName" className="form-label">
-                    Thành Phố
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="formCityName"
-                    name="cityName"
-                    value={formData.cityName}
-                    onChange={handleInputChange}
-                    placeholder="Nhập tên thành phố"
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="formDistrictName" className="form-label">
-                    Quận/Huyện
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="formDistrictName"
-                    name="districtName"
-                    value={formData.districtName}
-                    onChange={handleInputChange}
-                    placeholder="Nhập tên quận/huyện"
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="formWardName" className="form-label">
-                    Phường/Xã
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="formWardName"
-                    name="wardName"
-                    value={formData.wardName}
-                    onChange={handleInputChange}
-                    placeholder="Nhập tên phường/xã"
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="formPhone" className="form-label">
+                  <label htmlFor="phone" className="form-label fw-bold">
                     Số Điện Thoại
                   </label>
                   <input
                     type="tel"
                     className="form-control"
-                    id="formPhone"
+                    id="phone"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
@@ -233,14 +191,13 @@ const OrderPage: React.FC = () => {
                     required
                   />
                 </div>
-
                 <div className="mb-3">
-                  <label htmlFor="formPaymentMethod" className="form-label">
+                  <label htmlFor="paymentMethod" className="form-label fw-bold">
                     Phương Thức Thanh Toán
                   </label>
                   <select
                     className="form-select"
-                    id="formPaymentMethod"
+                    id="paymentMethod"
                     name="paymentMethod"
                     value={formData.paymentMethod}
                     onChange={handleInputChange}
@@ -251,16 +208,21 @@ const OrderPage: React.FC = () => {
                     <option value="zalo">Zalo Pay</option>
                   </select>
                 </div>
-
                 <div className="d-flex justify-content-between">
                   <button
                     type="button"
-                    className="btn btn-secondary"
+                    className="btn btn-outline-secondary rounded-pill"
                     onClick={() => navigate(-1)}
                   >
                     Hủy
                   </button>
-                  <button type="submit" className="btn btn-primary">
+                  <button
+                    type="submit"
+                    className="btn text-white rounded-pill"
+                    style={{
+                      background: "linear-gradient(90deg, #007bff, #00d4ff)",
+                    }}
+                  >
                     Xác Nhận Đơn Hàng
                   </button>
                 </div>
@@ -269,79 +231,13 @@ const OrderPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Cột phải: Danh sách sản phẩm và tổng tiền */}
+        {/* Cột phải: Sản phẩm thanh toán */}
         <div className="col-lg-6 mb-5">
-          <div className="card border-0">
-            <div className="card-body">
-              <h5 className="section-title position-relative text-uppercase mb-4">
-                <span className="bg-secondary pr-3">Sản phẩm thanh toán</span>
-              </h5>
-              {loading ? (
-                <p>Đang tải...</p>
-              ) : error ? (
-                <p className="text-danger">{error}</p>
-              ) : cartDetails.length === 0 ? (
-                <p>Không có sản phẩm nào được chọn.</p>
-              ) : (
-                <>
-                  <div className="table-responsive">
-                    <table className="table table-light table-borderless table-hover text-center mb-0">
-                      <thead className="thead-dark">
-                        <tr>
-                          <th>Hình ảnh</th>
-                          <th>Sản phẩm</th>
-                          <th>Giá</th>
-                          <th>Số lượng</th>
-                          <th>Tổng tiền</th>
-                        </tr>
-                      </thead>
-                      <tbody className="align-middle">
-                        {cartDetails.map((item) => (
-                          <tr key={item.cartDetailId}>
-                            <td>
-                              {item.product.mainImage && (
-                                <img
-                                  src={item.product.mainImage}
-                                  alt={item.product.productName}
-                                  style={{ width: "80px", height: "80px" }}
-                                />
-                              )}
-                            </td>
-                            <td>
-                              <h6>{item.product.productName}</h6>
-                              <p>{item.product.description}</p>
-                            </td>
-                            <td>{item.price.toLocaleString("vi-VN")} vnđ</td>
-                            <td>{item.quantity}</td>
-                            <td>
-                              {(item.price * item.quantity).toLocaleString(
-                                "vi-VN"
-                              )}{" "}
-                              vnđ
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="bg-light p-4 mt-4">
-                    <div className="d-flex justify-content-between mb-3">
-                      <h6>Tổng tiền sản phẩm</h6>
-                      <h6>{totalPrice.toLocaleString("vi-VN")} vnđ</h6>
-                    </div>
-                    <div className="d-flex justify-content-between mb-3">
-                      <h6>Phí vận chuyển</h6>
-                      <h6>Miễn phí</h6>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <h5>Tổng tiền cần thanh toán:</h5>
-                      <h5>{totalPrice.toLocaleString("vi-VN")} vnđ</h5>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
+          <OrderSummary
+            cartDetails={cartDetails}
+            loading={loading}
+            error={error}
+          />
         </div>
       </div>
     </div>
