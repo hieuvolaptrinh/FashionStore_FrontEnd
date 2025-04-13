@@ -7,4 +7,5 @@ export interface UserModel {
   password: string;
   userName: string;
   avatarBase64: string | null;
+  role?: string;
 }

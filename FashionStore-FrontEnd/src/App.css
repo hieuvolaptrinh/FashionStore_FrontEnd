@@ -1,0 +1,68 @@
+
+
+/* Navbar chính */
+.custom-navbar {
+  background-color: #414f67 !important; /* Nền xám đen */
+}
+
+/* Nút toggle sidebar */
+.sidebar-toggler {
+  color: #a0aec0 !important; /* Màu xám nhạt */
+}
+
+.sidebar-toggler:hover {
+  color: #04ff00 !important; /* Màu đỏ khi hover */
+}
+
+/* Thanh tìm kiếm */
+.custom-navbar .form-control {
+  background-color: #2f371f !important;
+  color: #a0aec0 !important;
+}
+
+.custom-navbar .form-control::placeholder {
+  color: #a0aec0 !important; /* Màu placeholder xám nhạt */
+}
+
+/* Các mục trong Nav */
+.custom-nav-dropdown .nav-link {
+  color: #006eff !important; /* Màu chữ xám nhạt */
+}
+
+.custom-nav-dropdown .nav-link:hover {
+  color: #ef4444 !important; /* Màu đỏ khi hover */
+}
+
+/* Dropdown menu */
+.custom-nav-dropdown .dropdown-menu {
+  background-color: #2d3748 !important; /* Nền xám đen cho dropdown */
+  border: none !important;
+}
+
+/* Các mục trong dropdown */
+.custom-dropdown-item {
+  color: #4b96f7 !important; /* Màu chữ xám nhạt */
+  padding: 10px 20px !important; /* Tăng padding cho dễ nhìn */
+}
+
+.custom-dropdown-item:hover {
+  background-color: #f7e879 !important; /* Màu đỏ khi hover */
+  color: #000000 !important; /* Chữ trắng khi hover */
+}
+
+/* Đường phân cách trong dropdown */
+.custom-nav-dropdown .dropdown-divider {
+  border-color: #4b5563 !important; /* Màu xám đậm cho đường phân cách */
+}
+
+/* Đảm bảo chữ trong navbar và dropdown hiển thị rõ */
+.custom-navbar .navbar-brand,
+.custom-navbar .navbar-text,
+.custom-nav-dropdown .nav-link {
+  color: #a0aec0 !important;
+}
+
+.custom-navbar .navbar-brand:hover,
+.custom-nav-dropdown .nav-link:hover {
+  color: #ef4444 !important;
+}

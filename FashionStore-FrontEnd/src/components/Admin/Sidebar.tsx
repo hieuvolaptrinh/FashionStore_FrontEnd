@@ -1,79 +1,348 @@
-import React from 'react';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton, // Thêm ListItemButton
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Box,
+  Typography,
+  Avatar,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import {
+  Dashboard as DashboardIcon,
+  Laptop as LaptopIcon,
+  Widgets as WidgetsIcon,
+  TableChart as TableChartIcon,
+  BarChart as BarChartIcon,
+  Description as DescriptionIcon,
+  ExpandMore as ExpandMoreIcon,
+} from "@mui/icons-material";
 
 interface SidebarProps {
   isOpen: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+  const userName = localStorage.getItem("username") || "Hiếu Võ ";
   return (
-    <div className={`sidebar pe-4 pb-3 ${isOpen ? 'd-block' : 'd-none'}`}>
-      <Navbar bg="secondary" variant="dark" className="flex-column">
-        <Navbar.Brand as={Link} to="/" className="mx-4 mb-3">
-          <h3 className="text-primary">
-            <i className="fa fa-user-edit me-2"></i>DarkPan
-          </h3>
-        </Navbar.Brand>
-        <div className="d-flex align-items-center ms-4 mb-4">
-          <div className="position-relative">
-            <img
-              className="rounded-circle"
+    <Drawer
+      variant="persistent"
+      open={isOpen}
+      sx={{
+        width: isOpen ? 250 : 0,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          width: 250,
+          backgroundColor: "#2D3748",
+          color: "#ffffff",
+          borderRight: "none",
+          transition: "width 0.3s",
+          overflowX: "hidden",
+        },
+      }}
+    >
+      <Box sx={{ padding: "16px" }}>
+        {/* Logo và Brand */}
+        <Link to="/admin" style={{ textDecoration: "none", color: "inherit" }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+            <Avatar sx={{ bgcolor: "#EF4444", mr: 1 }}>
+              <i className="fa fa-user-edit"></i>
+            </Avatar>
+            <Typography
+              variant="h6"
+              sx={{ color: "#EF4444", fontWeight: "bold" }}
+            >
+              ADMIN
+            </Typography>
+          </Box>
+        </Link>
+
+        {/* Thông tin người dùng */}
+        <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+          <Box sx={{ position: "relative" }}>
+            <Avatar
               src="/img/user.jpg"
               alt="User"
-              style={{ width: '40px', height: '40px' }}
+              sx={{ width: 40, height: 40 }}
             />
-            <div className="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-          </div>
-          <div className="ms-3">
-            <h6 className="mb-0">Jhon Doe</h6>
-            <span>Admin</span>
-          </div>
-        </div>
-        <Nav className="flex-column w-100">
-          <Nav.Link as={Link} to="/" className="nav-item nav-link">
-            <i className="fa fa-tachometer-alt me-2"></i>Dashboard
-          </Nav.Link>
-          <NavDropdown
-            title={
-              <>
-                <i className="fa fa-laptop me-2"></i>Elements
-              </>
-            }
-            id="elements-dropdown"
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                width: 16,
+                height: 16,
+                bgcolor: "#38A169",
+                borderRadius: "50%",
+                border: "2px solidrgb(255, 255, 255)",
+              }}
+            />
+          </Box>
+          <Box sx={{ ml: 2 }}>
+            <Typography variant="subtitle1" sx={{ color: "rgb(42, 245, 6)" }}>
+              {userName}
+            </Typography>
+            <Typography variant="caption" sx={{ color: "rgb(225, 6, 245)" }}>
+              Admin
+            </Typography>
+          </Box>
+        </Box>
+
+        <Divider sx={{ bgcolor: "#4B5563", mb: 2 }} />
+
+        {/* Các mục điều hướng */}
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/admin"
+              sx={{
+                borderRadius: "50px",
+                mb: 1,
+                "&:hover": {
+                  backgroundColor: "#EF4444",
+                  "& .MuiListItemIcon-root": {
+                    color: "#ffffff",
+                  },
+                },
+                "&.Mui-selected": {
+                  backgroundColor: "#EF4444",
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "#A0AEC0", minWidth: 40 }}>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản Lý Tổng Quan" />
+            </ListItemButton>
+          </ListItem>
+
+          {/* Quá trình bán hàng*/}
+          <Accordion
+            sx={{
+              backgroundColor: "transparent",
+              color: "#ffffff",
+              boxShadow: "none",
+              "&:before": { display: "none" },
+            }}
           >
-            <NavDropdown.Item as={Link} to="/elements/buttons">Buttons</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/typography">Typography</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/elements/other">Other Elements</NavDropdown.Item>
-          </NavDropdown>
-          <Nav.Link as={Link} to="/widgets">
-            <i className="fa fa-th me-2"></i>Widgets
-          </Nav.Link>
-          <Nav.Link as={Link} to="/forms">
-            <i className="fa fa-keyboard me-2"></i>Forms
-          </Nav.Link>
-          <Nav.Link as={Link} to="/tables">
-            <i className="fa fa-table me-2"></i>Tables
-          </Nav.Link>
-          <Nav.Link as={Link} to="/charts">
-            <i className="fa fa-chart-bar me-2"></i>Charts
-          </Nav.Link>
-          <NavDropdown
-            title={
-              <>
-                <i className="far fa-file-alt me-2"></i>Pages
-              </>
-            }
-            id="pages-dropdown"
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon sx={{ color: "#A0AEC0" }} />}
+              sx={{
+                borderRadius: "50px",
+                "&:hover": {
+                  backgroundColor: "#EF4444",
+                  "& .MuiListItemIcon-root": {
+                    color: "#ffffff",
+                  },
+                  "& .MuiAccordionSummary-expandIconWrapper": {
+                    color: "#ffffff",
+                  },
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "#A0AEC0", minWidth: 40 }}>
+                <LaptopIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quá Trình Bán Hàng" />
+            </AccordionSummary>
+            <AccordionDetails sx={{ pl: 5 }}>
+              <List disablePadding>
+                <ListItem
+                  disablePadding
+                  sx={{
+                    color: "#A0AEC0",
+                    "&:hover": {
+                      color: "#EF4444",
+                    },
+                  }}
+                >
+                  <ListItemButton component={Link} to="/admin/orders">
+                    <ListItemText primary="Đơn Hàng" />
+                  </ListItemButton>
+                </ListItem>
+
+                <ListItem
+                  disablePadding
+                  sx={{
+                    color: "#A0AEC0",
+                    "&:hover": {
+                      color: "#EF4444",
+                    },
+                  }}
+                >
+                  <ListItemButton component={Link} to="/admin/create">
+                    <ListItemText primary="Danh sách sản phẩm" />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </AccordionDetails>
+          </Accordion>
+
+          {/* Tiện ích */}
+          <ListItem disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/admin/widgets"
+              sx={{
+                borderRadius: "50px",
+                mb: 1,
+                "&:hover": {
+                  backgroundColor: "#EF4444",
+                  "& .MuiListItemIcon-root": {
+                    color: "#ffffff",
+                  },
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "#A0AEC0", minWidth: 40 }}>
+                <WidgetsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Tiện Ích" />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/admin/user"
+              sx={{
+                borderRadius: "50px",
+                mb: 1,
+                "&:hover": {
+                  backgroundColor: "#EF4444",
+                  "& .MuiListItemIcon-root": {
+                    color: "#ffffff",
+                  },
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "#A0AEC0", minWidth: 40 }}>
+                <TableChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Người Dùng" />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/admin/charts"
+              sx={{
+                borderRadius: "50px",
+                mb: 1,
+                "&:hover": {
+                  backgroundColor: "#EF4444",
+                  "& .MuiListItemIcon-root": {
+                    color: "#ffffff",
+                  },
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "#A0AEC0", minWidth: 40 }}>
+                <BarChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Biểu đồ thống kê" />
+            </ListItemButton>
+          </ListItem>
+
+          {/* Pages
+           */}
+          <Accordion
+            sx={{
+              backgroundColor: "transparent",
+              color: "#ffffff",
+              boxShadow: "none",
+              "&:before": { display: "none" },
+            }}
           >
-            <NavDropdown.Item as={Link} to="/signin">Sign In</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/signup">Sign Up</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/404">404 Error</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/blank">Blank Page</NavDropdown.Item>
-          </NavDropdown>
-        </Nav>
-      </Navbar>
-    </div>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon sx={{ color: "#A0AEC0" }} />}
+              sx={{
+                borderRadius: "50px",
+                "&:hover": {
+                  backgroundColor: "#EF4444",
+                  "& .MuiListItemIcon-root": {
+                    color: "#ffffff",
+                  },
+                  "& .MuiAccordionSummary-expandIconWrapper": {
+                    color: "#ffffff",
+                  },
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "#A0AEC0", minWidth: 40 }}>
+                <DescriptionIcon />
+              </ListItemIcon>
+              <ListItemText primary="Pages" />
+            </AccordionSummary>
+            <AccordionDetails sx={{ pl: 5 }}>
+              <List disablePadding>
+                <ListItem
+                  disablePadding
+                  sx={{
+                    color: "#A0AEC0",
+                    "&:hover": {
+                      color: "#EF4444",
+                    },
+                  }}
+                >
+                  <ListItemButton component={Link} to="/register">
+                    <ListItemText primary="Đăng Kí" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  disablePadding
+                  sx={{
+                    color: "#A0AEC0",
+                    "&:hover": {
+                      color: "#EF4444",
+                    },
+                  }}
+                >
+                  <ListItemButton component={Link} to="/login">
+                    <ListItemText primary="Đăng nhập tài khoản khác" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  disablePadding
+                  sx={{
+                    color: "#A0AEC0",
+                    "&:hover": {
+                      color: "#EF4444",
+                    },
+                  }}
+                >
+                  <ListItemButton component={Link} to="/admin/404">
+                    <ListItemText primary="404 Error" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  disablePadding
+                  sx={{
+                    color: "#A0AEC0",
+                    "&:hover": {
+                      color: "#EF4444",
+                    },
+                  }}
+                >
+                  <ListItemButton component={Link} to="/admin/blank">
+                    <ListItemText primary="Blank Page" />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </AccordionDetails>
+          </Accordion>
+        </List>
+      </Box>
+    </Drawer>
   );
 };
 

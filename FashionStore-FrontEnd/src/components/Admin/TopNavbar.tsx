@@ -1,3 +1,4 @@
+// src/components/Admin/TopNavbar.tsx
 import React from "react";
 import {
   Navbar,
@@ -14,13 +15,13 @@ interface NavbarProps {
 }
 
 const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
+  const userName = localStorage.getItem("username") || "Hiếu Võ ";
   return (
     <Navbar
       expand="lg"
-      bg="secondary"
       variant="dark"
+      className="px-4 py-0 custom-navbar"
       sticky="top"
-      className="px-4 py-0"
     >
       <Navbar.Brand as={Link} to="/" className="d-flex d-lg-none me-4">
         <h2 className="text-primary mb-0">
@@ -29,7 +30,7 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
       </Navbar.Brand>
       <Button
         variant="link"
-        className="sidebar-toggler flex-shrink-0"
+        className="sidebar-toggler flex-shrink-0 text-light"
         onClick={toggleSidebar}
       >
         <i className="fa fa-bars"></i>
@@ -38,7 +39,7 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
         <FormControl
           type="search"
           placeholder="Search"
-          className="bg-dark border-0"
+          className="bg-dark border-0 text-light"
         />
       </Form>
       <Navbar.Collapse className="justify-content-end">
@@ -51,9 +52,10 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               </>
             }
             id="message-dropdown"
+            className="custom-nav-dropdown"
           >
             {[...Array(3)].map((_, i: number) => (
-              <NavDropdown.Item key={i}>
+              <NavDropdown.Item key={i} className="custom-dropdown-item">
                 <div className="d-flex align-items-center">
                   <img
                     className="rounded-circle"
@@ -68,8 +70,8 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 </div>
               </NavDropdown.Item>
             ))}
-            <NavDropdown.Divider />
-            <NavDropdown.Item className="text-center">
+            <NavDropdown.Divider className="bg-light" />
+            <NavDropdown.Item className="text-center custom-dropdown-item">
               See all messages
             </NavDropdown.Item>
           </NavDropdown>
@@ -81,23 +83,24 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               </>
             }
             id="notification-dropdown"
+            className="custom-nav-dropdown"
           >
-            <NavDropdown.Item>
+            <NavDropdown.Item className="custom-dropdown-item">
               <h6 className="fw-normal mb-0">Profile updated</h6>
               <small>15 minutes ago</small>
             </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item>
+            <NavDropdown.Divider className="bg-light" />
+            <NavDropdown.Item className="custom-dropdown-item">
               <h6 className="fw-normal mb-0">New user added</h6>
               <small>15 minutes ago</small>
             </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item>
+            <NavDropdown.Divider className="bg-light" />
+            <NavDropdown.Item className="custom-dropdown-item">
               <h6 className="fw-normal mb-0">Password changed</h6>
               <small>15 minutes ago</small>
             </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item className="text-center">
+            <NavDropdown.Divider className="bg-light" />
+            <NavDropdown.Item className="text-center custom-dropdown-item">
               See all notifications
             </NavDropdown.Item>
           </NavDropdown>
@@ -106,18 +109,25 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               <>
                 <img
                   className="rounded-circle me-lg-2"
-                  src="/img/user.jpg"
-                  alt="User"
+                  src="/images/user.jpg"
+
                   style={{ width: "40px", height: "40px" }}
                 />
-                <span className="d-none d-lg-inline-flex">John Doe</span>
+                <span className="d-none d-lg-inline-flex">{userName}</span>
               </>
             }
             id="user-dropdown"
+            className="custom-nav-dropdown"
           >
-            <NavDropdown.Item>My Profile</NavDropdown.Item>
-            <NavDropdown.Item>Settings</NavDropdown.Item>
-            <NavDropdown.Item>Log Out</NavDropdown.Item>
+            <NavDropdown.Item className="custom-dropdown-item">
+              My Profile
+            </NavDropdown.Item>
+            <NavDropdown.Item className="custom-dropdown-item">
+              Settings
+            </NavDropdown.Item>
+            <NavDropdown.Item className="custom-dropdown-item">
+              Log Out
+            </NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>
