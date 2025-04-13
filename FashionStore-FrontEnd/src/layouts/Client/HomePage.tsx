@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 
 import ListProduct from "../../pages/ListProduct";
 import Carousel from "../Carousel";
+import Button from "@mui/material/Button";
 
 // viết như này thì không cần inter
 function HomePage(props: { keyword: string }) {
@@ -22,6 +23,11 @@ function HomePage(props: { keyword: string }) {
   return (
     <>
       <Carousel />
+
+      <Button variant="contained" color="primary">
+        click
+      </Button>
+
       <ListProduct keyword={props.keyword} typeId={typeIdNumber} />
     </>
   );
