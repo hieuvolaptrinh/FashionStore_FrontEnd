@@ -1,7 +1,7 @@
 import { API_BASE_URL } from "../../apiConfig";
 import RestResponse from "../../models/RestResponse";
 import { UserModel } from "../../models/UserModel";
-import { request } from "../Request";
+
 
 export const getAvatar = async (): Promise<string | null> => {
   const storedUsername = localStorage.getItem("username");
@@ -55,9 +55,30 @@ export const checkEmail = async (email: string): Promise<boolean> => {
 export const registerUser = async (
   userData: Omit<UserModel, "userId">
 ): Promise<string> => {
+  const token = localStorage.getItem("token") || "";
+  if (!token) {
+    return "Bạn chưa đăng nhập!";
+  }
+
   try {
-    await request(`${API_BASE_URL}/api/v1/user/register`, "POST", userData);
-    return "Đã đăng ký thành công vui lòng kiểm tra email để kích hoạt tài khoản";
+    const response = await fetch(`${API_BASE_URL}/api/v1/user/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Thêm header Content-Type
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(userData), // Chuyển userData thành JSON
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      return (
+        result ||
+        "Đã đăng ký thành công vui lòng kiểm tra email để kích hoạt tài khoản"
+      );
+    } else {
+      return result.message || "Có lỗi khi đăng ký người dùng";
+    }
   } catch (error) {
     console.error("Lỗi đăng ký:", error);
     return `Bị lỗi trong quá trình đăng ký tài khoản: ${error}`;
@@ -127,27 +148,41 @@ export const login = async (
   }
 };
 
-export const getAllUsers = async (): Promise<UserModel[]> => {
+// src/service/API/UserAPI.ts
+export const updateUser = async (user: UserModel): Promise<string> => {
   const token = localStorage.getItem("token") || "";
   if (!token) {
-    return [];
+    return "Bạn chưa đăng nhập!";
   }
+
+  const payload = {
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    avatarBase64: user.avatarBase64,
+    roles: user.roles || [], // Đảm bảo roles là mảng
+    active: user.active,
+  };
+
   try {
-    const response = await fetch(`${API_BASE_URL}/api/v1/user`, {
-      method: "GET",
+    const response = await fetch(`${API_BASE_URL}/api/v1/user/${user.userId}`, {
+      method: "PUT",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(payload),
     });
+
+    const result = await response.json();
     if (response.ok) {
-      const data = await response.json();
-      return data.data;
+      return result.message || "Cập nhật thành công";
     } else {
-      console.error("Lỗi khi lấy danh sách người dùng:", response.statusText);
-      return [];
+      return result.message || "Có lỗi khi cập nhật người dùng";
     }
   } catch (error) {
-    console.error("Lỗi khi gọi API:", error);
-    return [];
+    console.error("Lỗi khi cập nhật người dùng:", error);
+    return "Có lỗi xảy ra khi cập nhật người dùng!";
   }
 };

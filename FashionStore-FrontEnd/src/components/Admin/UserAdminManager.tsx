@@ -2,20 +2,16 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "react-bootstrap";
 import UserFormModal from "./UserFormModal";
-import { getAllUsers, registerUser } from "../../service/API/UserAPI"; // API đã cung cấp
+import { getAllUsers, lockAccount } from "../../service/API/AdminAPI";
+import { registerUser, updateUser } from "../../service/API/UserAPI";
 import { UserModel } from "../../models/UserModel";
 
 type User = UserModel;
-
-const deleteUser = async (userId: number): Promise<void> => {
-  console.log(`Gửi yêu cầu xóa user với ID: ${userId}`);
-};
 
 const UserAdminManager: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [userToEdit, setUserToEdit] = useState<User | null>(null);
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -40,25 +36,66 @@ const UserAdminManager: React.FC = () => {
     setUserToEdit(null);
     setShowModal(true);
   };
+
   // Mở modal để sửa người dùng
   const handleEditUser = (user: User) => {
     setUserToEdit(user);
     setShowModal(true);
   };
 
-  // Xóa người dùng
+  // Khóa người dùng
   const handleDeleteUser = async (userId: number) => {
-    if (window.confirm("Bạn có chắc muốn xóa người dùng này?")) {
+    if (window.confirm("Bạn có chắc muốn khóa người dùng này?")) {
       try {
-        await deleteUser(userId);
+        await lockAccount(userId);
+        alert("Khóa người dùng thành công!");
+        // Cập nhật state trực tiếp thay vì gọi lại API
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.userId === userId ? { ...user, active: false } : user
+          )
+        );
       } catch (error) {
-        console.error("Lỗi khi xóa người dùng:", error);
-        alert("Có lỗi xảy ra khi xóa người dùng!");
+        console.error("Lỗi khi khóa người dùng:", error);
+        alert("Có lỗi xảy ra khi khóa người dùng!");
       }
     }
   };
 
-  const handleSaveUser = async (userData: User) => {};
+  // Lưu người dùng (thêm mới hoặc cập nhật)
+  const handleSaveUser = async (userData: User) => {
+    if (userToEdit) {
+      // Cập nhật người dùng
+      try {
+        const message = await updateUser(userData);
+        alert(message);
+        // Cập nhật state trực tiếp
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.userId === userData.userId ? { ...userData } : user
+          )
+        );
+      } catch (error) {
+        console.error("Lỗi khi cập nhật người dùng:", error);
+        alert("Có lỗi xảy ra khi cập nhật người dùng!");
+      }
+    } else {
+      // Thêm người dùng mới
+      try {
+        const message = await registerUser(userData);
+        alert(message);
+        // Thêm người dùng mới vào state
+        setUsers((prevUsers) => [
+          ...prevUsers,
+          { ...userData, userId: Date.now() },
+        ]);
+      } catch (error) {
+        console.error("Lỗi khi thêm người dùng:", error);
+        alert("Có lỗi xảy ra khi thêm người dùng!");
+      }
+    }
+    setShowModal(false);
+  };
 
   return (
     <>
@@ -69,12 +106,10 @@ const UserAdminManager: React.FC = () => {
           <div className="container mt-4">
             <h2 className="mb-4">Quản lý người dùng</h2>
 
-            {/* Nút thêm người dùng */}
             <Button variant="primary" className="mb-3" onClick={handleAddUser}>
               Thêm người dùng
             </Button>
 
-            {/* Bảng hiển thị danh sách người dùng */}
             <Table striped bordered hover responsive>
               <thead>
                 <tr>
@@ -84,6 +119,7 @@ const UserAdminManager: React.FC = () => {
                   <th>Số điện thoại</th>
                   <th>Quyền</th>
                   <th>Avatar</th>
+                  <th>Trạng thái</th>
                   <th>Hành động</th>
                 </tr>
               </thead>
@@ -94,18 +130,25 @@ const UserAdminManager: React.FC = () => {
                     <td>{`${user.firstName} ${user.lastName}`}</td>
                     <td>{user.email}</td>
                     <td>{user.phoneNumber}</td>
-                    <td>{user.role}</td>
+                    <td>{user.roles?.join(", ") || "Không có quyền"}</td>
                     <td>
                       {user.avatarBase64 ? (
                         <img
-                          src={user.avatarBase64}
+                          src={`data:image/png;base64,${user.avatarBase64}`}
                           alt="Avatar"
-                          width={50}
-                          height={50}
-                          style={{ objectFit: "cover", borderRadius: "50%" }}
+                          width={100}
+                          height={100}
+                          style={{ objectFit: "cover", borderRadius: "0%" }}
                         />
                       ) : (
                         "Không có ảnh"
+                      )}
+                    </td>
+                    <td>
+                      {user.active ? (
+                        <span className="text-success">Đang hoạt động</span>
+                      ) : (
+                        <span className="text-danger">Đã khóa</span>
                       )}
                     </td>
                     <td>
@@ -122,7 +165,7 @@ const UserAdminManager: React.FC = () => {
                         size="sm"
                         onClick={() => handleDeleteUser(user.userId!)}
                       >
-                        Xóa
+                        Khóa
                       </Button>
                     </td>
                   </tr>
@@ -130,7 +173,6 @@ const UserAdminManager: React.FC = () => {
               </tbody>
             </Table>
 
-            {/* Modal để thêm/sửa người dùng */}
             <UserFormModal
               show={showModal}
               onHide={() => setShowModal(false)}
