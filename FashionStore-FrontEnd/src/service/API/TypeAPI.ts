@@ -1,36 +1,23 @@
+import axios from 'axios';
 import { API_BASE_URL } from "../../apiConfig";
 import RestResponse from "../../models/RestResponse";
-
 import Type from "../../models/Type";
 
 export async function getTypes(): Promise<Type[]> {
   const url = `${API_BASE_URL}/api/v1/products/types`;
-
   try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      const errorBody = await response.json();
-      throw new Error(
-        errorBody?.message ||
-          `HTTP LÔIXXXXXXXXXXXXs! Status: ${response.status}`
-      );
+    const response = await axios.get<RestResponse<Type[]>>(url);
+    if (response.data.status !== 200) {
+      throw new Error(response.data.error || "Lỗi không xác định từ server.");
     }
-
-    // Parse JSON và gán kiểu
-    const json: RestResponse<Type[]> = await response.json();
-
-    if (json.status !== 200) {
-      throw new Error(json.error || "Lỗi không xác định từ server.");
-    }
-
-    return json.data;
+    return response.data.data; // .data ở lần đầu vì cái json của axios nó cũng có data
   } catch (error) {
-    console.error("Lỗi khi lấy types:", error);
+
+    if (axios.isAxiosError(error)) {
+      console.error("Lỗi từ API:", error.response?.data);
+    } else {
+      console.error("Lỗi không xác định:", error);
+    }
     throw error;
   }
 }

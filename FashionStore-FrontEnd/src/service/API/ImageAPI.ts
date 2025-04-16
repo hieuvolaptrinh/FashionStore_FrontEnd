@@ -7,7 +7,7 @@ async function fetchProductImage(url: string): Promise<ImageModel[]> {
 
   // Sử dụng axios thay vì fetch
   const response = await axios.get<RestResponse<ImageModel[]>>(url);
-  const data: ImageModel[] = response.data.data; // Truy cập dữ liệu qua response.data.data
+  const data: ImageModel[] = response.data.data; 
 
   for (const image of data) {
     result.push({

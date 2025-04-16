@@ -1,7 +1,7 @@
 import { API_BASE_URL } from "../../apiConfig";
 import RestResponse from "../../models/RestResponse";
 import { UserModel } from "../../models/UserModel";
-
+import axios from "axios";
 
 export const getAvatar = async (): Promise<string | null> => {
   const storedUsername = localStorage.getItem("username");
@@ -11,28 +11,28 @@ export const getAvatar = async (): Promise<string | null> => {
   }
 
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/api/v1/user/${storedUsername}/avatar`
+    const response = await axios.get<string>(
+      `${API_BASE_URL}/api/v1/user/${storedUsername}/avatar`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+        },
+      }
     );
 
-    if (!response.ok) {
-      throw new Error("Không thể lấy avatar từ server.");
-    }
-    const base64 = await response.text();
-    return base64;
+    return response.data; // Dữ liệu ảnh dưới dạng base64
   } catch (error) {
     console.error("Lỗi khi gọi API:", error);
     return null;
   }
 };
+
 export const checkUserName = async (userName: string): Promise<boolean> => {
   const url = `${API_BASE_URL}/users/search/existsByUserName?userName=${userName}`;
+
   try {
-    const response = await fetch(url);
-    const json: RestResponse<boolean> = await response.json();
-    const data = json.data;
-    console.log("data: ", data, typeof data);
-    return data;
+    const response = await axios.get<RestResponse<boolean>>(url);
+    return response.data.data;
   } catch (error) {
     console.error("Lỗi kiểm tra username:", error);
     return false;
@@ -41,40 +41,30 @@ export const checkUserName = async (userName: string): Promise<boolean> => {
 
 export const checkEmail = async (email: string): Promise<boolean> => {
   const url = `${API_BASE_URL}/users/search/existsByEmail?email=${email}`;
+
   try {
-    const response = await fetch(url);
-    const json: RestResponse<boolean> = await response.json();
-    const data = json.data;
-    console.log("data: ", data, typeof data);
-    return data;
+    const response = await axios.get<RestResponse<boolean>>(url);
+    return response.data.data;
   } catch (error) {
     console.error("Lỗi kiểm tra email:", error);
     return false;
   }
 };
+
 export const registerUser = async (
   userData: Omit<UserModel, "userId">
 ): Promise<string> => {
-  const token = localStorage.getItem("token") || "";
-  if (!token) {
-    return "Bạn chưa đăng nhập!";
-  }
-
   try {
-    const response = await fetch(`${API_BASE_URL}/api/v1/user/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Thêm header Content-Type
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(userData), // Chuyển userData thành JSON
-    });
+    const response = await axios.post(
+      `${API_BASE_URL}/api/v1/user/register`,
+      userData,
+    );
 
-    const result = await response.json();
-    if (response.ok) {
+    const result = response.data;
+    if (response.status === 200) {
       return (
-        result ||
-        "Đã đăng ký thành công vui lòng kiểm tra email để kích hoạt tài khoản"
+        result.message ||
+        "Đã đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản."
       );
     } else {
       return result.message || "Có lỗi khi đăng ký người dùng";
@@ -84,6 +74,7 @@ export const registerUser = async (
     return `Bị lỗi trong quá trình đăng ký tài khoản: ${error}`;
   }
 };
+
 export const activateAccount = async (
   email: string,
   activationCode: string

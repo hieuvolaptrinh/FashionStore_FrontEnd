@@ -15,7 +15,6 @@ export async function getReviewsWithUser(productId: number): Promise<
 > {
   try {
     const url = `${API_BASE_URL}/api/v1/review-list/product/${productId}`;
-
     // Gọi API và lấy dữ liệu
     const response = await fetch(url);
     const json: RestResponse<

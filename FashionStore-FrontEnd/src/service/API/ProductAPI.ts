@@ -1,6 +1,7 @@
 import ProductModel from "../../models/ProductModel";
 import { API_BASE_URL } from "../../apiConfig";
 import RestResponse from "../../models/RestResponse";
+import axios from "axios";
 
 interface ProductPage {
   content: ProductModel[]; // vì backend phân trang
@@ -8,31 +9,9 @@ interface ProductPage {
   totalElements: number;
 }
 async function getProduct(url: string): Promise<ProductPage | null> {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      const errorBody = await response.json();
-      throw new Error(
-        errorBody?.message || `HTTP Lỗi! Status: ${response.status}`
-      );
-    }
-
-    const json: RestResponse<ProductPage> = await response.json();
-    if (!json.data || !Array.isArray(json.data.content)) {
-      throw new Error("Dữ liệu không hợp lệ hoặc trống.");
-    }
-
-    return {
-      content: json.data.content.map((item: ProductModel) => ({
-        ...item,
-      })),
-      totalPages: json.data.totalPages,
-      totalElements: json.data.totalElements,
-    };
-  } catch (error) {
-    console.error("Lỗi khi gọi API:", error);
-    return null;
-  }
+  const response = (await axios.get(url)).data;
+  console.log(response);
+  return  response.data;
 }
 
 export async function searchProduct(

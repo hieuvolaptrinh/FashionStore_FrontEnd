@@ -1,6 +1,5 @@
 import { API_BASE_URL } from "../../apiConfig";
 
-
 const uploadToGoogleDrive = async (file: File): Promise<string> => {
   const formData = new FormData();
   formData.append("image", file);
