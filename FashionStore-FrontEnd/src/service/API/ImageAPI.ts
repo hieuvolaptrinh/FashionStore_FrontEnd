@@ -1,12 +1,14 @@
+import axios from "axios";
 import ImageModel from "../../models/ImageModel";
 import RestResponse from "../../models/RestResponse";
 
 async function fetchProductImage(url: string): Promise<ImageModel[]> {
   const result: ImageModel[] = [];
 
-  const response = await fetch(url);
-  const json: RestResponse<ImageModel[]> = await response.json();
-  const data: ImageModel[] = json.data;
+  // Sử dụng axios thay vì fetch
+  const response = await axios.get<RestResponse<ImageModel[]>>(url);
+  const data: ImageModel[] = response.data.data; // Truy cập dữ liệu qua response.data.data
+
   for (const image of data) {
     result.push({
       imageId: image.imageId,
@@ -17,10 +19,10 @@ async function fetchProductImage(url: string): Promise<ImageModel[]> {
       productId: image.productId,
     });
   }
-
   return result;
 }
 
+// Sử dụng Axios để fetch danh sách hình ảnh cho sản phẩm
 export async function fetchProductImages(
   productId: number
 ): Promise<ImageModel[]> {
