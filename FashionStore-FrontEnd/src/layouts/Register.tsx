@@ -9,6 +9,8 @@ import {
 import getBase64 from "../utils/getBase64";
 
 export const Register: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [avatar, setAvatar] = useState<File | null>(null);
 
   const [userName, setUserName] = useState("");
@@ -73,6 +75,7 @@ export const Register: React.FC = () => {
 
   // xử lý nút đăng ký
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsLoading(true); // Bắt đầu loading
     e.preventDefault();
     let hasError = false;
 
@@ -120,6 +123,7 @@ export const Register: React.FC = () => {
       avatarBase64: base64Avatar,
     });
     setNotification(message);
+    setIsLoading(false); // Kết thúc loading
   };
 
   return (
@@ -322,11 +326,29 @@ export const Register: React.FC = () => {
                       </div>
                     </div>
 
+                    {/* Loanding */}
+                    {isLoading && (
+                      <div className="alert alert-info mb-3" role="alert">
+                        <div className="d-flex align-items-center">
+                          <div
+                            className="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          >
+                            <span className="visually-hidden">
+                              Đang xử lý...
+                            </span>
+                          </div>
+                          <span>Kiểm tra thông tin người dùng...</span>
+                        </div>
+                      </div>
+                    )}
                     {/* Nút đăng ký */}
+                    {/*  */}
                     <div className="col-12">
                       <button
                         type="submit"
                         className="btn btn-primary w-100 py-2 rounded-5"
+                        disabled={isLoading}
                       >
                         Đăng Kí
                       </button>

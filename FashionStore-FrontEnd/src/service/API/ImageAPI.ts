@@ -1,13 +1,14 @@
 import axios from "axios";
 import ImageModel from "../../models/ImageModel";
 import RestResponse from "../../models/RestResponse";
+import { API_BASE_URL } from "../../apiConfig";
 
 async function fetchProductImage(url: string): Promise<ImageModel[]> {
   const result: ImageModel[] = [];
 
   // Sử dụng axios thay vì fetch
   const response = await axios.get<RestResponse<ImageModel[]>>(url);
-  const data: ImageModel[] = response.data.data; 
+  const data: ImageModel[] = response.data.data;
 
   for (const image of data) {
     result.push({
@@ -26,7 +27,7 @@ async function fetchProductImage(url: string): Promise<ImageModel[]> {
 export async function fetchProductImages(
   productId: number
 ): Promise<ImageModel[]> {
-  const url: string = `http://localhost:8080/api/v1/products/${productId}/listImages`;
+  const url: string = `${API_BASE_URL}/api/v1/products/${productId}/listImages`;
 
   return await fetchProductImage(url);
 }

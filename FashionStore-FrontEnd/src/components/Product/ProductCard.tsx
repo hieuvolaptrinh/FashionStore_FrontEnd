@@ -3,7 +3,7 @@ import ProductModel from "../../models/ProductModel";
 import ImageModel from "../../models/ImageModel";
 import { fetchProductImages } from "../../service/API/ImageAPI";
 import { Link } from "react-router-dom";
-
+import ImageProduct from "./ImageProduct";
 const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
   const [images, setImages] = useState<ImageModel[]>([]);
   const [loanding, setLoading] = useState(true);
@@ -54,7 +54,12 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
     <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
       <div className="product-item bg-light mb-4">
         <div className="product-img position-relative overflow-hidden">
-          <img
+          {/* ảo giác vl phải tạo component */}
+          <ImageProduct
+            icon={icon || ""}
+            productName={product.productName || ""}
+          />
+          {/* <img
             className="img-fluid w-100"
             src={icon ? `${icon}` : "/images/product-4.jpg"}
             alt={product.productName || "Product"}
@@ -63,7 +68,7 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
               width: "100%", // Đảm bảo ảnh full khung
               height: "300px", // Chiều cao cố định
             }}
-          />
+          /> */}
           <div className="product-action">
             <a className="btn btn-outline-dark btn-square" href="">
               <i className="fa fa-shopping-cart"></i>

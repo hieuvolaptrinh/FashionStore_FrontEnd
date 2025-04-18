@@ -17,3 +17,10 @@ export interface ShippingMethod {
   description: string;
   fee: number; // phí vận chuyển
 }
+
+export interface ResponseOrder {
+  orderId: number;
+  status: string;
+  totalPrice: number;
+  createAt: string;
+}

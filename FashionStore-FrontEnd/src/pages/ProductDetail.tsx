@@ -4,7 +4,7 @@ import ProductModel from "../models/ProductModel";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../service/API/ProductAPI";
 import ProductImage from "../components/Product/ProductImage";
-import QuantityInput from "../components/QuantityInput";
+import QuantityInput from "../components/Product/QuantityInput";
 import { ReviewModel } from "../models/ReviewModel";
 import { UserModel } from "../models/UserModel";
 import { getReviewsWithUser } from "../service/API/ReviewAPI";

@@ -15,6 +15,7 @@ import Forms from "../components/Admin/Forms";
 import Charts from "../components/Admin/Charts";
 import "../App.css"; // Ensure styles are imported
 import UserAdminManager from "../components/Admin/UserAdminManager";
+import Orders from "../components/Admin/Order/Order";
 
 const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
@@ -36,6 +37,7 @@ const AdminLayout: React.FC = () => {
             <Route path="/widgets" element={<Widgets />} />
             <Route path="/forms" element={<Forms />} />
             <Route path="/charts" element={<Charts />} />
+            <Route path="orders" element={<Orders />} />
           </Routes>
         </Container>
         <Footer />

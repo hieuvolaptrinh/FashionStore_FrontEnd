@@ -67,7 +67,6 @@ export const lockAccount = async (userId: number): Promise<void> => {
     const response = await fetch(`${API_BASE_URL}/api/v1/user/lock/${userId}`, {
       method: "PUT",
       headers: {
-        
         Authorization: `Bearer ${token}`,
       },
     });
