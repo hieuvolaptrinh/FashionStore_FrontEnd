@@ -22,5 +22,5 @@ export interface ResponseOrder {
   orderId: number;
   status: string;
   totalPrice: number;
-  createAt: string;
+  createAt: number;
 }

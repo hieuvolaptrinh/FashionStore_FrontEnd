@@ -35,7 +35,7 @@ export async function getAllOrdersAdmin(): Promise<ResponseOrder[]> {
 export const updateOrderStatus = async (orderId: number, status: string) => {
   const token = localStorage.getItem("token") || "";
   await axios.post(
-    `${API_BASE_URL}/api/v1/orders/admin/update/${orderId}&status=${status}`,
+    `${API_BASE_URL}/api/v1/orders/admin/update?orderId=${orderId}&status=${status}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

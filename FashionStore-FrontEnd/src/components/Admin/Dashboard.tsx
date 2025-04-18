@@ -1,7 +1,6 @@
 // src/components/Dashboard.tsx
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-
+import RevenueChart from "./Charts/RevenueChart";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,37 +23,12 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
 interface StatItem {
   icon: string;
   title: string;
   value: string;
 }
-
 const Dashboard: React.FC = () => {
-  const salesData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-    datasets: [
-      {
-        label: "Sales",
-        data: [1200, 1900, 3000, 5000, 2000],
-        backgroundColor: "#4A90E2",
-      },
-    ],
-  };
-
-  const revenueData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-    datasets: [
-      {
-        label: "Revenue",
-        data: [1000, 1500, 2500, 4000, 1800],
-        borderColor: "#4A90E2",
-        fill: false,
-      },
-    ],
-  };
-
   const stats: StatItem[] = [
     { icon: "chart-line", title: "Lược Truy Cập ", value: "10000" },
     { icon: "chart-bar", title: "Doanh Thu Hôm Nay", value: "$1234" },
@@ -64,6 +38,20 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container fluid>
+      <Row>
+        <Col sm={12} xl={6}>
+          <div className="bg-secondary rounded h-100 p-4">
+            <h6 className="mb-4">Biểu Đồ Doanh Thu</h6>
+            <RevenueChart />
+          </div>
+        </Col>
+        <Col sm={12} xl={6}>
+          <div className="bg-secondary rounded h-100 p-4">
+            <h6 className="mb-4">Biểu Đồ Doanh Thu Theo Tháng</h6>
+            <RevenueChart />
+          </div>
+        </Col>
+      </Row>
       <Row className="g-4">
         {stats.map((item, index) => (
           <Col sm={6} xl={3} key={index}>
@@ -114,27 +102,6 @@ const Dashboard: React.FC = () => {
                 </tbody>
               </table>
             </div>
-          </div>
-        </Col>
-      </Row>
-
-      <Row className="g-4 mt-4">
-        <Col sm={12} xl={6}>
-          <div className="bg-secondary text-center rounded p-4">
-            <div className="d-flex align-items-center justify-content-between mb-4">
-              <h6 className="mb-0">Doanh Số</h6>
-              <a href="#">Show All</a>
-            </div>
-            <Bar data={salesData} />
-          </div>
-        </Col>
-        <Col sm={12} xl={6}>
-          <div className="bg-secondary text-center rounded p-4">
-            <div className="d-flex align-items-center justify-content-between mb-4">
-              <h6 className="mb-0"> Bán hàng và doanh thu</h6>
-              <a href="#">Show All</a>
-            </div>
-            <Line data={revenueData} />
           </div>
         </Col>
       </Row>
