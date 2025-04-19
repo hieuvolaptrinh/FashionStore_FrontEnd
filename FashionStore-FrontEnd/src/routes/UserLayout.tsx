@@ -14,8 +14,7 @@ import Header from "../layouts/Client/Header";
 import Navbar from "../layouts/Client/Navbar";
 import LoginRequiredPage from "../pages/LoginRequiredPage";
 import CartPage_User from "../pages/CartPage";
-import Checkout from "../pages/CheckOut";
-
+import Checkout from "../pages/Checkout";
 
 function UserLayout() {
   const [keyword, setKeyword] = useState("");
