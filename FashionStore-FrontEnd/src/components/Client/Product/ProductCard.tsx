@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ProductModel from "../../models/ProductModel";
-import ImageModel from "../../models/ImageModel";
-import { fetchProductImages } from "../../service/API/ImageAPI";
 import { Link } from "react-router-dom";
 import ImageProduct from "./ImageProduct";
+import { fetchProductImages } from "../../../service/API/ImageAPI";
+import ProductModel from "../../../models/ProductModel";
+import ImageModel from "../../../models/ImageModel";
+
+
 const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
   const [images, setImages] = useState<ImageModel[]>([]);
   const [loanding, setLoading] = useState(true);

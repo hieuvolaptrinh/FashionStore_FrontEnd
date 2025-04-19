@@ -1,7 +1,7 @@
 // components/order/OrderSummary.tsx
 import React from "react";
-import { CartDetailModel } from "../../models/CartModel";
-import { PaymentType, ShippingMethod } from "../../models/OrderModel";
+import { CartDetailModel } from "../../../models/CartModel";
+import { PaymentType, ShippingMethod } from "../../../models/OrderModel";
 
 interface OrderSummaryProps {
   cartDetails: CartDetailModel[];

@@ -3,13 +3,13 @@ import ProductModel from "../models/ProductModel";
 
 import { useParams } from "react-router-dom";
 import { getProductById } from "../service/API/ProductAPI";
-import ProductImage from "../components/Product/ProductImage";
-import QuantityInput from "../components/Product/QuantityInput";
+import ProductImage from "../components/Client/Product/ProductImage";
+import QuantityInput from "../components/Client/Product/QuantityInput";
 import { ReviewModel } from "../models/ReviewModel";
 import { UserModel } from "../models/UserModel";
 import { getReviewsWithUser } from "../service/API/ReviewAPI";
-import InforProduct from "../components/Product/InforProduct";
-import Carousel from "../layouts/Carousel";
+import InforProduct from "../components/Client/Product/InforProduct";
+import Carousel from "./Carousel";
 import { addToCart } from "../service/API/CartAPI";
 
 const ProductDetail: React.FC = () => {

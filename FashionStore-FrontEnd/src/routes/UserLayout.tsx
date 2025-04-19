@@ -3,18 +3,19 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "../layouts/Client/HomePage";
 import { About } from "../pages/About";
 import ProductDetail from "../pages/ProductDetail";
-import { Register } from "../layouts/Register";
-import Login from "../layouts/Login";
+import { Register } from "../pages/Register";
+import Login from "../pages/Login";
 import ActivateAccount from "../pages/ActivateAccount";
 
 import Trademark from "../pages/Trademark";
 import Footer from "../layouts/Client/Footer";
 import Header from "../layouts/Client/Header";
 
-import CartPage from "../layouts/Client/CartPage";
 import Navbar from "../layouts/Client/Navbar";
 import LoginRequiredPage from "../pages/LoginRequiredPage";
-import OrderPage from "../layouts/Client/OrderPage";
+import CartPage_User from "../pages/CartPage";
+import Checkout from "../pages/CheckOut";
+
 
 function UserLayout() {
   const [keyword, setKeyword] = useState("");
@@ -35,10 +36,10 @@ function UserLayout() {
           path="/activateAccount/:email/:activationCode"
           element={<ActivateAccount />}
         />
-        <Route path="/cart" element={<CartPage />} />
+        <Route path="/cart" element={<CartPage_User />} />
         <Route path="/loginrequired" element={<LoginRequiredPage />} />
 
-        <Route path="/order" element={<OrderPage />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
       <Trademark />
       <Footer />

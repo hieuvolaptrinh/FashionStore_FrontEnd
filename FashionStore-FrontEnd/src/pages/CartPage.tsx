@@ -1,93 +1,155 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { CartModel, CartDetailModel } from "../models/CartModel";
+import { useEffect, useState } from "react";
+
 import { getCart, getCartDetails } from "../service/API/CartAPI";
-import CartItem from "../components/CartItem";
+import { CartDetailModel, CartModel } from "../models/CartModel";
+import CartItem from "../components/Client/Cart/CartItem";
+import { useNavigate } from "react-router-dom";
+import RequireUser from "../layouts/Client/RequireUser";
 
-const CartPage: React.FC = () => {
-  const [cart, setCart] = useState<CartModel | null>(null);
-  const [cartDetails, setCartDetails] = useState<CartDetailModel[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchCartData = async () => {
-    try {
-      setLoading(true);
-      const [cartData, detailsData] = await Promise.all([
-        getCart(),
-        getCartDetails()
-      ]);
-      setCart(cartData);
-      setCartDetails(detailsData);
-      setError(null);
-    } catch (err) {
-      setError("Không thể lấy thông tin giỏ hàng");
-    } finally {
-      setLoading(false);
-    }
-  };
+function CartPage() {
+  const [cart, setCart] = useState<CartModel>();
+  const [cartDetails, setCartDetails] = useState<CartDetailModel[]>();
+  const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCartData();
+    getCart()
+      .then((response) => {
+        setCart(response);
+        console.log("Cart data:", response);
+      })
+      .catch((error) => {
+        console.error("Error fetching cart data:", error);
+      });
+    getCartDetails()
+      .then((response) => {
+        setCartDetails(response);
+        console.log("Cart details:", response);
+      })
+      .catch((error) => {
+        console.error("Error fetching cart data:", error);
+      });
   }, []);
 
   const handleCartUpdate = () => {
-    fetchCartData();
+    // Gọi lại API để cập nhật dữ liệu giỏ hàng
+    getCart()
+      .then((response) => {
+        setCart(response);
+      })
+      .catch((error) => {
+        console.error("Error fetching cart data:", error);
+      });
+
+    getCartDetails()
+      .then((response) => {
+        setCartDetails(response);
+      })
+      .catch((error) => {
+        console.error("Error fetching cart data:", error);
+      });
   };
 
-  if (loading) {
-    return <div>Đang tải...</div>;
-  }
+  // Hàm để xử lý khi checkbox thay đổi
+  const handleSelectItem = (id: number, isSelected: boolean) => {
+    const newSelectedItems = new Set(selectedItems);
+    if (isSelected) {
+      newSelectedItems.add(id);
+    } else {
+      newSelectedItems.delete(id);
+    }
+    setSelectedItems(newSelectedItems);
+  };
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!cart || cartDetails.length === 0) {
-    return (
-      <div>
-        <h2>Giỏ hàng trống</h2>
-        <Link to="/products">Tiếp tục mua sắm</Link>
-      </div>
-    );
-  }
+  const handleCheckout = () => {
+    const selectedIds = Array.from(selectedItems);
+    console.log("Selected IDs:", selectedIds);
+    navigate("/checkout", { state: { selectedIds } });
+  };
 
   return (
-    <div>
-      <h2>Giỏ hàng của bạn</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Sản phẩm</th>
-            <th>Giá</th>
-            <th>Số lượng</th>
-            <th>Tổng</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {cartDetails.map((item) => (
-            <CartItem
-              key={item.cartDetailId}
-              item={item}
-              onUpdate={handleCartUpdate}
-            />
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colSpan={3}>Tổng cộng:</td>
-            <td>{cart.totalPrices.toLocaleString("vi-VN")} vnđ</td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-      <div>
-        <Link to="/products">Tiếp tục mua sắm</Link>
-        <button>Thanh toán</button>
+    <>
+      <div className="container-fluid">
+        <div className="row px-xl-5">
+          <div className="col-lg-8 table-responsive mb-5">
+            <table className="table table-light table-borderless table-hover text-center mb-0">
+              <thead className="thead-dark">
+                <tr>
+                  <th>Chọn thanh toán</th>
+                  <th>Mã </th>
+                  <th>Hình ảnh </th>
+                  <th>Sản phẩm </th>
+                  <th>Giá </th>
+                  <th>Số lượng</th>
+                  <th>Tổng tiền</th>
+                  <th>Xoá</th>
+                </tr>
+              </thead>
+              <tbody className="align-middle">
+                {cartDetails?.map((cartDetail) => (
+                  <CartItem
+                    key={cartDetail.cartDetailId}
+                    item={cartDetail}
+                    onUpdate={handleCartUpdate}
+                    onSelect={handleSelectItem}
+                    selectedItems={selectedItems}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* Đặt hàng */}
+          <div className="col-lg-4">
+            <form className="mb-30" action="">
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control border-0 p-4"
+                  placeholder="Nhập mã giảm giá "
+                />
+                <div className="input-group-append">
+                  <button className="btn btn-primary">
+                    Apply Mã giảm giá{" "}
+                  </button>
+                </div>
+              </div>
+            </form>
+            <h5 className="section-title position-relative text-uppercase mb-3">
+              <span className="bg-secondary pr-3">Giỏ Hàng</span>
+            </h5>
+            <div className="bg-light p-30 mb-5">
+              <div className="border-bottom pb-2">
+                <div className="d-flex justify-content-between mb-3">
+                  <h6>Tổng tiền sản phẩm</h6>
+                  <h6>{cart ? cart.totalPrices.toLocaleString("vi-VN") : 0}</h6>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <h6 className="font-weight-medium">Phí vận chuyển </h6>
+                  <h6 className="font-weight-medium">Free</h6>
+                </div>
+              </div>
+              <div className="pt-2">
+                <div className="d-flex justify-content-between mt-2">
+                  <h5>Tổng tiền cần thanh toán: </h5>
+                  <h5>
+                    {cart ? cart.totalPrices.toLocaleString("vi-VN") : 0} vnd
+                  </h5>
+                </div>
+                <button
+                  className="btn btn-block btn-primary font-weight-bold my-3 py-3"
+                  onClick={handleCheckout}
+                >
+                  Đặt hàng ngay
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
-};
+}
 
-export default CartPage; 
+const CartPage_User = RequireUser(CartPage);
+
+export default CartPage_User;

@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import AddressList from "../../components/Order/AddressList";
-import AddressForm from "../../components/Order/AddressForm";
-import OrderSummary from "../../components/Order/OrderSummary";
+import AddressList from "../components/Client/Checkout/AddressList";
+import AddressForm from "../components/Client/Checkout/AddressForm";
+import OrderSummary from "../components/Client/Checkout/OrderSummary";
 import {
   createAddress,
   getUserAddresses,
   getAllPaymentTypes,
   getAllShippingMethods,
   createOrder,
-} from "../../service/API/OrderAPI";
-import { getSelectedCartDetails } from "../../service/API/CartAPI";
-import { AddressModel } from "../../models/AddressModel";
-import { CartDetailModel } from "../../models/CartModel";
-import {
-  OrderModel,
-  PaymentType,
-  ShippingMethod,
-} from "../../models/OrderModel";
+} from "../service/API/OrderAPI";
+import { getSelectedCartDetails } from "../service/API/CartAPI";
+import { AddressModel } from "../models/AddressModel";
+import { CartDetailModel } from "../models/CartModel";
+import { OrderModel, PaymentType, ShippingMethod } from "../models/OrderModel";
 
-const OrderPage: React.FC = () => {
+const Checkout: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const selectedIds = location.state?.selectedIds || [];
@@ -230,7 +226,6 @@ const OrderPage: React.FC = () => {
                   </select>
                 </div>
                 <div className="d-flex justify-content-between">
-              
                   <button
                     type="submit"
                     className="btn text-white rounded-pill"
@@ -259,4 +254,4 @@ const OrderPage: React.FC = () => {
   );
 };
 
-export default OrderPage;
+export default Checkout;

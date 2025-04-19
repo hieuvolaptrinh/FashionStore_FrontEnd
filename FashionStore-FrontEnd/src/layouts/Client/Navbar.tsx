@@ -92,14 +92,15 @@ function Navbar() {
                   <NavLink to="/" className="nav-item nav-link ">
                     Trang Chủ
                   </NavLink>
-                  <NavLink to="/shop" className="nav-item nav-link">
-                    Shop
-                  </NavLink>
+
                   <NavLink to="/product/1" className="nav-item nav-link">
                     Chi Tiết Sản Phẩm
                   </NavLink>
                   <NavLink to="/cart" className="nav-item nav-link">
                     Giỏ Hàng
+                  </NavLink>
+                  <NavLink to="/order" className="nav-item nav-link">
+                    Đơn Hàng
                   </NavLink>
                   <NavLink to="/checkout" className="nav-item nav-link">
                     Thanh Toán
