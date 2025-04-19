@@ -11,8 +11,6 @@ import {
 import RestResponse from "../../models/RestResponse";
 
 // begin admin
-
-// lấy danh sách tất cả đơn hàng
 export async function getAllOrdersAdmin(): Promise<ResponseOrder[]> {
   const token = localStorage.getItem("token") || "";
 
@@ -45,6 +43,22 @@ export const updateOrderStatus = async (orderId: number, status: string) => {
   );
 };
 // end admin
+
+export const getOrderUser = async (): Promise<ResponseOrder[]> => {
+  const token = localStorage.getItem("token") || "";
+  const response = await axios.get<RestResponse<ResponseOrder[]>>(
+    `${API_BASE_URL}/api/v1/orders/user`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  console.log(" response" + response);
+  const data = response.data.data;
+  return data;
+};
+
 export const getUserAddresses = async (): Promise<AddressModel[]> => {
   const token = localStorage.getItem("token");
   if (!token) {

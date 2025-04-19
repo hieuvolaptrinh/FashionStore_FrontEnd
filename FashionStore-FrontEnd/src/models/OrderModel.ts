@@ -23,4 +23,14 @@ export interface ResponseOrder {
   status: string;
   totalPrice: number;
   createAt: number;
+  orderDetails: OrderDetail[];
+}
+
+export interface OrderDetail {
+  orderDetailId: number;
+  quantity: number;
+  price: number;
+  mainImage: string;
+  productName: string;
+  description: string;
 }

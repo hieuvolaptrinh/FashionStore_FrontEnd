@@ -17,10 +17,10 @@ const RequireUser = <P extends object>(
     useEffect(() => {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/loginrequired");
+        navigate("/loginRequired");
         return;
       }
-      
+
       try {
         const decodedToken = jwtDecode(token) as JwtPayload;
         const roles = decodedToken.roles;
@@ -31,7 +31,7 @@ const RequireUser = <P extends object>(
         }
       } catch (err) {
         console.error("Token không hợp lệ:", err);
-        navigate("/loginrequired");
+        navigate("/loginRequired");
       } finally {
         setChecking(false);
       }
@@ -41,9 +41,7 @@ const RequireUser = <P extends object>(
       return (
         <div className="d-flex justify-content-center align-items-center vh-100">
           <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">
-              Đang kiểm tra xác thực...
-            </span>
+            <span className="visually-hidden">Đang kiểm tra xác thực...</span>
           </div>
         </div>
       );

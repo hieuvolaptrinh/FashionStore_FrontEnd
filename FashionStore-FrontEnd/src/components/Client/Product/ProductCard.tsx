@@ -4,7 +4,7 @@ import ImageProduct from "./ImageProduct";
 import { fetchProductImages } from "../../../service/API/ImageAPI";
 import ProductModel from "../../../models/ProductModel";
 import ImageModel from "../../../models/ImageModel";
-
+import { addToCart } from "../../../service/API/CartAPI";
 
 const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
   const [images, setImages] = useState<ImageModel[]>([]);
@@ -40,6 +40,16 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
       </div>
     );
   }
+  const productId = product.productId !== undefined ? product.productId : 0;
+  const handleAddToCart = async () => {
+    try {
+      const response = await addToCart(productId, 1);
+      alert("Đã thêm sản phâm thành công vào giỏ hàng ");
+      console.log(response);
+    } catch (error) {
+      alert("Không thể thêm sản phẩm vào giỏ hàng" + error);
+    }
+  };
   if (loanding) {
     return (
       <div>
@@ -72,9 +82,12 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
             }}
           /> */}
           <div className="product-action">
-            <a className="btn btn-outline-dark btn-square" href="">
+            <button
+              className="btn btn-outline-dark btn-square"
+              onClick={handleAddToCart}
+            >
               <i className="fa fa-shopping-cart"></i>
-            </a>
+            </button>
             <a className="btn btn-outline-dark btn-square" href="">
               <i className="far fa-heart"></i>
             </a>
