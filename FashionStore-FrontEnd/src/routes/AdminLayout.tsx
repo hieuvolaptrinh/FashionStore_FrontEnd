@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import Sidebar from "../components/Admin/Sidebar";
-import TopNavbar from "../components/Admin/TopNavbar";
+import Sidebar from "../layouts/Admin/Sidebar";
+import TopNavbar from "../layouts/Admin/TopNavbar";
 
-import Footer from "../components/Admin/Footer";
-import AddProductForm_Admin from "../layouts/Admin/AddProductForm";
+import Footer from "../layouts/Admin/Footer";
+import AddProductForm_Admin from "../components/Admin/Product/AddProductForm";
 import ForbiddenPage from "../pages/ForbiddenPage";
 import Dashboard from "../components/Admin/Dashboard";
 
@@ -14,7 +14,7 @@ import Widgets from "../components/Admin/Widgets";
 import Forms from "../components/Admin/Forms";
 import Charts from "../components/Admin/Charts";
 import "../App.css"; // Ensure styles are imported
-import UserAdminManager from "../components/Admin/UserAdminManager";
+import UserAdminManager from "../components/Admin/User/UserAdminManager";
 import Orders from "../components/Admin/Order/Order";
 
 const AdminLayout: React.FC = () => {

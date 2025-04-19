@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "react-bootstrap";
 import UserFormModal from "./UserFormModal";
-import { getAllUsers, lockAccount } from "../../service/API/AdminAPI";
-import { registerUser, updateUser } from "../../service/API/UserAPI";
-import { UserModel } from "../../models/UserModel";
+import { getAllUsers, lockAccount } from "../../../service/API/AdminAPI";
+import { registerUser, updateUser } from "../../../service/API/UserAPI";
+import { UserModel } from "../../../models/UserModel";
 
 type User = UserModel;
 

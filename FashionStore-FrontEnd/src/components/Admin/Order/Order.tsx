@@ -19,7 +19,6 @@ import OrderStatusSelect from "./OrderStatusSelect";
 import { ResponseOrder } from "../../../models/OrderModel";
 import RevenueChart from "../Charts/RevenueChart";
 import { Col, Container, Row } from "react-bootstrap";
-
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState<ResponseOrder[]>([]);
 
@@ -46,7 +45,7 @@ const Orders: React.FC = () => {
 
   // Xử lý cập nhật trạng thái
   const handleStatusChange = (orderId: number, newStatus: string) => {
-    // callback function to get the latest state
+    // callback function
     setOrders((prevOrders) =>
       prevOrders.map((order) =>
         order.orderId === orderId ? { ...order, status: newStatus } : order

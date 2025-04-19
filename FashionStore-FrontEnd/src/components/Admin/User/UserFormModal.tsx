@@ -1,10 +1,13 @@
 // src/components/Admin/UserFormModal.tsx
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { checkEmail, checkUserName } from "../../service/API/UserAPI";
-import { validatePassword, validateRePassword } from "../../utils/Validation";
-import getBase64 from "../../utils/getBase64";
-import { UserModel } from "../../models/UserModel";
+import { checkEmail, checkUserName } from "../../../service/API/UserAPI";
+import {
+  validatePassword,
+  validateRePassword,
+} from "../../../utils/Validation";
+import getBase64 from "../../../utils/getBase64";
+import { UserModel } from "../../../models/UserModel";
 
 type User = UserModel;
 
