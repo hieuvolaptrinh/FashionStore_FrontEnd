@@ -6,7 +6,7 @@ import { createProduct } from "../../../service/API/AdminAPI";
 import uploadToGoogleDrive from "../../../service/API/DriveAPI";
 import Type from "../../../models/Type";
 
-const AddProductForm: React.FC = () => {
+const AddProductForm : React.FC = () => {
   const [types, setTypes] = useState<Type[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({

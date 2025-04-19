@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import RequireUser from "./RequireUser";
 import { getCart, getCartDetails } from "../../service/API/CartAPI";
 import { CartDetailModel, CartModel } from "../../models/CartModel";
-import CartItem from "../../components/Cart/CartItem";
+import CartItem from "../../components/Client/Cart/CartItem";
 import { useNavigate } from "react-router-dom";
 
 function CartPage() {
