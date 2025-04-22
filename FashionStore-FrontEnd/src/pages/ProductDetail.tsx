@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import ProductModel from "../models/ProductModel";
 
@@ -8,9 +9,9 @@ import QuantityInput from "../components/Client/Product/QuantityInput";
 import { ReviewModel } from "../models/ReviewModel";
 
 import { getReviewsWithUser } from "../service/API/ReviewAPI";
-import InforProduct from "../components/Client/Product/InforProduct";
 import Carousel from "./Carousel";
 import { addToCart } from "../service/API/CartAPI";
+import InfoProduct from "../components/Client/Product/InforProduct";
 
 const ProductDetail: React.FC = () => {
   // lấy productId từ URL
@@ -39,29 +40,36 @@ const ProductDetail: React.FC = () => {
     }
   };
 
+  const fetchReviews = async () => {
+    try {
+      const result = await getReviewsWithUser(productIdNumber);
+      setReviews(result);
+      console.log("Reviews updated:", result);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
   useEffect(() => {
-    getProductById(productIdNumber)
-      .then((res) => {
-        console.log("product llaf :", res);
-        setProduct(res);
+    const fetchData = async () => {
+      try {
+        const [productData, reviewsData] = await Promise.all([
+          getProductById(productIdNumber),
+          getReviewsWithUser(productIdNumber),
+        ]);
+
+        setProduct(productData);
+        setReviews(reviewsData);
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error: any) {
         setError(error);
         setLoading(false);
-      });
-    getReviewsWithUser(productIdNumber)
-      .then((result) => {
-        setReviews(result);
-        setLoading(false);
-        console.log("ktra:", result);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
-  }, []);
-  //  add to cart
+      }
+    };
+
+    fetchData();
+  }, [productIdNumber]);
+
   const handleAddToCart = async () => {
     try {
       const response = await addToCart(productIdNumber, quantity);
@@ -71,6 +79,7 @@ const ProductDetail: React.FC = () => {
       alert("Không thể thêm sản phẩm vào giỏ hàng" + error);
     }
   };
+
   if (!product) {
     return (
       <div>
@@ -304,7 +313,11 @@ const ProductDetail: React.FC = () => {
         </div>
         <div className="row px-xl-5">
           <div className="col">
-            <InforProduct reviews={reviews} product={product} />
+            <InfoProduct
+              reviews={reviews}
+              product={product}
+              onReviewAdded={fetchReviews}
+            />
           </div>
         </div>
       </div>

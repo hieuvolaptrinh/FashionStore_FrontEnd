@@ -3,13 +3,13 @@ import { ReviewModel } from "../../../models/ReviewModel";
 import ProductModel from "../../../models/ProductModel";
 import ReviewForm from "./ReviewForm";
 
-interface InforProductProps {
+interface InfoProductProps {
   reviews: ReviewModel[];
   product: ProductModel;
-  onReviewAdded?: () => void;
+  onReviewAdded: () => void;
 }
 
-const InforProduct: React.FC<InforProductProps> = ({
+const InfoProduct: React.FC<InfoProductProps> = ({
   reviews,
   product,
   onReviewAdded,
@@ -117,4 +117,4 @@ const InforProduct: React.FC<InforProductProps> = ({
   );
 };
 
-export default InforProduct;
+export default InfoProduct;

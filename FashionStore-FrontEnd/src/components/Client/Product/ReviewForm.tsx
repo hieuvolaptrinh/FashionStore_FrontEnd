@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { Rating } from "@mui/material";
 import { Star } from "@mui/icons-material";
@@ -5,8 +6,15 @@ import { createReview } from "../../../service/API/ReviewAPI";
 
 interface ReviewFormProps {
   productId: number;
-  onReviewSubmitted?: () => void;
+  onReviewSubmitted: () => void;
 }
+
+
+// interface ReviewRequest {
+//   productId: number;
+//   stars: number;
+//   content: string;
+// }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({
   productId,
@@ -40,16 +48,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
       await createReview(reviewData);
 
-      // Reset form
       setRating(0);
       setContent("");
 
-      // Notify parent component
-      if (onReviewSubmitted) {
-        onReviewSubmitted();
-      }
+      onReviewSubmitted(); // Cập nhật lại danh sách đánh giá
 
-      // Show success message
       alert("Đánh giá của bạn đã được gửi thành công!");
     } catch (err) {
       setError("Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại sau." + err);

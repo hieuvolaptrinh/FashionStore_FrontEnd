@@ -82,7 +82,6 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
               className="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {/* Hiển thị avatar nếu có, nếu không hiển thị tên "Tài khoản" */}
               {username ? (
                 <>
                   {avatarBase64 && (
@@ -94,11 +93,9 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
                     />
                   )}
                   <div className="text-start">
-                    {username && (
-                      <div style={{ fontSize: "1.1rem", color: "#666" }}>
-                        Xin chào, <strong>{username}</strong>
-                      </div>
-                    )}
+                    <div style={{ fontSize: "1.1rem", color: "#666" }}>
+                      Xin chào, <strong>{username}</strong>
+                    </div>
                   </div>
                 </>
               ) : (
@@ -107,7 +104,6 @@ const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
                 </span>
               )}
             </button>
-
             {isOpen && (
               <div className="dropdown-menu dropdown-menu-right show">
                 {!username ? (

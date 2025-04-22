@@ -1,12 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { API_BASE_URL } from "../../apiConfig";
 import { ReviewModel } from "../../models/ReviewModel";
-
 import RestResponse from "../../models/RestResponse";
 import axios from "axios";
 
-// pick: chỉ lấy ra vài thuộc tính của 1 object
-// http://localhost:8080/api/review-list/product/{productId}
-// api này tự viết ko phải của spring
+// Lấy danh sách đánh giá của sản phẩm
 export async function getReviewsWithUser(
   productId: number
 ): Promise<ReviewModel[]> {
@@ -15,17 +13,11 @@ export async function getReviewsWithUser(
       `${API_BASE_URL}/api/v1/review-list/product/${productId}`
     );
     console.log("Lấy review thành công: ", response.data.data);
-    return response.data.data; // Đã xóa từ khóa "await" không cần thiết
+    return response.data.data;
   } catch (error) {
     console.error("Lỗi:", error);
     throw error;
   }
-}
-
-interface ReviewDTO {
-  productId: number;
-  stars: number;
-  content: string;
 }
 
 export const getProductReviews = async (productId: number) => {
@@ -40,19 +32,21 @@ export const getProductReviews = async (productId: number) => {
   }
 };
 
-export const createReview = async (reviewData: ReviewDTO) => {
+export const createReview = async (reviewData: any) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Bạn chưa đăng nhập!");
+    throw new Error("No token found");
+  }
+  console.log("reviewData", reviewData);
+  console.log("url", `${API_BASE_URL}/api/v1/review-list`);
   try {
-    const response = await axios.post(
-      `${API_BASE_URL}/api/v1/review-list`,
-      reviewData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true, // Important for sending authentication cookies
-      }
-    );
-    return response.data;
+    await axios.post(`${API_BASE_URL}/api/v1/review-list`, reviewData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
   } catch (error) {
     console.error("Error creating review:", error);
     throw error;
