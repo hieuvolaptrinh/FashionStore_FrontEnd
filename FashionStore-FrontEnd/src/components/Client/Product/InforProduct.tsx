@@ -1,16 +1,19 @@
-import React, { useState } from "react";
-import ProductModel from "../../models/ProductModel";
-import { ReviewModel } from "../../models/ReviewModel";
-import { UserModel } from "../../models/UserModel";
-type ReviewWithUser = Pick<ReviewModel, "content" | "stars"> & {
-  user: Pick<UserModel, "firstName" | "lastName" | "email">;
-};
+import { useState } from "react";
+import { ReviewModel } from "../../../models/ReviewModel";
+import ProductModel from "../../../models/ProductModel";
+import ReviewForm from "./ReviewForm";
+
 interface InforProductProps {
+  reviews: ReviewModel[];
   product: ProductModel;
-  reviews: ReviewWithUser[];
+  onReviewAdded?: () => void;
 }
 
-const InforProduct: React.FC<InforProductProps> = ({ reviews, product }) => {
+const InforProduct: React.FC<InforProductProps> = ({
+  reviews,
+  product,
+  onReviewAdded,
+}) => {
   const [activeTab, setActiveTab] = useState("reviews");
 
   return (
@@ -46,38 +49,58 @@ const InforProduct: React.FC<InforProductProps> = ({ reviews, product }) => {
         <div className="tab-content">
           {activeTab === "reviews" && (
             <>
-              {reviews.map((review, index) => (
-                <div key={index} className="media mb-4">
-                  <img
-                    src="/images/user.jpg"
-                    alt="Image"
-                    className="img-fluid mr-3 mt-1"
-                    style={{ width: "70px" }}
-                  />
-                  <div className="media-body">
-                    <h6>
-                      {review.user.firstName} {review.user.lastName}
-                      <small> </small>
-                    </h6>
-                    <div className="text-primary mb-2">
-                      {[...Array(5)].map((_, index) => (
-                        <small
-                          key={index}
-                          className={`fa fa-star ${
-                            index < (review.stars || 0)
-                              ? "text-primary"
-                              : "text-muted"
-                          } mr-1`}
-                        ></small>
-                      ))}
-                      <small>({review.stars ? review.stars : "0"})</small>
+              <ReviewForm
+                productId={product.productId!}
+                onReviewSubmitted={onReviewAdded}
+              />
+              {reviews.length > 0 ? (
+                <>
+                  {reviews.map((review, index) => (
+                    <div key={index} className="media mb-4">
+                      <img
+                        src={
+                          review.avatar
+                            ? `data:image/png;base64,${review.avatar}`
+                            : "/images/user.jpg"
+                        }
+                        alt="User Avatar"
+                        className="img-fluid mr-3 mt-1"
+                        style={{ width: "70px" }}
+                        onError={(e) =>
+                          (e.currentTarget.src = "/images/user.jpg")
+                        }
+                      />
+                      <div className="media-body">
+                        <h6>
+                          {review.name}
+                          <small> </small>
+                        </h6>
+                        <div className="text-primary mb-2">
+                          {[...Array(5)].map((_, index) => (
+                            <small
+                              key={index}
+                              className={`fa fa-star ${
+                                index < (review.stars || 0)
+                                  ? "text-primary"
+                                  : "text-muted"
+                              } mr-1`}
+                            ></small>
+                          ))}
+                          <small>({review.stars ? review.stars : "0"})</small>
+                        </div>
+                        <p>{review.content}</p>
+                      </div>
                     </div>
-                    <p>{review.content}</p>
-                  </div>
+                  ))}
+                </>
+              ) : (
+                <div className="text-center">
+                  <h4>Chưa có đánh giá nào cho sản phẩm này</h4>
                 </div>
-              ))}
+              )}
             </>
           )}
+
           {activeTab === "description" && (
             <div className="tab-pane fade show active">
               <h4>{product.description}</h4>

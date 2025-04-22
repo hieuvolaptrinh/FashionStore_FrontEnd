@@ -6,7 +6,7 @@ import { getProductById } from "../service/API/ProductAPI";
 import ProductImage from "../components/Client/Product/ProductImage";
 import QuantityInput from "../components/Client/Product/QuantityInput";
 import { ReviewModel } from "../models/ReviewModel";
-import { UserModel } from "../models/UserModel";
+
 import { getReviewsWithUser } from "../service/API/ReviewAPI";
 import InforProduct from "../components/Client/Product/InforProduct";
 import Carousel from "./Carousel";
@@ -21,15 +21,12 @@ const ProductDetail: React.FC = () => {
   } catch (error) {
     console.error("Lỗi lấy productId từ URL: ", error);
   }
-  type ReviewWithUser = Pick<ReviewModel, "content" | "stars"> & {
-    user: Pick<UserModel, "firstName" | "lastName" | "email">;
-  };
+
   const [product, setProduct] = useState<ProductModel | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const [reviews, setReviews] = useState<ReviewWithUser[]>([]);
+  const [reviews, setReviews] = useState<ReviewModel[]>([]);
 
   const increaseQuantity = () => {
     if (quantity < (product?.quantity ?? 0)) {
@@ -45,7 +42,7 @@ const ProductDetail: React.FC = () => {
   useEffect(() => {
     getProductById(productIdNumber)
       .then((res) => {
-        console.log("res:", res);
+        console.log("product llaf :", res);
         setProduct(res);
         setLoading(false);
       })
@@ -87,7 +84,7 @@ const ProductDetail: React.FC = () => {
     return (
       <div>
         <div className="d-flex justify-content-center mt-5">
-          <h2>Gặp lỗi: </h2>
+          <h2>Gặp lỗi: {error}</h2>
         </div>
       </div>
     );

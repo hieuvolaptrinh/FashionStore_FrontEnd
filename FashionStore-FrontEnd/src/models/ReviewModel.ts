@@ -3,8 +3,6 @@ export interface ReviewModel {
   content: string;
   stars: number;
   productId: number;
-  userId: number;
-  _links: {
-    user: { href: string };
-  };
+  name: string;
+  avatar: string;
 }

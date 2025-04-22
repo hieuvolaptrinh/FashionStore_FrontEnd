@@ -97,7 +97,7 @@ const OrderItem: React.FC<{ order: ResponseOrder }> = ({ order }) => {
           className="card-body"
           style={{ padding: "20px", backgroundColor: "#fafafa" }}
         >
-          <OrderDetail orderDetails={order.orderDetails} />
+          <OrderDetail orderDetails={order.orderDetails} status={order.status} />
         </div>
       </div>
     </StyledCard>
