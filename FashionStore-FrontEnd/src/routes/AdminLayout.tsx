@@ -6,7 +6,7 @@ import Sidebar from "../layouts/Admin/Sidebar";
 import TopNavbar from "../layouts/Admin/TopNavbar";
 
 import Footer from "../layouts/Admin/Footer";
-import AddProductForm_Admin from "../components/Admin/Product/AddProductForm";
+import AddProductForm from "../components/Admin/Product/AddProductForm";
 import ForbiddenPage from "../pages/ForbiddenPage";
 import Dashboard from "../components/Admin/Dashboard";
 
@@ -16,6 +16,7 @@ import Charts from "../components/Admin/Charts";
 import "../App.css"; // Ensure styles are imported
 import UserAdminManager from "../components/Admin/User/UserAdminManager";
 import Orders from "../components/Admin/Order/Order";
+import RequireAdmin from "./RequireAdmin";
 
 const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
@@ -30,7 +31,7 @@ const AdminLayout: React.FC = () => {
         <Container fluid className="pt-4 px-4 flex-grow-1">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/create" element={<AddProductForm_Admin />} />
+            <Route path="/create" element={<AddProductForm />} />
             <Route path="/forbidden" element={<ForbiddenPage />} />
             <Route path="/user" element={<UserAdminManager />} />
             {/* Placeholder */}
@@ -46,4 +47,6 @@ const AdminLayout: React.FC = () => {
   );
 };
 
-export default AdminLayout;
+const AdminLayout_Checked = RequireAdmin(AdminLayout);
+
+export default AdminLayout_Checked;

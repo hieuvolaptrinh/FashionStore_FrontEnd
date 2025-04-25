@@ -15,7 +15,8 @@ import Navbar from "../layouts/Client/Navbar";
 import LoginRequiredPage from "../pages/LoginRequiredPage";
 import CartPage_User from "../pages/CartPage";
 import Checkout from "../pages/Checkout";
-import OrderPage from "../pages/OrderPage";
+
+import OrderPage_Checked from "../pages/OrderPage";
 
 function UserLayout() {
   const [keyword, setKeyword] = useState("");
@@ -38,7 +39,7 @@ function UserLayout() {
         />
         <Route path="/cart" element={<CartPage_User />} />
         <Route path="/loginRequired" element={<LoginRequiredPage />} />
-        <Route path="order" element={<OrderPage />} />
+        <Route path="/order" element={<OrderPage_Checked />} />
 
         <Route path="/checkout" element={<Checkout />} />
       </Routes>

@@ -1,12 +1,11 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 
 import { getTypes } from "../../../service/API/TypeAPI";
-import RequireAdmin from "../../../layouts/Admin/RequireAdmin";
 import { createProduct } from "../../../service/API/AdminAPI";
 import uploadToGoogleDrive from "../../../service/API/DriveAPI";
 import Type from "../../../models/Type";
 
-const AddProductForm : React.FC = () => {
+const AddProductForm: React.FC = () => {
   const [types, setTypes] = useState<Type[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({
@@ -286,6 +285,4 @@ const AddProductForm : React.FC = () => {
   );
 };
 
-const AddProductForm_Admin = RequireAdmin(AddProductForm);
-
-export default AddProductForm_Admin;
+export default AddProductForm;

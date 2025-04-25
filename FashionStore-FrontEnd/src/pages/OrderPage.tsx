@@ -14,6 +14,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
+import RequireUser from "../routes/RequireUser";
 
 const StyledContainer = styled(Container)({
   paddingTop: "20px",
@@ -137,4 +138,5 @@ const OrderPage: React.FC = () => {
   );
 };
 
-export default OrderPage;
+const OrderPage_Checked = RequireUser(OrderPage);
+export default OrderPage_Checked;
