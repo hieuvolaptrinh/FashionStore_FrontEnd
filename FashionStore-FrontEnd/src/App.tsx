@@ -2,15 +2,47 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import AdminLayout from "./routes/AdminLayout";
 import UserLayout from "./routes/UserLayout";
+import HomePage from "./layouts/Client/HomePage";
+import Checkout from "./pages/Client/Checkout";
+import OrderPage_Checked from "./pages/Client/OrderPage";
+import LoginRequiredPage from "./pages/LoginRequiredPage";
+import CartPage_User from "./pages/Client/CartPage";
+import ProductDetail from "./pages/Client/ProductDetailPage";
+import ActivateAccount from "./pages/Client/ActivateAccount";
+import Login from "./pages/Login";
+import { Register } from "./pages/Register";
+import { KeywordProvider } from "./contexts/KeywordContext";
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/*" element={<UserLayout />} />
-          <Route path="/admin/*" element={<AdminLayout />} />
-        </Routes>
-      </BrowserRouter>
+      <KeywordProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* user */}
+
+            <Route path="/" element={<UserLayout />}>
+              <Route index element={<HomePage />} />
+              <Route path="/:typeId" element={<HomePage />} />
+
+              <Route path="/product/:productId" element={<ProductDetail />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/activateAccount/:email/:activationCode"
+                element={<ActivateAccount />}
+              />
+              <Route path="/cart" element={<CartPage_User />} />
+              <Route path="/loginRequired" element={<LoginRequiredPage />} />
+              <Route path="/order" element={<OrderPage_Checked />} />
+
+              <Route path="/checkout" element={<Checkout />} />
+            </Route>
+
+            {/* admin */}
+            <Route path="/admin/*" element={<AdminLayout />} />
+          </Routes>
+        </BrowserRouter>
+      </KeywordProvider>
     </>
   );
 }

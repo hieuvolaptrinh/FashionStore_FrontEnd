@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { activateAccount } from "../service/API/UserAPI";
+import { activateAccount } from "../../service/API/UserAPI";
 
 const ActivateAccount: React.FC = () => {
   const { email, activationCode } = useParams();

@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
-import ProductModel from "../models/ProductModel";
+import ProductModel from "../../models/ProductModel";
 
 import { useParams } from "react-router-dom";
-import { getProductById } from "../service/API/ProductAPI";
-import ProductImage from "../components/Client/Product/ProductImage";
-import QuantityInput from "../components/Client/Product/QuantityInput";
-import { ReviewModel } from "../models/ReviewModel";
+import { getProductById } from "../../service/API/ProductAPI";
+import ProductImage from "../../components/Client/Product/ProductImage";
+import QuantityInput from "../../components/Client/Product/QuantityInput";
+import { ReviewModel } from "../../models/ReviewModel";
 
-import { getReviewsWithUser } from "../service/API/ReviewAPI";
-import Carousel from "./Carousel";
-import { addToCart } from "../service/API/CartAPI";
-import InfoProduct from "../components/Client/Product/InforProduct";
+import { getReviewsWithUser } from "../../service/API/ReviewAPI";
+import Carousel from "../../layouts/Client/Carousel";
+import { addToCart } from "../../service/API/CartAPI";
+import InfoProduct from "../../components/Client/Product/InforProduct";
 
 const ProductDetail: React.FC = () => {
   // lấy productId từ URL

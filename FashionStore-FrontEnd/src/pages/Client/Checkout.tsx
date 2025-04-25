@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import AddressList from "../components/Client/Checkout/AddressList";
-import AddressForm from "../components/Client/Checkout/AddressForm";
-import OrderSummary from "../components/Client/Checkout/OrderSummary";
+import { AddressModel } from "../../models/AddressModel";
+import {
+  OrderModel,
+  PaymentType,
+  ShippingMethod,
+} from "../../models/OrderModel";
+import { CartDetailModel } from "../../models/CartModel";
 import {
   createAddress,
-  getUserAddresses,
+  createOrder,
   getAllPaymentTypes,
   getAllShippingMethods,
-  createOrder,
-} from "../service/API/OrderAPI";
-import { getSelectedCartDetails } from "../service/API/CartAPI";
-import { AddressModel } from "../models/AddressModel";
-import { CartDetailModel } from "../models/CartModel";
-import { OrderModel, PaymentType, ShippingMethod } from "../models/OrderModel";
+  getUserAddresses,
+} from "../../service/API/OrderAPI";
+import { getSelectedCartDetails } from "../../service/API/CartAPI";
+import AddressList from "../../components/Client/Order/AddressList";
+import AddressForm from "../../components/Client/Order/AddressForm";
+import OrderSummary from "../../components/Client/Order/OrderSummary";
 
 const Checkout: React.FC = () => {
   const location = useLocation();

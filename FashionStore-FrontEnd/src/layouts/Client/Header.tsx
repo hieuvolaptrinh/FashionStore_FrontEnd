@@ -1,16 +1,15 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAvatar } from "../../service/API/UserAPI";
+import { useKeyword } from "../../contexts/KeywordContext";
 
-interface HeaderProps {
-  keyword: string;
-  setKeyword: (keyword: string) => void;
-}
+const Header: React.FC = () => {
+  // sử dụng setKeyword từ context để lưu từ khóa tìm kiếm
+  const { setKeyword } = useKeyword();
+  const [tmp, setTmp] = useState("");
 
-const Header: React.FC<HeaderProps> = ({ setKeyword }) => {
   const [isOpen, setIsOpen] = useState(false); // dropdown tài khoản
   const [username, setUsername] = useState<string | null>(null);
-  const [tmp, setTmp] = useState("");
   const [avatarBase64, setAvatarBase64] = useState<string | null>(null);
 
   const roles = localStorage.getItem("roles");

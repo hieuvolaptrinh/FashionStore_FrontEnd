@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-
-import { getCart, getCartDetails } from "../service/API/CartAPI";
-import { CartDetailModel, CartModel } from "../models/CartModel";
-import CartItem from "../components/Client/Cart/CartItem";
+import { CartDetailModel, CartModel } from "../../models/CartModel";
 import { useNavigate } from "react-router-dom";
-import RequireUser from "../routes/RequireUser";
+import { getCart, getCartDetails } from "../../service/API/CartAPI";
+import CartItem from "../../components/Client/Cart/CartItem";
+import RequireUser from "../../routes/RequireUser";
 
 function CartPage() {
   const [cart, setCart] = useState<CartModel>();

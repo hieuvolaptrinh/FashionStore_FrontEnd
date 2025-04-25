@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 
-import ListProduct from "../../pages/ListProduct";
-import Carousel from "../../pages/Carousel";
+import ListProduct from "../../components/Client/Product/ListProduct";
+import Carousel from "./Carousel";
+import { useKeyword } from "../../contexts/KeywordContext";
 
-// viết như này thì không cần inter
-function HomePage(props: { keyword: string }) {
-  // nó sẽ lấy từ url
+function HomePage() {
+  const { keyword } = useKeyword();
+  // lấy typeId từ url
   const { typeId } = useParams();
   let typeIdNumber = 0;
 
@@ -22,7 +23,7 @@ function HomePage(props: { keyword: string }) {
   return (
     <>
       <Carousel />
-      <ListProduct keyword={props.keyword} typeId={typeIdNumber} />
+      <ListProduct keyword={keyword} typeId={typeIdNumber} />
     </>
   );
 }

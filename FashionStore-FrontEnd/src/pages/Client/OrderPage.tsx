@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import OrderItem from "../components/Client/Order/OrderItem";
-import { ResponseOrder } from "../models/OrderModel";
-import { getOrderUser } from "../service/API/OrderAPI";
+import OrderItem from "../../components/Client/Order/OrderItem";
+import { ResponseOrder } from "../../models/OrderModel";
+import { getOrderUser } from "../../service/API/OrderAPI";
 import {
   Typography,
   Container,
@@ -14,7 +14,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import RequireUser from "../routes/RequireUser";
+import RequireUser from "../../routes/RequireUser";
 
 const StyledContainer = styled(Container)({
   paddingTop: "20px",
