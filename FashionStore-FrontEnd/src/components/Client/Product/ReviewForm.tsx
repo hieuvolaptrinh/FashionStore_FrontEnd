@@ -9,7 +9,6 @@ interface ReviewFormProps {
   onReviewSubmitted: () => void;
 }
 
-
 // interface ReviewRequest {
 //   productId: number;
 //   stars: number;

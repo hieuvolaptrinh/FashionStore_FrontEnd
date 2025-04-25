@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import AdminLayout from "./routes/AdminLayout";
 import UserLayout from "./routes/UserLayout";
-
 function App() {
   return (
     <>
@@ -15,5 +14,4 @@ function App() {
     </>
   );
 }
-
 export default App;

@@ -29,8 +29,8 @@ export async function createProduct(product: ProductProps): Promise<string> {
   if (response.ok) {
     return "Thêm sản phẩm thành công!";
   } else {
-    const errorText = await response.text();
-    return errorText;
+    const errorJson = await response.json();
+    return errorJson.message || "Có lỗi xảy ra!";
   }
 }
 export const getAllUsers = async (): Promise<UserModel[]> => {
