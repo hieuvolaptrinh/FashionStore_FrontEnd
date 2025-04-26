@@ -150,25 +150,25 @@ export const getAllShippingMethods = async (): Promise<ShippingMethod[]> => {
   const result: RestResponse<ShippingMethod[]> = await response.json();
   return result.data || [];
 };
+
 // tạo mới hóa đơn
-export const createOrder = async (order: OrderModel): Promise<void> => {
+export const createOrder = async (order: OrderModel) => {
   const token = localStorage.getItem("token");
   if (!token) {
     throw new Error("Không tìm thấy token xác thực");
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/v1/orders`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(order),
-  });
+  try {
+    const response = await axios.post(`${API_BASE_URL}/api/v1/orders`, order, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Không thể tạo đơn hàng");
+    return response.data.data;
+  } catch (err) {
+    throw new Error("Không thể tạo đơn hàng" + err);
   }
 };
 

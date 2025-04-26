@@ -18,6 +18,7 @@ import { getSelectedCartDetails } from "../../service/API/CartAPI";
 import AddressList from "../../components/Client/Order/AddressList";
 import AddressForm from "../../components/Client/Order/AddressForm";
 import OrderSummary from "../../components/Client/Order/OrderSummary";
+import { getUrlPayment } from "../../service/API/PaymentAPI";
 
 const Checkout: React.FC = () => {
   const location = useLocation();
@@ -136,9 +137,23 @@ const Checkout: React.FC = () => {
     };
 
     try {
-      await createOrder(payload);
-      alert("Đơn hàng đã được xác nhận!");
-      navigate("/cart");
+      const orderId = await createOrder(payload);
+
+      if (selectedPaymentType.paymentTypeId != 1) {
+        alert("Đơn hàng đã được xác nhận!");
+        navigate("/order");
+      } else {
+        const productTotal = cartDetails.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        // chỗ này id =1 nghĩa là tôi đang thanh toán online
+        alert("Đơn hàng đã được xác nhận! Chuyển đến trang thanh toán.");
+        //  chỗ này chuyển sang trang thanh toán
+        const url = getUrlPayment(orderId,productTotal);
+
+        // 
+      }
     } catch (err) {
       alert("Có lỗi xảy ra, vui lòng thử lại: " + err);
     }
