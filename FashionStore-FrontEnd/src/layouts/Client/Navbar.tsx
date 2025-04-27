@@ -93,19 +93,19 @@ function Navbar() {
                     Trang Chủ
                   </NavLink>
 
-                  <NavLink to="/product/1" className="nav-item nav-link">
+                  <NavLink to="/products/1" className="nav-item nav-link">
                     Chi Tiết Sản Phẩm
                   </NavLink>
-                  <NavLink to="/cart" className="nav-item nav-link">
+                  <NavLink to="/carts" className="nav-item nav-link">
                     Giỏ Hàng
                   </NavLink>
-                  <NavLink to="/order" className="nav-item nav-link">
+                  <NavLink to="/orders" className="nav-item nav-link">
                     Đơn Hàng
                   </NavLink>
-                  <NavLink to="/checkout" className="nav-item nav-link">
+                  <NavLink to="/checkouts" className="nav-item nav-link">
                     Thanh Toán
                   </NavLink>
-                  <NavLink to="/contact" className="nav-item nav-link">
+                  <NavLink to="/contacts" className="nav-item nav-link">
                     Liên Hệ
                   </NavLink>
                 </div>

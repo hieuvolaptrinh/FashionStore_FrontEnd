@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Bar } from "react-chartjs-2";
 import { ResponseOrder } from "../../../models/OrderModel";
 import { useEffect, useState } from "react";
@@ -11,8 +12,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-
-// Register necessary Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -44,7 +43,7 @@ const RevenueChart: React.FC = () => {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
-    }); // Ví dụ: "20/04/2025"
+    }); 
   };
 
   // Tổng hợp doanh thu theo ngày
@@ -52,7 +51,7 @@ const RevenueChart: React.FC = () => {
     const dailyData: { [key: string]: number } = {};
 
     orders.forEach((order) => {
-      const dateKey = formatDate(order.createAt); // Lấy ngày dạng "dd/MM/yyyy"
+      const dateKey = formatDate(order.createAt); 
       if (!dailyData[dateKey]) {
         dailyData[dateKey] = 0;
       }

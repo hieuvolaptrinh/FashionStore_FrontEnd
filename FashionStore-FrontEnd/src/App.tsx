@@ -25,18 +25,18 @@ function App() {
               <Route index element={<HomePage />} />
               <Route path="/:typeId" element={<HomePage />} />
 
-              <Route path="/product/:productId" element={<ProductDetail />} />
+              <Route path="/products/:productId" element={<ProductDetail />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route
                 path="/activateAccount/:email/:activationCode"
                 element={<ActivateAccount />}
               />
-              <Route path="/cart" element={<CartPage_User />} />
+              <Route path="/carts" element={<CartPage_User />} />
               <Route path="/loginRequired" element={<LoginRequiredPage />} />
-              <Route path="/order" element={<OrderPage_Checked />} />
+              <Route path="/orders" element={<OrderPage_Checked />} />
 
-              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/checkouts" element={<Checkout />} />
               <Route path="/payment-result" element={<PaymentResult />} />
             </Route>
 
