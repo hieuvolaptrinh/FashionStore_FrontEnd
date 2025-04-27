@@ -150,8 +150,9 @@ const Checkout: React.FC = () => {
         // chỗ này id =1 nghĩa là tôi đang thanh toán online
         alert("Đơn hàng đã được xác nhận! Chuyển đến trang thanh toán.");
         //  chỗ này chuyển sang trang thanh toán
-        const url = getUrlPayment(orderId,productTotal);
 
+        const paymentUrl = await getUrlPayment(orderId, productTotal);
+        window.location.href = paymentUrl; // Chuyển hướng đến VNPay
         // 
       }
     } catch (err) {

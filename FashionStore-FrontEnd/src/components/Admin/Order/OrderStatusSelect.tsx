@@ -23,7 +23,13 @@ const OrderStatusSelect: React.FC<OrderStatusSelectProps> = ({
   const [status, setStatus] = useState<string>(currentStatus);
   const [error, setError] = useState<string | null>(null);
 
-  const statuses = ["Chưa xử lý", "Đang giao", "Đã giao", "Đã hủy"];
+  const statuses = [
+    "Chưa xử lý",
+    "Đang giao",
+    "Đã giao",
+    "Đã hủy",
+    "Đang vận chuyển",
+  ];
 
   // Xử lý thay đổi trạng thái
   const handleChange = async (event: SelectChangeEvent<string>) => {

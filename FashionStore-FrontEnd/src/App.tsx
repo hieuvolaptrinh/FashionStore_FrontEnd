@@ -12,6 +12,7 @@ import ActivateAccount from "./pages/Client/ActivateAccount";
 import Login from "./pages/Login";
 import { Register } from "./pages/Register";
 import { KeywordProvider } from "./contexts/KeywordContext";
+import PaymentResult from "./pages/Client/PaymentResult";
 function App() {
   return (
     <>
@@ -36,6 +37,7 @@ function App() {
               <Route path="/order" element={<OrderPage_Checked />} />
 
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/payment-result" element={<PaymentResult />} />
             </Route>
 
             {/* admin */}

@@ -4,6 +4,8 @@ import { format } from "date-fns";
 import { Badge, Card } from "@mui/material";
 import { styled } from "@mui/system";
 import OrderDetail from "./OrderDetail";
+import { Button } from "react-bootstrap";
+import { getUrlPayment } from "../../../service/API/PaymentAPI";
 
 const StyledCard = styled(Card)({
   marginBottom: "20px",
@@ -55,6 +57,11 @@ const OrderItem: React.FC<{ order: ResponseOrder }> = ({ order }) => {
     }
   };
 
+  const handlePayment = async () => {
+    const paymentUrl = await getUrlPayment(order.orderId, order.totalPrice);
+    window.location.href = paymentUrl; // Chuyển hướng đến VNPay
+  };
+
   return (
     <StyledCard>
       <div
@@ -65,11 +72,22 @@ const OrderItem: React.FC<{ order: ResponseOrder }> = ({ order }) => {
         role="button"
       >
         <div className="row align-items-center">
-          <div className="col-md-3 col-6">
+          <div className="col-md-2 col-4">
             <strong style={{ color: "#333" }}>Mã đơn: </strong>
             <span style={{ color: "#1976d2", fontWeight: "bold" }}>
               {order.orderId}
             </span>
+          </div>
+
+          <div className="col-md-2 col-4">
+            <strong style={{ color: "#333" }}>Tổng: </strong>
+            <span style={{ color: "#d32f2f", fontWeight: "bold" }}>
+              {order.totalPrice.toLocaleString("vi-VN")} VNĐ
+            </span>
+          </div>
+          <div className="col-md-2 col-4">
+            <strong style={{ color: "#333" }}>Ngày đặt </strong>
+            <span>{format(new Date(order.createAt), "dd/MM/yyyy")}</span>
           </div>
           <div className="col-md-3 col-6">
             <strong style={{ color: "#333" }}>Trạng thái: </strong>
@@ -78,14 +96,13 @@ const OrderItem: React.FC<{ order: ResponseOrder }> = ({ order }) => {
             </Badge>
           </div>
           <div className="col-md-3 col-6">
-            <strong style={{ color: "#333" }}>Tổng: </strong>
-            <span style={{ color: "#d32f2f", fontWeight: "bold" }}>
-              {order.totalPrice.toLocaleString("vi-VN")} VNĐ
-            </span>
-          </div>
-          <div className="col-md-3 col-6">
-            <strong style={{ color: "#333" }}>Ngày: </strong>
-            <span>{format(new Date(order.createAt), "dd/MM/yyyy")}</span>
+            {order.pay == true ? (
+              <p className="text-primary-emphasis">ĐÃ THANH TOÁN</p>
+            ) : (
+              <Button onClick={handlePayment} className="status-badge">
+                Thanh toán ngay
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -97,7 +114,10 @@ const OrderItem: React.FC<{ order: ResponseOrder }> = ({ order }) => {
           className="card-body"
           style={{ padding: "20px", backgroundColor: "#fafafa" }}
         >
-          <OrderDetail orderDetails={order.orderDetails} status={order.status} />
+          <OrderDetail
+            orderDetails={order.orderDetails}
+            status={order.status}
+          />
         </div>
       </div>
     </StyledCard>

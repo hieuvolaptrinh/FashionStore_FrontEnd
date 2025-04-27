@@ -133,6 +133,11 @@ const Orders: React.FC = () => {
                   Ngày Đặt Hàng
                 </TableCell>
                 <TableCell
+                  sx={{ fontWeight: "bold", color: "rgb(242, 243, 240)" }}
+                >
+                  Trạng thái thanh toán
+                </TableCell>
+                <TableCell
                   sx={{ fontWeight: "bold", color: "rgb(240, 243, 242)" }}
                 >
                   Trạng Thái
@@ -153,6 +158,9 @@ const Orders: React.FC = () => {
                       </TableCell>
                       <TableCell>
                         <Skeleton variant="text" width={80} />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" width={120} />
                       </TableCell>
                       <TableCell>
                         <Skeleton variant="text" width={120} />
@@ -182,6 +190,14 @@ const Orders: React.FC = () => {
                       </TableCell>
                       <TableCell>
                         {format(new Date(order.createAt), "dd/MM/yyyy")}
+                      </TableCell>
+                      <TableCell>
+                   
+                        {order.pay == true ? (
+                          <p>ĐÃ THANH TOÁN</p>
+                        ) : (
+                          "CHƯA THANH TOÁN"
+                        )}
                       </TableCell>
                       <TableCell>
                         <OrderStatusSelect

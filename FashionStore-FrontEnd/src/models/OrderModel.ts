@@ -23,7 +23,7 @@ export interface ResponseOrder {
   status: string;
   totalPrice: number;
   createAt: number;
-  isPay: boolean;
+  pay: boolean;
   orderDetails: OrderDetail[];
 }
 
