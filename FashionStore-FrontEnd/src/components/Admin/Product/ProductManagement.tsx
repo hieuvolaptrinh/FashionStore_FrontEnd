@@ -59,9 +59,6 @@ const ProductManagement: React.FC = () => {
     setShowModal(true);
   };
 
-  // Xử lý xóa sản phẩm
-  const handleDeleteProduct = async (productId: number) => {};
-
   // Xử lý chuyển ảnh
   const handleImageChange = (productId: number, direction: "prev" | "next") => {
     setImageIndexes((prev) => {
@@ -108,6 +105,28 @@ const ProductManagement: React.FC = () => {
         const currentIndex = imageIndexes[product.productId!] || 0;
         const images = product.listImages || [];
 
+        // Kiểm tra nếu không có hình ảnh
+        if (!images || images.length === 0) {
+          return (
+            <div
+              style={{
+                width: "100px",
+                height: "100px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#f0f0f0",
+                borderRadius: "4px",
+              }}
+            >
+              Không có ảnh
+            </div>
+          );
+        }
+
+        // Đảm bảo currentIndex hợp lệ
+        const validIndex = Math.min(currentIndex, images.length - 1);
+
         return (
           <div
             style={{
@@ -140,8 +159,8 @@ const ProductManagement: React.FC = () => {
               </IconButton>
             )}
             <img
-              src={images[currentIndex].link}
-              alt={`product-${currentIndex}`}
+              src={images[validIndex].link} // Sửa link thành url
+              alt={`product-${validIndex}`}
               style={{
                 width: "100%",
                 height: "100%",
@@ -196,6 +215,13 @@ const ProductManagement: React.FC = () => {
     </>
   );
 
+  // Xử lý xóa sản phẩm (chưa được định nghĩa trong mã gốc)
+  const handleDeleteProduct = (productId: number) => {
+    // Thêm logic xóa sản phẩm, ví dụ gọi API deleteProduct
+    console.log("Xóa sản phẩm:", productId);
+    alert("Chức năng xóa chưa được triển khai!");
+  };
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Quản Lý Sản Phẩm</h2>
@@ -209,7 +235,6 @@ const ProductManagement: React.FC = () => {
         actions={actions}
       />
       <div className="d-flex justify-content-center mt-3">
-        {/* component pagination */}
         <Pagination
           count={totalPages}
           page={currentPage}

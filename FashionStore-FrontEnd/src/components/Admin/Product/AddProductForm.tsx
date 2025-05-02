@@ -47,10 +47,10 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<
-    { id: number; url: string }[]
+    { id: number; link: string }[]
   >([]); // Lưu trữ hình ảnh hiện có
 
-  // Fetch types khi component mount
+  // Lấy danh sách loại sản phẩm
   useEffect(() => {
     const fetchTypes = async () => {
       try {
@@ -66,6 +66,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   // Reset form khi productToEdit hoặc show thay đổi
   useEffect(() => {
     if (productToEdit && show) {
+      // Cập nhật formData từ productToEdit
       setFormData({
         productId: productToEdit.productId,
         productName: productToEdit.productName || "",
@@ -78,15 +79,29 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
         listTypes: productToEdit.listTypes?.map((type) => type.typeId) || [],
         deletedImageIds: [],
       });
+      // Ánh xạ listImages thành { id, link }
       const existing =
-        productToEdit.listImages?.map((image, index) => ({
-          id: index + 1, // Giả sử Image có id, cần thay bằng id thực từ backend
-          url: image.link, // Map to the 'link' property of the image object
+        productToEdit.listImages?.map((image) => ({
+          id: image.imageId, // ID thực từ backend
+          link: image.link, // Sử dụng link thay vì link
         })) || [];
-      setExistingImages(existing);
-      setImagePreviews(existing.map((img) => img.url));
+      // Lọc ảnh hợp lệ
+      setExistingImages(
+        existing.filter(
+          (img) => img.id !== undefined && img.link !== undefined
+        ) as {
+          id: number;
+          link: string;
+        }[]
+      );
+      setImagePreviews(
+        existing
+          .map((img) => img.link)
+          .filter((link): link is string => link !== undefined)
+      );
       setSelectedFiles([]);
     } else {
+      // Reset form khi thêm sản phẩm mới
       setFormData({
         productId: undefined,
         productName: "",
@@ -133,12 +148,12 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     });
   };
 
-  // Xử lý thay đổi hình ảnh mới
+  // Xử lý thêm hình ảnh mới
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
       const fileArray = Array.from(files);
-      setSelectedFiles((prev) => [...prev, ...fileArray]); // Thêm vào danh sách file
+      setSelectedFiles((prev) => [...prev, ...fileArray]);
       setImagePreviews((prev) => [
         ...prev,
         ...fileArray.map((file) => URL.createObjectURL(file)),
@@ -146,14 +161,21 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     }
   };
 
-  // Xử lý xóa hình ảnh hiện có
-  const handleDeleteImage = (imageId: number, url: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      deletedImageIds: [...(prev.deletedImageIds || []), imageId],
-    }));
-    setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
-    setImagePreviews((prev) => prev.filter((preview) => preview !== url));
+  // Xử lý xóa hình ảnh
+  const handleDeleteImage = (index: number, imageId?: number) => {
+    // Xóa ảnh khỏi imagePreviews
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+
+    if (imageId !== undefined) {
+      setFormData((prev) => ({
+        ...prev,
+        deletedImageIds: [...(prev.deletedImageIds || []), imageId],
+      }));
+      setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
+    } else {
+      // Xóa ảnh mới
+      setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    }
   };
 
   // Submit form
@@ -163,10 +185,10 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     try {
       let result;
       if (productToEdit && formData.productId) {
-        // Gọi API cập nhật sản phẩm
+        // Cập nhật sản phẩm, gửi deletedImageIds
         result = await updateProduct(formData, selectedFiles);
       } else {
-        // Gọi API tạo sản phẩm
+        // Tạo sản phẩm mới
         result = await createProduct(formData, selectedFiles);
       }
       alert(result);
@@ -372,44 +394,48 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
                     className="d-flex flex-wrap gap-2"
                     sx={{ maxHeight: "200px", overflow: "auto" }}
                   >
-                    {existingImages.map((img) => (
-                      <Box key={img.id} sx={{ position: "relative" }}>
-                        <img
-                          src={img.url}
-                          alt={`existing-${img.id}`}
-                          width={80}
-                          height={80}
-                          style={{
-                            objectFit: "cover",
-                            border: "1px solid #ddd",
-                          }}
-                        />
-                        <IconButton
-                          sx={{ position: "absolute", top: 0, right: 0 }}
-                          onClick={() => handleDeleteImage(img.id, img.url)}
-                          disabled={isLoading}
+                    {imagePreviews.map((src, index) => {
+                      const existingImage = existingImages.find(
+                        (img) => img.link === src
+                      );
+                      const imageId = existingImage?.id;
+                      return (
+                        <Box
+                          key={imageId ? `existing-${imageId}` : `new-${index}`}
+                          sx={{ position: "relative" }}
                         >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </Box>
-                    ))}
-                    {imagePreviews
-                      .filter(
-                        (src) => !existingImages.some((img) => img.url === src)
-                      )
-                      .map((src, index) => (
-                        <img
-                          key={`new-${index}`}
-                          src={src}
-                          alt={`preview-${index}`}
-                          width={80}
-                          height={80}
-                          style={{
-                            objectFit: "cover",
-                            border: "1px solid #ddd",
-                          }}
-                        />
-                      ))}
+                          <img
+                            src={src}
+                            alt={
+                              imageId
+                                ? `existing-${imageId}`
+                                : `preview-${index}`
+                            }
+                            width={80}
+                            height={80}
+                            style={{
+                              objectFit: "cover",
+                              border: "1px solid #ddd",
+                            }}
+                          />
+                          <IconButton
+                            sx={{
+                              position: "absolute",
+                              top: -8,
+                              right: -8,
+                              backgroundColor: "rgba(255, 255, 255, 0.8)",
+                              "&:hover": {
+                                backgroundColor: "rgba(255, 255, 255, 1)",
+                              },
+                            }}
+                            onClick={() => handleDeleteImage(index, imageId)}
+                            disabled={isLoading}
+                          >
+                            <DeleteIcon fontSize="small" color="error" />
+                          </IconButton>
+                        </Box>
+                      );
+                    })}
                   </Box>
                 </div>
               )}

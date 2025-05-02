@@ -52,6 +52,7 @@ export async function updateProduct(
   product: ProductRequest,
   files: File[]
 ): Promise<string> {
+  console.log("Product:", product);
   const token = localStorage.getItem("token");
   if (!token) {
     return "Bạn chưa đăng nhập!";
