@@ -1,28 +1,62 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
+import {
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  FormControlLabel,
+  TextField,
+  Typography,
+  Paper,
+  Alert,
+  Modal,
+} from "@mui/material";
 
 import { getTypes } from "../../../service/API/TypeAPI";
 import { createProduct } from "../../../service/API/AdminAPI";
 import uploadToGoogleDrive from "../../../service/API/DriveAPI";
-import Type from "../../../models/Type";
+import ProductModel from "../../../models/ProductModel";
 
-const AddProductForm: React.FC = () => {
+// Định nghĩa interface cho Type
+interface Type {
+  typeId: number;
+  typeName: string;
+}
+
+// Định nghĩa props cho component
+interface AddProductFormProps {
+  show: boolean;
+  onHide: () => void;
+  onSave: (product: ProductModel) => void;
+  productToEdit?: ProductModel | null;
+}
+
+const AddProductForm: React.FC<AddProductFormProps> = ({
+  show,
+  onHide,
+  onSave,
+  productToEdit,
+}) => {
   const [types, setTypes] = useState<Type[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState({
-    productName: "",
-    description: "",
-    originalPrice: 0,
-    productionInfor: "",
-    salePrice: 0,
-    quantity: 0,
-    manufactureDate: "",
-    listTypes: [] as number[],
-    listImages: [] as File[],
+  const [formData, setFormData] = useState<Partial<ProductModel>>({
+    productId: productToEdit?.productId,
+    productName: productToEdit?.productName || "",
+    description: productToEdit?.description || "",
+    originalPrice: productToEdit?.originalPrice || 0,
+    productionInfor: productToEdit?.productionInfor || "",
+    salePrice: productToEdit?.salePrice || 0,
+    quantity: productToEdit?.quantity || 0,
+    manufactureDate: productToEdit?.manufactureDate || "",
+    listTypes: productToEdit?.listTypes || [],
+    listImages: [],
   });
 
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>(
+    productToEdit?.listImages || []
+  );
 
-  // set types product
+  // Fetch types khi component mount
   useEffect(() => {
     const fetchTypes = async () => {
       try {
@@ -35,253 +69,362 @@ const AddProductForm: React.FC = () => {
 
     fetchTypes();
   }, []);
+
+  // Reset form khi productToEdit thay đổi hoặc modal đóng/mở
+  useEffect(() => {
+    if (productToEdit) {
+      setFormData({
+        productId: productToEdit.productId,
+        productName: productToEdit.productName,
+        description: productToEdit.description,
+        originalPrice: productToEdit.originalPrice,
+        productionInfor: productToEdit.productionInfor || "",
+        salePrice: productToEdit.salePrice,
+        quantity: productToEdit.quantity,
+        manufactureDate: productToEdit.manufactureDate,
+        listTypes: productToEdit.listTypes,
+        listImages: [],
+      });
+      setImagePreviews(productToEdit.listImages || []);
+    } else {
+      setFormData({
+        productId: undefined,
+        productName: "",
+        description: "",
+        originalPrice: 0,
+        productionInfor: "",
+        salePrice: 0,
+        quantity: 0,
+        manufactureDate: "",
+        listTypes: [],
+        listImages: [],
+      });
+      setImagePreviews([]);
+    }
+  }, [productToEdit, show]);
+
+  // Xử lý thay đổi input
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Xử lý thay đổi checkbox loại sản phẩm
   const handleCheckboxChange = (typeId: number) => {
     setFormData((prev) => {
-      const exists = prev.listTypes.includes(typeId);
+      const exists = prev.listTypes?.includes(typeId) || false;
       return {
         ...prev,
         listTypes: exists
-          ? prev.listTypes.filter((id) => id !== typeId)
-          : [...prev.listTypes, typeId],
+          ? prev.listTypes?.filter((id: number) => id !== typeId) || []
+          : [...(prev.listTypes || []), typeId],
       };
     });
   };
 
+  // Xử lý thay đổi hình ảnh
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
       const fileArray = Array.from(files);
-      setFormData((prev) => ({ ...prev, listImages: fileArray }));
+      setFormData((prev) => ({ ...prev, listImages: fileArray as any }));
 
       const previews = fileArray.map((file) => URL.createObjectURL(file));
       setImagePreviews(previews);
     }
   };
-  // submit form
+
+  // Submit form
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true); // Bắt đầu loading
+    setIsLoading(true);
     try {
-      console.log("Đang tải hình ảnh lên Google Drive...");
+      let imageLinks = productToEdit?.listImages || [];
 
-      const imageLinks = await Promise.all(
-        formData.listImages.map((file) => uploadToGoogleDrive(file))
-      );
+      // Nếu có hình ảnh mới, upload lên Google Drive
+      if (formData.listImages && formData.listImages.length > 0) {
+        console.log("Đang tải hình ảnh lên Google Drive...");
+        imageLinks = await Promise.all(
+          (formData.listImages as File[]).map((file) =>
+            uploadToGoogleDrive(file)
+          )
+        );
+      }
 
-      console.log("Đang thêm thông tin sản phẩm...");
-      const productToSend = {
+      // Tạo đối tượng sản phẩm để gửi lên server
+      const productToSend: ProductModel = {
         ...formData,
         listImages: imageLinks,
-      };
+        listTypes: formData.listTypes || [],
+      } as ProductModel;
 
-      const message = await createProduct(productToSend);
+      // Gọi API tạo sản phẩm
+      await createProduct(productToSend);
+
       setIsLoading(false);
-      alert(message);
-
-      resetForm();
+      onSave(productToSend);
+      onHide();
     } catch (error) {
       setIsLoading(false);
-      alert("Lỗi khi thêm sản phẩm!" + error);
+      alert("Lỗi khi lưu sản phẩm!" + error);
     }
   };
 
-  //  reset form
-  const resetForm = () => {
-    setFormData({
-      productName: "",
-      description: "",
-      originalPrice: 0,
-      productionInfor: "",
-      salePrice: 0,
-      quantity: 0,
-      manufactureDate: "",
-      listTypes: [],
-      listImages: [],
-    });
-    setImagePreviews([]);
-  };
-
   return (
-    <div className="container mt-5 mb-5">
-      <h2 className="mb-4 text-center">Thêm Sản Phẩm Mới</h2>
-      <form
-        onSubmit={handleSubmit}
-        className="border p-4 rounded shadow bg-light"
+    <Modal
+      open={show}
+      onClose={onHide}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box
+        sx={{
+          width: "80%",
+          maxWidth: "800px",
+          maxHeight: "90vh",
+          overflow: "auto",
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#f1f1f1",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#888",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#555",
+          },
+        }}
       >
-        <div className="mb-3">
-          <label className="form-label">Tên sản phẩm</label>
-          <input
-            type="text"
-            className="form-control"
-            name="productName"
-            value={formData.productName}
-            onChange={handleInputChange}
-            required
-            disabled={isLoading}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Mô tả</label>
-          <textarea
-            className="form-control"
-            name="description"
-            rows={3}
-            value={formData.description}
-            onChange={handleInputChange}
-            disabled={isLoading}
-          ></textarea>
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Giá gốc</label>
-          <input
-            type="number"
-            className="form-control"
-            name="originalPrice"
-            value={formData.originalPrice}
-            onChange={handleInputChange}
-            disabled={isLoading}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Giá sale</label>
-          <input
-            type="number"
-            className="form-control"
-            name="salePrice"
-            value={formData.salePrice}
-            onChange={handleInputChange}
-            disabled={isLoading}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Số lượng</label>
-          <input
-            type="number"
-            className="form-control"
-            name="quantity"
-            value={formData.quantity}
-            onChange={handleInputChange}
-            disabled={isLoading}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Ngày sản xuất</label>
-          <input
-            type="date"
-            className="form-control"
-            name="manufactureDate"
-            value={formData.manufactureDate}
-            onChange={handleInputChange}
-            disabled={isLoading}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Thông tin sản xuất</label>
-          <textarea
-            className="form-control"
-            name="productionInfor"
-            rows={3}
-            value={formData.productionInfor}
-            onChange={handleInputChange}
-            disabled={isLoading}
-          ></textarea>
-        </div>
-
-        {/* DANH SÁCH LOẠI SẢN PHẨM LẤY ĐỘNG TỪ API */}
-        <div className="mb-3">
-          <label className="form-label d-block">Loại sản phẩm</label>
-          {types.length === 0 ? (
-            <p>Đang tải danh sách loại...</p>
-          ) : (
-            types.map((type) => (
-              <div className="form-check form-check-inline" key={type.typeId}>
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id={`type-${type.typeId}`}
-                  checked={formData.listTypes.includes(type.typeId)}
-                  onChange={() => handleCheckboxChange(type.typeId)}
+        <Paper elevation={3} className="p-4">
+          <Typography variant="h4" align="center" gutterBottom>
+            {productToEdit ? "Sửa Sản Phẩm" : "Thêm Sản Phẩm Mới"}
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <div className="row g-3">
+              <div className="col-12">
+                <TextField
+                  fullWidth
+                  label="Tên sản phẩm"
+                  name="productName"
+                  value={formData.productName}
+                  onChange={handleInputChange}
+                  required
                   disabled={isLoading}
+                  size="small"
                 />
-                <label
-                  className="form-check-label"
-                  htmlFor={`type-${type.typeId}`}
+              </div>
+
+              <div className="col-12">
+                <TextField
+                  fullWidth
+                  label="Mô tả"
+                  name="description"
+                  multiline
+                  rows={2}
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  disabled={isLoading}
+                  size="small"
+                />
+              </div>
+
+              <div className="col-md-6">
+                <TextField
+                  fullWidth
+                  label="Giá gốc"
+                  name="originalPrice"
+                  type="number"
+                  value={formData.originalPrice}
+                  onChange={handleInputChange}
+                  disabled={isLoading}
+                  size="small"
+                />
+              </div>
+
+              <div className="col-md-6">
+                <TextField
+                  fullWidth
+                  label="Giá sale"
+                  name="salePrice"
+                  type="number"
+                  value={formData.salePrice}
+                  onChange={handleInputChange}
+                  disabled={isLoading}
+                  size="small"
+                />
+              </div>
+
+              <div className="col-md-6">
+                <TextField
+                  fullWidth
+                  label="Số lượng"
+                  name="quantity"
+                  type="number"
+                  value={formData.quantity}
+                  onChange={handleInputChange}
+                  disabled={isLoading}
+                  size="small"
+                />
+              </div>
+
+              <div className="col-md-6">
+                <TextField
+                  fullWidth
+                  label="Ngày sản xuất"
+                  name="manufactureDate"
+                  type="date"
+                  value={formData.manufactureDate}
+                  onChange={handleInputChange}
+                  disabled={isLoading}
+                  InputLabelProps={{ shrink: true }}
+                  size="small"
+                />
+              </div>
+
+              <div className="col-12">
+                <TextField
+                  fullWidth
+                  label="Thông tin sản xuất"
+                  name="productionInfor"
+                  multiline
+                  rows={2}
+                  value={formData.productionInfor}
+                  onChange={handleInputChange}
+                  disabled={isLoading}
+                  size="small"
+                />
+              </div>
+
+              <div className="col-12">
+                <Typography variant="subtitle1" gutterBottom>
+                  Loại sản phẩm
+                </Typography>
+                {types.length === 0 ? (
+                  <Typography>Đang tải danh sách loại...</Typography>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 1,
+                      maxHeight: "100px",
+                      overflow: "auto",
+                      "&::-webkit-scrollbar": {
+                        width: "6px",
+                      },
+                      "&::-webkit-scrollbar-track": {
+                        background: "#f1f1f1",
+                      },
+                      "&::-webkit-scrollbar-thumb": {
+                        background: "#888",
+                        borderRadius: "4px",
+                      },
+                      "&::-webkit-scrollbar-thumb:hover": {
+                        background: "#555",
+                      },
+                    }}
+                  >
+                    {types.map((type) => (
+                      <FormControlLabel
+                        key={type.typeId}
+                        control={
+                          <Checkbox
+                            checked={
+                              formData.listTypes?.includes(type.typeId) || false
+                            }
+                            onChange={() => handleCheckboxChange(type.typeId)}
+                            disabled={isLoading}
+                            size="small"
+                          />
+                        }
+                        label={type.typeName}
+                      />
+                    ))}
+                  </Box>
+                )}
+              </div>
+
+              <div className="col-12">
+                <Button
+                  variant="contained"
+                  component="label"
+                  disabled={isLoading}
+                  size="small"
                 >
-                  {type.typeName}
-                </label>
+                  Chọn hình ảnh sản phẩm
+                  <input
+                    type="file"
+                    hidden
+                    multiple
+                    onChange={handleImageChange}
+                    accept="image/*"
+                  />
+                </Button>
               </div>
-            ))
-          )}
-        </div>
 
-        {/* HÌNH ẢNH */}
-        <div className="mb-3">
-          <label className="form-label">Hình ảnh sản phẩm</label>
-          <input
-            type="file"
-            className="form-control"
-            multiple
-            onChange={handleImageChange}
-            accept="image/*"
-            disabled={isLoading}
-          />
-        </div>
+              {imagePreviews.length > 0 && (
+                <div className="col-12">
+                  <Typography variant="subtitle1" gutterBottom>
+                    Xem trước hình ảnh
+                  </Typography>
+                  <Box
+                    className="d-flex flex-wrap gap-2"
+                    sx={{ maxHeight: "200px", overflow: "auto" }}
+                  >
+                    {imagePreviews.map((src, index) => (
+                      <img
+                        key={index}
+                        src={src}
+                        alt={`preview-${index}`}
+                        width={80}
+                        height={80}
+                        style={{ objectFit: "cover", border: "1px solid #ddd" }}
+                      />
+                    ))}
+                  </Box>
+                </div>
+              )}
 
-        {/* XEM TRƯỚC ẢNH */}
-        {imagePreviews.length > 0 && (
-          <div className="mb-3">
-            <label className="form-label d-block">Xem trước hình ảnh</label>
-            <div className="d-flex flex-wrap gap-2">
-              {imagePreviews.map((src, index) => (
-                <img
-                  key={index}
-                  src={src}
-                  alt={`preview-${index}`}
-                  width={100}
-                  height={100}
-                  style={{ objectFit: "cover", border: "1px solid #ddd" }}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+              {isLoading && (
+                <div className="col-12">
+                  <Alert
+                    severity="info"
+                    icon={<CircularProgress size={20} />}
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    Đang lưu thông tin sản phẩm...
+                  </Alert>
+                </div>
+              )}
 
-        {/* HIỂN THỊ TRẠNG THÁI LOADING */}
-        {isLoading && (
-          <div className="alert alert-info mb-3" role="alert">
-            <div className="d-flex align-items-center">
-              <div
-                className="spinner-border spinner-border-sm me-2"
-                role="status"
-              >
-                <span className="visually-hidden">Đang xử lý...</span>
+              <div className="col-12">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  disabled={isLoading}
+                  size="small"
+                >
+                  {isLoading
+                    ? "Đang xử lý..."
+                    : productToEdit
+                    ? "Cập nhật"
+                    : "Thêm sản phẩm"}
+                </Button>
               </div>
-              <span>Đang thêm thông tin sản phẩm...</span>
             </div>
-          </div>
-        )}
-
-        <button
-          type="submit"
-          className="btn btn-primary w-100"
-          disabled={isLoading}
-        >
-          {isLoading ? "Đang xử lý..." : "Thêm sản phẩm"}
-        </button>
-      </form>
-    </div>
+          </form>
+        </Paper>
+      </Box>
+    </Modal>
   );
 };
 

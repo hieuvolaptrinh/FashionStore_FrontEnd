@@ -6,17 +6,16 @@ import Sidebar from "../layouts/Admin/Sidebar";
 import TopNavbar from "../layouts/Admin/TopNavbar";
 
 import Footer from "../layouts/Admin/Footer";
-import AddProductForm from "../components/Admin/Product/AddProductForm";
+
 import ForbiddenPage from "../pages/ForbiddenPage";
 import Dashboard from "../components/Admin/Dashboard";
-
 import Widgets from "../components/Admin/Widgets";
 import Forms from "../components/Admin/Forms";
 import Charts from "../components/Admin/Charts";
-import "../App.css"; // Ensure styles are imported
 import UserAdminManager from "../components/Admin/User/UserAdminManager";
-import Orders from "../components/Admin/Order/Order";
 import RequireAdmin from "./RequireAdmin";
+import OrdersTable from "../components/Admin/Order/OrderTable";
+import AdminOrderPage from "../pages/Admin/AdminOrderPage";
 
 const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
@@ -31,14 +30,14 @@ const AdminLayout: React.FC = () => {
         <Container fluid className="pt-4 px-4 flex-grow-1">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/create" element={<AddProductForm />} />
+            <Route path="/product" element={<AdminOrderPage />} />
             <Route path="/forbidden" element={<ForbiddenPage />} />
             <Route path="/user" element={<UserAdminManager />} />
             {/* Placeholder */}
             <Route path="/widgets" element={<Widgets />} />
             <Route path="/forms" element={<Forms />} />
             <Route path="/charts" element={<Charts />} />
-            <Route path="orders" element={<Orders />} />
+            <Route path="/orders" element={<OrdersTable />} />
           </Routes>
         </Container>
         <Footer />

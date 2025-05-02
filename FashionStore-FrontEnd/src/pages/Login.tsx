@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { login } from "../service/API/UserAPI";
 import { Link } from "react-router-dom";
 
+
 export default function Login() {
   const [formData, setFormData] = useState({
     userName: "",
@@ -19,12 +20,11 @@ export default function Login() {
   const handleSubmit = async () => {
     const { userName, password } = formData;
     const response = await login(userName, password);
-
-    if (response.success) {
-      setSuccess(response.message); // hiển thị thông báo thành công
+    if (response) {
+      setSuccess("đăng nhập thành công!");
       setError("");
     } else {
-      setError(response.message); // hiển thị thông báo lỗi
+      setError("Đăng nhập thất bại!");
       setSuccess("");
     }
   };

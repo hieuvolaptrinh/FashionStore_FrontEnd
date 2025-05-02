@@ -1,7 +1,5 @@
-
 import React, { useState } from "react";
-import { AddressModel } from "../../models/AddressModel";
-
+import { AddressModel } from "../../../models/AddressModel";
 interface AddressFormProps {
   onAddAddress: (address: AddressModel) => void;
 }

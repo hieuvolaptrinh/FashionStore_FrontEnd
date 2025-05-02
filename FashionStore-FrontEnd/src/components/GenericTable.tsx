@@ -69,7 +69,11 @@ const GenericTable = <T,>({
             data.map((item) => (
               <TableRow key={String(item[rowKey])}>
                 {columns.map((column) => (
-                  <TableCell key={column.header} align="center">
+                  <TableCell
+                    key={column.header}
+                    align="center"
+                   
+                  >
                     {typeof column.accessor === "function"
                       ? column.accessor(item)
                       : String(item[column.accessor as keyof T])}

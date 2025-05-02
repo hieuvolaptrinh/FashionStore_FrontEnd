@@ -30,7 +30,6 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
-  const userName = localStorage.getItem("username") || "Hiếu Võ ";
   return (
     <Drawer
       variant="persistent"
@@ -63,37 +62,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
             </Typography>
           </Box>
         </Link>
-
-        {/* Thông tin người dùng */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-          <Box sx={{ position: "relative" }}>
-            <Avatar
-              src="/img/user.jpg"
-              alt="User"
-              sx={{ width: 40, height: 40 }}
-            />
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 0,
-                right: 0,
-                width: 16,
-                height: 16,
-                bgcolor: "#38A169",
-                borderRadius: "50%",
-                border: "2px solidrgb(255, 255, 255)",
-              }}
-            />
-          </Box>
-          <Box sx={{ ml: 2 }}>
-            <Typography variant="subtitle1" sx={{ color: "rgb(42, 245, 6)" }}>
-              {userName}
-            </Typography>
-            <Typography variant="caption" sx={{ color: "rgb(225, 6, 245)" }}>
-              Admin
-            </Typography>
-          </Box>
-        </Box>
 
         <Divider sx={{ bgcolor: "#4B5563", mb: 2 }} />
 

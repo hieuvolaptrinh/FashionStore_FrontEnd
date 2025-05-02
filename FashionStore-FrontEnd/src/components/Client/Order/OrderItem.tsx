@@ -3,9 +3,10 @@ import { ResponseOrder } from "../../../models/OrderModel";
 import { format } from "date-fns";
 import { Badge, Card } from "@mui/material";
 import { styled } from "@mui/system";
-import OrderDetail from "./OrderDetail";
+
 import { Button } from "react-bootstrap";
 import { getUrlPayment } from "../../../service/API/PaymentAPI";
+import OrderDetailItem from "./OrderDetailItem";
 
 const StyledCard = styled(Card)({
   marginBottom: "20px",
@@ -114,7 +115,7 @@ const OrderItem: React.FC<{ order: ResponseOrder }> = ({ order }) => {
           className="card-body"
           style={{ padding: "20px", backgroundColor: "#fafafa" }}
         >
-          <OrderDetail
+          <OrderDetailItem
             orderDetails={order.orderDetails}
             status={order.status}
           />

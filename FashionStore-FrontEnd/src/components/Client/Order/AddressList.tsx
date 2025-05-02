@@ -1,5 +1,5 @@
 import React from "react";
-import { AddressModel } from "../../models/AddressModel";
+import { AddressModel } from "../../../models/AddressModel";
 
 interface AddressListProps {
   addresses: AddressModel[];

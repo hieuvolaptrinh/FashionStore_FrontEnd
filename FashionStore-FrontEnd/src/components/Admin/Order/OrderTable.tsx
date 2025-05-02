@@ -9,7 +9,7 @@ import { ResponseOrder } from "../../../models/OrderModel";
 import { Container, Row, Col } from "react-bootstrap";
 import RevenueChart from "../Charts/RevenueChart";
 
-const Orders: React.FC = () => {
+const OrdersTable: React.FC = () => {
   const [orders, setOrders] = useState<ResponseOrder[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
@@ -71,13 +71,13 @@ const Orders: React.FC = () => {
   return (
     <Container fluid>
       <Row>
-        <Col sm={12} xl={4}>
+        <Col sm={12} xl={12}>
           <div className="bg-secondary rounded h-100 p-4">
             <Typography variant="h4">Doanh Thu</Typography>
             <RevenueChart />
           </div>
         </Col>
-        <Col sm={12} xl={8}>
+        <Col sm={12} xl={12}>
           <Box
             sx={{
               padding: 2,
@@ -109,4 +109,4 @@ const Orders: React.FC = () => {
   );
 };
 
-export default Orders;
+export default OrdersTable;

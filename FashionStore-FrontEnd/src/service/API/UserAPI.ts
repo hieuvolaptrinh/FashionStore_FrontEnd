@@ -57,7 +57,7 @@ export const registerUser = async (
   try {
     const response = await axios.post(
       `${API_BASE_URL}/api/v1/user/register`,
-      userData,
+      userData
     );
 
     const result = response.data;
@@ -96,10 +96,7 @@ export const activateAccount = async (
   }
 };
 
-export const login = async (
-  userName: string,
-  password: string
-): Promise<{ success: boolean; message: string }> => {
+export const login = async (userName: string, password: string) => {
   const loginRequest = {
     userName,
     password,
@@ -122,20 +119,13 @@ export const login = async (
       localStorage.setItem("username", username);
       localStorage.setItem("roles", JSON.stringify(roles)); // ["ADMIN", "STAFF"]
 
-      return { success: true, message: "Đăng nhập thành công" };
+      return true;
     } else {
-      const errorData = await response.json();
-      return {
-        success: false,
-        message: errorData.error || "Tên đăng nhập hoặc mật khẩu sai",
-      };
+      return false;
     }
   } catch (error) {
     console.error("Error:", error);
-    return {
-      success: false,
-      message: "Có lỗi xảy ra, vui lòng thử lại." + error,
-    };
+    return false;
   }
 };
 

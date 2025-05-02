@@ -1,5 +1,5 @@
 // src/components/Admin/TopNavbar.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   Nav,
@@ -9,6 +9,7 @@ import {
   Button,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { getAvatar } from "../../service/API/UserAPI";
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -16,6 +17,17 @@ interface NavbarProps {
 
 const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const userName = localStorage.getItem("username") || "Hiếu Võ ";
+  const [avatar, setAvatar] = useState<string | null>(null);
+
+  useEffect(() => {
+    getAvatar()
+      .then((avatar) => {
+        setAvatar(avatar);
+      })
+      .catch((error) => {
+        console.error("Không có AVATAR", error);
+      });
+  }, []);
   return (
     <Navbar
       expand="lg"
@@ -109,8 +121,11 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               <>
                 <img
                   className="rounded-circle me-lg-2"
-                  src="/images/user.jpg"
-
+                  src={
+                    avatar
+                      ? `data:image/png;base64,${avatar}`
+                      : "/images/user.jpg"
+                  }
                   style={{ width: "40px", height: "40px" }}
                 />
                 <span className="d-none d-lg-inline-flex">{userName}</span>
