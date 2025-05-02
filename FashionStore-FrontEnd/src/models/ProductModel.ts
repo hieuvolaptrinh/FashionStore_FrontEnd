@@ -1,6 +1,6 @@
 import Type from "./TypeModel";
 
-export interface ProductModel {
+export interface ProductResponse {
   productId?: number;
   productName?: string;
   description?: string;
@@ -10,12 +10,12 @@ export interface ProductModel {
   quantity?: number;
   avgStars?: number;
   manufactureDate?: string; // YYYY-MM-DD
-  listTypes: number[];
+  listTypes?: Type[];
   listImages?: string[];
-  mainImage: string;
+  mainImage?: string;
 }
 
-export interface ProductModelResponse {
+export interface ProductRequest {
   productId?: number;
   productName?: string;
   description?: string;
@@ -25,6 +25,6 @@ export interface ProductModelResponse {
   quantity?: number;
   avgStars?: number;
   manufactureDate?: string; // YYYY-MM-DD
-  listTypes: Type[];
+  listTypes?: number[];
   listImages?: string[];
 }

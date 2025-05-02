@@ -7,15 +7,17 @@ import { getAllProducts } from "../../../service/API/ProductAPI";
 
 import { Pagination, IconButton } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { ProductModelResponse } from "../../../models/ProductModel";
+
 import Type from "../../../models/TypeModel";
+import { ProductResponse } from "../../../models/ProductModel";
 
 const ProductManagement: React.FC = () => {
   // State quản lý danh sách sản phẩm và modal
-  const [products, setProducts] = useState<ProductModelResponse[]>([]);
+  const [products, setProducts] = useState<ProductResponse[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [productToEdit, setProductToEdit] =
-    useState<ProductModelResponse | null>(null);
+  const [productToEdit, setProductToEdit] = useState<ProductResponse | null>(
+    null
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [imageIndexes, setImageIndexes] = useState<{ [key: number]: number }>(
@@ -43,7 +45,7 @@ const ProductManagement: React.FC = () => {
       }
     };
     fetchProducts();
-  }, [currentPage]);
+  }, [currentPage, showModal]);
 
   // Xử lý thêm sản phẩm mới
   const handleAddProduct = () => {
@@ -52,26 +54,13 @@ const ProductManagement: React.FC = () => {
   };
 
   // Xử lý sửa sản phẩm
-  const handleEditProduct = (product: ProductModelResponse) => {
+  const handleEditProduct = (product: ProductResponse) => {
     setProductToEdit(product);
     setShowModal(true);
   };
 
   // Xử lý xóa sản phẩm
-  const handleDeleteProduct = async (productId: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
-      try {
-        // TODO: Gọi API xóa sản phẩm
-        setProducts(
-          products.filter((product) => product.productId !== productId)
-        );
-        alert("Xóa sản phẩm thành công!");
-      } catch (error) {
-        console.error("Lỗi khi xóa sản phẩm:", error);
-        alert("Lỗi khi xóa sản phẩm!");
-      }
-    }
-  };
+  const handleDeleteProduct = async (productId: number) => {};
 
   // Xử lý chuyển ảnh
   const handleImageChange = (productId: number, direction: "prev" | "next") => {
@@ -98,24 +87,24 @@ const ProductManagement: React.FC = () => {
     { header: "Mô tả", accessor: "description" },
     {
       header: "Giá gốc",
-      accessor: (product: ProductModelResponse) =>
+      accessor: (product: ProductResponse) =>
         `${product.originalPrice?.toLocaleString() || 0}đ`,
     },
     {
       header: "Giá sale",
-      accessor: (product: ProductModelResponse) =>
+      accessor: (product: ProductResponse) =>
         `${product.salePrice?.toLocaleString() || 0}đ`,
     },
     { header: "Số lượng", accessor: "quantity" },
     {
       header: "Loại sản phẩm",
-      accessor: (product: ProductModelResponse) =>
+      accessor: (product: ProductResponse) =>
         product.listTypes?.map((type: Type) => type.typeName).join(", ") ||
         "Chưa có loại",
     },
     {
       header: "Hình ảnh",
-      accessor: (product: ProductModelResponse) => {
+      accessor: (product: ProductResponse) => {
         const currentIndex = imageIndexes[product.productId!] || 0;
         const images = product.listImages || [];
 
@@ -187,7 +176,7 @@ const ProductManagement: React.FC = () => {
   ];
 
   // Định nghĩa các nút hành động
-  const actions = (product: ProductModelResponse) => (
+  const actions = (product: ProductResponse) => (
     <>
       <Button
         variant="warning"
@@ -234,20 +223,7 @@ const ProductManagement: React.FC = () => {
         show={showModal}
         onHide={() => setShowModal(false)}
         productToEdit={productToEdit}
-        onSave={(product) => {
-          if (productToEdit) {
-            // Cập nhật sản phẩm
-            setProducts(
-              products.map((p) =>
-                p.productId === product.productId ? product : p
-              )
-            );
-          } else {
-            // Thêm sản phẩm mới
-            setProducts([...products, product]);
-          }
-          setShowModal(false);
-        }}
+    
       />
     </div>
   );

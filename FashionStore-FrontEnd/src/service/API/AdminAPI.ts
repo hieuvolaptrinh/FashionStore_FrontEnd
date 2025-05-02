@@ -1,38 +1,65 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import axios from "axios";
 import { API_BASE_URL } from "../../apiConfig";
+import { ProductRequest } from "../../models/ProductModel";
 import { UserModel } from "../../models/UserModel";
 
-interface ProductProps {
-  productName: string;
-  description: string;
-  originalPrice: number;
-  productionInfor: string;
-  salePrice: number;
-  quantity: number;
-  manufactureDate: string;
-  listTypes: number[];
-  listImages: string[];
+export async function createProduct(product: ProductRequest): Promise<string> {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return "Bạn chưa đăng nhập!";
+  }
+
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/v1/products`,
+      product,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("Response:", response.data);
+    return "Thêm sản phẩm thành công!";
+  } catch (error: any) {
+    console.error("API error:", error);
+
+    if (error.response && error.response.data && error.response.data.message) {
+      return error.response.data.error; // vì cấu trúc của axios
+    }
+
+    return "Có lỗi xảy ra khi thêm sản phẩm!";
+  }
 }
 
-export async function createProduct(product: ProductProps): Promise<string> {
+export async function updateProduct(product: ProductRequest): Promise<string> {
   const token = localStorage.getItem("token") || "";
   if (!token) {
     return "Bạn chưa đăng nhập!";
   }
-  const response = await fetch(`${API_BASE_URL}/api/v1/products`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(product),
-  });
+  const response = await fetch(
+    `${API_BASE_URL}/api/v1/products/${product.productId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(product),
+    }
+  );
   if (response.ok) {
-    return "Thêm sản phẩm thành công!";
+    return "Cập nhật sản phẩm thành công!";
   } else {
     const errorJson = await response.json();
     return errorJson.message || "Có lỗi xảy ra!";
   }
 }
+
 export const getAllUsers = async (): Promise<UserModel[]> => {
   const token = localStorage.getItem("token") || "";
   if (!token) {
@@ -77,4 +104,3 @@ export const lockAccount = async (userId: number): Promise<void> => {
     console.error("Lỗi khi gọi API:", error);
   }
 };
-

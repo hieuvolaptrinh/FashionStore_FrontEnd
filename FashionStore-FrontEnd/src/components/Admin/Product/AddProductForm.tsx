@@ -13,47 +13,38 @@ import {
 } from "@mui/material";
 
 import { getTypes } from "../../../service/API/TypeAPI";
-import { createProduct } from "../../../service/API/AdminAPI";
-import uploadToGoogleDrive from "../../../service/API/DriveAPI";
-import ProductModel from "../../../models/ProductModel";
+import { createProduct, updateProduct } from "../../../service/API/AdminAPI";
 
-// Định nghĩa interface cho Type
-interface Type {
-  typeId: number;
-  typeName: string;
-}
+import Type from "../../../models/TypeModel";
+import { ProductRequest, ProductResponse } from "../../../models/ProductModel";
 
 interface AddProductFormProps {
   show: boolean;
   onHide: () => void;
-  onSave: (product: ProductModel) => void;
-  productToEdit?: ProductModel | null;
+  productToEdit?: ProductResponse | null;
 }
 
 const AddProductForm: React.FC<AddProductFormProps> = ({
   show,
   onHide,
-  onSave,
+
   productToEdit,
 }) => {
   const [types, setTypes] = useState<Type[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Partial<ProductModel>>({
-    productId: productToEdit?.productId,
-    productName: productToEdit?.productName || "",
-    description: productToEdit?.description || "",
-    originalPrice: productToEdit?.originalPrice || 0,
-    productionInfor: productToEdit?.productionInfor || "",
-    salePrice: productToEdit?.salePrice || 0,
-    quantity: productToEdit?.quantity || 0,
-    manufactureDate: productToEdit?.manufactureDate || "",
-    listTypes: productToEdit?.listTypes || [],
+  const [formData, setFormData] = useState<ProductRequest>({
+    productId: undefined,
+    productName: "",
+    description: "",
+    originalPrice: 0,
+    productionInfor: "",
+    salePrice: 0,
+    quantity: 0,
+    manufactureDate: "",
+    listTypes: [],
     listImages: [],
   });
-
-  const [imagePreviews, setImagePreviews] = useState<string[]>(
-    productToEdit?.listImages || []
-  );
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   // Fetch types khi component mount
   useEffect(() => {
@@ -65,24 +56,23 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
         console.error("Không thể load loại sản phẩm:", error);
       }
     };
-
     fetchTypes();
   }, []);
 
-  // Reset form khi productToEdit thay đổi hoặc modal đóng/mở
+  // Reset form khi productToEdit hoặc show thay đổi
   useEffect(() => {
-    if (productToEdit) {
+    if (productToEdit && show) {
       setFormData({
         productId: productToEdit.productId,
-        productName: productToEdit.productName,
-        description: productToEdit.description,
-        originalPrice: productToEdit.originalPrice,
+        productName: productToEdit.productName || "",
+        description: productToEdit.description || "",
+        originalPrice: productToEdit.originalPrice || 0,
         productionInfor: productToEdit.productionInfor || "",
-        salePrice: productToEdit.salePrice,
-        quantity: productToEdit.quantity,
-        manufactureDate: productToEdit.manufactureDate,
-        listTypes: productToEdit.listTypes,
-        listImages: [],
+        salePrice: productToEdit.salePrice || 0,
+        quantity: productToEdit.quantity || 0,
+        manufactureDate: productToEdit.manufactureDate || "",
+        listTypes: productToEdit.listTypes?.map((type) => type.typeId) || [],
+        listImages: productToEdit.listImages || [],
       });
       setImagePreviews(productToEdit.listImages || []);
     } else {
@@ -106,17 +96,24 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        name === "originalPrice" || name === "salePrice" || name === "quantity"
+          ? Number(value) || 0
+          : value,
+    }));
   };
 
   // Xử lý thay đổi checkbox loại sản phẩm
   const handleCheckboxChange = (typeId: number) => {
     setFormData((prev) => {
-      const exists = prev.listTypes?.includes(typeId) || false;
+      const exists = (prev.listTypes || []).includes(typeId);
       return {
         ...prev,
         listTypes: exists
-          ? prev.listTypes?.filter((id: number) => id !== typeId) || []
+          ? (prev.listTypes || []).filter((id) => id !== typeId)
           : [...(prev.listTypes || []), typeId],
       };
     });
@@ -127,10 +124,11 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     const files = e.target.files;
     if (files) {
       const fileArray = Array.from(files);
-      setFormData((prev) => ({ ...prev, listImages: fileArray as any }));
-
-      const previews = fileArray.map((file) => URL.createObjectURL(file));
-      setImagePreviews(previews);
+      setFormData((prev) => ({
+        ...prev,
+        listImages: fileArray.map((file) => URL.createObjectURL(file)),
+      }));
+      setImagePreviews(fileArray.map((file) => URL.createObjectURL(file)));
     }
   };
 
@@ -138,35 +136,22 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log("formData", formData);
     try {
-      let imageLinks = productToEdit?.listImages || [];
-
-      // Nếu có hình ảnh mới, upload lên Google Drive
-      if (formData.listImages && formData.listImages.length > 0) {
-        console.log("Đang tải hình ảnh lên Google Drive...");
-        imageLinks = await Promise.all(
-          (formData.listImages as File[]).map((file) =>
-            uploadToGoogleDrive(file)
-          )
-        );
+      let result;
+      if (productToEdit && formData.productId) {
+        // Gọi API cập nhật sản phẩm
+        result = await updateProduct(formData);
+      } else {
+        // Gọi API tạo sản phẩm
+        result = await createProduct(formData);
       }
-
-      // Tạo đối tượng sản phẩm để gửi lên server
-      const productToSend: ProductModel = {
-        ...formData,
-        listImages: imageLinks,
-        listTypes: formData.listTypes || [],
-      } as ProductModel;
-
-      // Gọi API tạo sản phẩm
-      await createProduct(productToSend);
+      alert("result" + result);
 
       setIsLoading(false);
-      onSave(productToSend);
-      onHide();
     } catch (error) {
       setIsLoading(false);
-      alert("Lỗi khi lưu sản phẩm!" + error);
+      alert(`Lỗi khi ${productToEdit ? "cập nhật" : "tạo"} sản phẩm: ${error}`);
     }
   };
 
@@ -335,9 +320,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
                         key={type.typeId}
                         control={
                           <Checkbox
-                            checked={
-                              formData.listTypes?.includes(type.typeId) || false
-                            }
+                            checked={(formData.listTypes ?? []).includes(
+                              type.typeId
+                            )}
                             onChange={() => handleCheckboxChange(type.typeId)}
                             disabled={isLoading}
                             size="small"
@@ -398,7 +383,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
                     icon={<CircularProgress size={20} />}
                     sx={{ display: "flex", alignItems: "center" }}
                   >
-                    Đang lưu thông tin sản phẩm...
+                    Đang {productToEdit ? "cập nhật" : "tạo"} sản phẩm...
                   </Alert>
                 </div>
               )}
