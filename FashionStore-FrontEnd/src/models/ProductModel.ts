@@ -26,5 +26,5 @@ export interface ProductRequest {
   avgStars?: number;
   manufactureDate?: string; // YYYY-MM-DD
   listTypes?: number[];
-  listImages?: string[];
+  deletedImageIds?: number[]; // Danh sách ID của các hình ảnh cần xóa
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, ChangeEvent } from "react";
 import {
   Box,
@@ -27,7 +28,6 @@ interface AddProductFormProps {
 const AddProductForm: React.FC<AddProductFormProps> = ({
   show,
   onHide,
-
   productToEdit,
 }) => {
   const [types, setTypes] = useState<Type[]>([]);
@@ -42,9 +42,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     quantity: 0,
     manufactureDate: "",
     listTypes: [],
-    listImages: [],
   });
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // Thêm state để lưu File
 
   // Fetch types khi component mount
   useEffect(() => {
@@ -72,9 +72,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
         quantity: productToEdit.quantity || 0,
         manufactureDate: productToEdit.manufactureDate || "",
         listTypes: productToEdit.listTypes?.map((type) => type.typeId) || [],
-        listImages: productToEdit.listImages || [],
       });
       setImagePreviews(productToEdit.listImages || []);
+      setSelectedFiles([]); // Reset files khi chỉnh sửa
     } else {
       setFormData({
         productId: undefined,
@@ -86,9 +86,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
         quantity: 0,
         manufactureDate: "",
         listTypes: [],
-        listImages: [],
       });
       setImagePreviews([]);
+      setSelectedFiles([]);
     }
   }, [productToEdit, show]);
 
@@ -109,12 +109,13 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   // Xử lý thay đổi checkbox loại sản phẩm
   const handleCheckboxChange = (typeId: number) => {
     setFormData((prev) => {
-      const exists = (prev.listTypes || []).includes(typeId);
+      const listTypes = prev.listTypes || [];
+      const exists = listTypes.includes(typeId);
       return {
         ...prev,
         listTypes: exists
-          ? (prev.listTypes || []).filter((id) => id !== typeId)
-          : [...(prev.listTypes || []), typeId],
+          ? listTypes.filter((id) => id !== typeId)
+          : [...listTypes, typeId],
       };
     });
   };
@@ -124,11 +125,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     const files = e.target.files;
     if (files) {
       const fileArray = Array.from(files);
-      setFormData((prev) => ({
-        ...prev,
-        listImages: fileArray.map((file) => URL.createObjectURL(file)),
-      }));
-      setImagePreviews(fileArray.map((file) => URL.createObjectURL(file)));
+      setSelectedFiles(fileArray); // Lưu danh sách File
+      setImagePreviews(fileArray.map((file) => URL.createObjectURL(file))); // Lưu preview
     }
   };
 
@@ -136,24 +134,24 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("formData", formData);
     try {
       let result;
       if (productToEdit && formData.productId) {
-        // Gọi API cập nhật sản phẩm
         result = await updateProduct(formData);
       } else {
-        // Gọi API tạo sản phẩm
-        result = await createProduct(formData);
-      }
-      alert("result" + result);
 
+        result = await createProduct(formData, selectedFiles);
+      }
+      alert(result);
       setIsLoading(false);
-    } catch (error) {
+     
+    } catch (error: any) {
       setIsLoading(false);
       alert(`Lỗi khi ${productToEdit ? "cập nhật" : "tạo"} sản phẩm: ${error}`);
     }
   };
+
+  // ... Phần render giữ nguyên như mã gốc ...
 
   return (
     <Modal
