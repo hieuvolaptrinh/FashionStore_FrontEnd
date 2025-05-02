@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 import { API_BASE_URL } from "../../apiConfig";
 import RestResponse from "../../models/RestResponse";
-import Type from "../../models/Type";
+import Type from "../../models/TypeModel";
 
 export async function getTypes(): Promise<Type[]> {
   const url = `${API_BASE_URL}/api/v1/products/types`;
@@ -12,7 +12,6 @@ export async function getTypes(): Promise<Type[]> {
     }
     return response.data.data; // .data ở lần đầu vì cái json của axios nó cũng có data
   } catch (error) {
-
     if (axios.isAxiosError(error)) {
       console.error("Lỗi từ API:", error.response?.data);
     } else {

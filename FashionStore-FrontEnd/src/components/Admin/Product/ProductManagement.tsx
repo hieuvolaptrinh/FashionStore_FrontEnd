@@ -4,15 +4,18 @@ import { Button } from "react-bootstrap";
 import GenericTable from "../../GenericTable";
 import AddProductForm from "./AddProductForm";
 import { getAllProducts } from "../../../service/API/ProductAPI";
-import ProductModel from "../../../models/ProductModel";
+
 import { Pagination, IconButton } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import { ProductModelResponse } from "../../../models/ProductModel";
+import Type from "../../../models/TypeModel";
 
 const ProductManagement: React.FC = () => {
   // State quản lý danh sách sản phẩm và modal
-  const [products, setProducts] = useState<ProductModel[]>([]);
+  const [products, setProducts] = useState<ProductModelResponse[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [productToEdit, setProductToEdit] = useState<ProductModel | null>(null);
+  const [productToEdit, setProductToEdit] =
+    useState<ProductModelResponse | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [imageIndexes, setImageIndexes] = useState<{ [key: number]: number }>(
@@ -49,7 +52,7 @@ const ProductManagement: React.FC = () => {
   };
 
   // Xử lý sửa sản phẩm
-  const handleEditProduct = (product: ProductModel) => {
+  const handleEditProduct = (product: ProductModelResponse) => {
     setProductToEdit(product);
     setShowModal(true);
   };
@@ -95,24 +98,24 @@ const ProductManagement: React.FC = () => {
     { header: "Mô tả", accessor: "description" },
     {
       header: "Giá gốc",
-      accessor: (product: ProductModel) =>
+      accessor: (product: ProductModelResponse) =>
         `${product.originalPrice?.toLocaleString() || 0}đ`,
     },
     {
       header: "Giá sale",
-      accessor: (product: ProductModel) =>
+      accessor: (product: ProductModelResponse) =>
         `${product.salePrice?.toLocaleString() || 0}đ`,
     },
     { header: "Số lượng", accessor: "quantity" },
     {
       header: "Loại sản phẩm",
-      accessor: (product: ProductModel) =>
-        product.listTypes?.map((typeId: number) => typeId).join(", ") ||
+      accessor: (product: ProductModelResponse) =>
+        product.listTypes?.map((type: Type) => type.typeName).join(", ") ||
         "Chưa có loại",
     },
     {
       header: "Hình ảnh",
-      accessor: (product: ProductModel) => {
+      accessor: (product: ProductModelResponse) => {
         const currentIndex = imageIndexes[product.productId!] || 0;
         const images = product.listImages || [];
 
@@ -184,7 +187,7 @@ const ProductManagement: React.FC = () => {
   ];
 
   // Định nghĩa các nút hành động
-  const actions = (product: ProductModel) => (
+  const actions = (product: ProductModelResponse) => (
     <>
       <Button
         variant="warning"
@@ -217,6 +220,7 @@ const ProductManagement: React.FC = () => {
         actions={actions}
       />
       <div className="d-flex justify-content-center mt-3">
+        {/* component pagination */}
         <Pagination
           count={totalPages}
           page={currentPage}

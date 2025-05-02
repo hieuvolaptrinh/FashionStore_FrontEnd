@@ -1,23 +1,20 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import ProductModel from "../../../models/ProductModel";
+import { ProductModelResponse } from "../../../models/ProductModel";
 import { getAllProducts, searchProduct } from "../../../service/API/ProductAPI";
-import { Pagination } from "../../Pagination";
+import { Pagination } from "@mui/material";
 
 interface ListProductProps {
   keyword: string;
   typeId: number;
 }
 function ListProduct({ keyword, typeId }: ListProductProps) {
-  const [listProduct, setListProduct] = useState<ProductModel[]>([]);
+  const [listProduct, setListProduct] = useState<ProductModelResponse[]>([]);
   const [loanding, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>();
-
-  // pagination
-  const onPageChange = (page: number) => setCurrentPage(page);
 
   // lấy dữ liệu
   useEffect(
@@ -91,9 +88,13 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
         </div>
         <div className="d-flex justify-content-center mt-4">
           <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages ?? 0}
-            onPageChange={onPageChange}
+            count={totalPages} //Số lượng tổng các trang
+            page={currentPage} //  Trang hiện tại (controlled component)
+            onChange={(_, page) => setCurrentPage(page)}
+            color="primary" //  Màu sắc của nút (theo theme: primary, secondary...)
+            showFirstButton //  Hiện nút "về trang đầu"
+            showLastButton //  Hiện nút "tới trang cuối"
+            size="large"
           />
         </div>
       </div>

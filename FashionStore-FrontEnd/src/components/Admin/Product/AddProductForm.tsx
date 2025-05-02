@@ -23,7 +23,6 @@ interface Type {
   typeName: string;
 }
 
-// Định nghĩa props cho component
 interface AddProductFormProps {
   show: boolean;
   onHide: () => void;

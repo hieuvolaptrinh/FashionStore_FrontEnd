@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Link, NavLink } from "react-router-dom";
-import Type from "../../models/Type";
+import Type from "../../models/TypeModel";
 import { getTypes } from "../../service/API/TypeAPI";
 
 function Navbar() {

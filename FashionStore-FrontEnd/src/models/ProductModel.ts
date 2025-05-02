@@ -1,4 +1,6 @@
-interface ProductModel {
+import Type from "./TypeModel";
+
+export interface ProductModel {
   productId?: number;
   productName?: string;
   description?: string;
@@ -13,4 +15,16 @@ interface ProductModel {
   mainImage: string;
 }
 
-export default ProductModel;
+export interface ProductModelResponse {
+  productId?: number;
+  productName?: string;
+  description?: string;
+  productionInfor?: string;
+  originalPrice?: number;
+  salePrice?: number;
+  quantity?: number;
+  avgStars?: number;
+  manufactureDate?: string; // YYYY-MM-DD
+  listTypes: Type[];
+  listImages?: string[];
+}

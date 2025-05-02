@@ -1,17 +1,17 @@
-import ProductModel from "../../models/ProductModel";
+import {  ProductModelResponse } from "../../models/ProductModel";
 import { API_BASE_URL } from "../../apiConfig";
 import RestResponse from "../../models/RestResponse";
 import axios from "axios";
 
 interface ProductPage {
-  content: ProductModel[]; // vì backend phân trang
+  content: ProductModelResponse[]; // vì backend phân trang
   totalPages: number;
   totalElements: number;
 }
 async function getProduct(url: string): Promise<ProductPage | null> {
   const response = (await axios.get(url)).data;
   console.log(response);
-  return  response.data;
+  return response.data;
 }
 
 export async function searchProduct(
@@ -59,7 +59,7 @@ export async function getAllProducts(
 
 export async function getProductById(
   productId: number
-): Promise<ProductModel | null> {
+): Promise<ProductModelResponse | null> {
   const url = `${API_BASE_URL}/api/v1/products/${productId}`;
   try {
     const response = await fetch(url);
@@ -71,7 +71,7 @@ export async function getProductById(
         errorBody?.message || `HTTP Lỗi! Status: ${response.status}`
       );
     }
-    const json: RestResponse<ProductModel> = await response.json();
+    const json: RestResponse<ProductModelResponse> = await response.json();
     return json.data;
   } catch (error) {
     console.error("Lỗi:", error);

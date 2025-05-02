@@ -146,7 +146,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
                     },
                   }}
                 >
-                  <ListItemButton component={Link} to="/admin/create">
+                  <ListItemButton component={Link} to="/admin/products">
                     <ListItemText primary="Danh sách sản phẩm" />
                   </ListItemButton>
                 </ListItem>

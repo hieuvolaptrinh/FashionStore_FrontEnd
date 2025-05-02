@@ -30,7 +30,7 @@ const AdminLayout: React.FC = () => {
         <Container fluid className="pt-4 px-4 flex-grow-1">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/product" element={<AdminOrderPage />} />
+            <Route path="/products" element={<AdminOrderPage />} />
             <Route path="/forbidden" element={<ForbiddenPage />} />
             <Route path="/user" element={<UserAdminManager />} />
             {/* Placeholder */}
