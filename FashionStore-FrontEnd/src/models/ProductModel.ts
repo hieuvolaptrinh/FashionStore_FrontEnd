@@ -11,7 +11,7 @@ export interface ProductResponse {
   avgStars?: number;
   manufactureDate?: string; // YYYY-MM-DD
   listTypes?: Type[];
-  listImages?: string[];
+  listImages?: { id: number; link: string }[];
   mainImage?: string;
 }
 

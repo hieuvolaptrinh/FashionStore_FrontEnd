@@ -140,7 +140,7 @@ const ProductManagement: React.FC = () => {
               </IconButton>
             )}
             <img
-              src={images[currentIndex]}
+              src={images[currentIndex].link}
               alt={`product-${currentIndex}`}
               style={{
                 width: "100%",
@@ -223,7 +223,6 @@ const ProductManagement: React.FC = () => {
         show={showModal}
         onHide={() => setShowModal(false)}
         productToEdit={productToEdit}
-    
       />
     </div>
   );

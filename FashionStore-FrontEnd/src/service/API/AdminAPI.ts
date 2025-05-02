@@ -57,39 +57,40 @@ export async function updateProduct(
     return "Bạn chưa đăng nhập!";
   }
 
+  if (!product.productId) {
+    return "ID sản phẩm không hợp lệ!";
+  }
+
   try {
     const formData = new FormData();
-    //  JSON với Content-Type ko là lỗi backend ko nhận
     formData.append(
       "product",
       new Blob([JSON.stringify(product)], { type: "application/json" })
     );
-
-    // Thêm các file hình ảnh (nếu có)
     if (files && files.length > 0) {
       files.forEach((file) => {
         formData.append("images", file);
       });
     }
 
-    const response = await axios.post(
-      `${API_BASE_URL}/api/v1/products`,
+    const response = await axios.put(
+      `${API_BASE_URL}/api/v1/products/${product.productId}`,
       formData,
       {
         headers: {
-          // Axios sẽ tự động đặt multipart/form-data
           Authorization: `Bearer ${token}`,
         },
       }
     );
+
     console.log("Response:", response.data);
-    return "Thêm sản phẩm thành công!";
+    return "Cập nhật sản phẩm thành công!";
   } catch (error: any) {
     console.error("API error:", error);
     if (error.response && error.response.data && error.response.data.message) {
-      return error.response.data.message; // Điều chỉnh theo cấu trúc lỗi của backend
+      return error.response.data.error;
     }
-    return "Có lỗi xảy ra khi thêm sản phẩm!";
+    return "Có lỗi xảy ra khi cập nhật sản phẩm!";
   }
 }
 
