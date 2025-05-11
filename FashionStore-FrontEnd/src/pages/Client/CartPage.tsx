@@ -63,7 +63,7 @@ function CartPage() {
   const handleCheckout = () => {
     const selectedIds = Array.from(selectedItems);
     console.log("Selected IDs:", selectedIds);
-    navigate("/checkout", { state: { selectedIds } });
+    navigate("/checkouts", { state: { selectedIds } });
   };
 
   return (

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { API_BASE_URL } from "../../apiConfig";
 import RestResponse from "../../models/RestResponse";
 import { UserModel } from "../../models/UserModel";
@@ -56,43 +57,37 @@ export const registerUser = async (
 ): Promise<string> => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/api/v1/user/register`,
+      `${API_BASE_URL}/api/v1/auth/register`,
       userData
     );
 
     const result = response.data;
     if (response.status === 200) {
-      return (
-        result.message ||
-        "Đã đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản."
-      );
+      return result.message;
     } else {
-      return result.message || "Có lỗi khi đăng ký người dùng";
+      return result.error || "Có lỗi khi đăng ký người dùng";
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Lỗi đăng ký:", error);
-    return `Bị lỗi trong quá trình đăng ký tài khoản: ${error}`;
+    if (error.response && error.response.data) {
+      // error.response : lầ cấu trúc của axios/ data.error là cấu trúc mình code bên backend
+      return "Lỗi:" + error.response.data.error;
+    }
+    return "Đã xảy ra lỗi trong quá trình đăng ký tài khoản. Vui lòng thử lại sau.";
   }
 };
-
 export const activateAccount = async (
   email: string,
   activationCode: string
 ): Promise<string> => {
   const params = new URLSearchParams({ email, activationCode });
-  const url = `${API_BASE_URL}/api/v1/user/activateAccount?${params}`;
-
+  const url = `${API_BASE_URL}/api/v1/auth/activateAccount?${params}`;
   try {
-    const response = await fetch(url, { method: "GET" });
-    const responseText = await response.json();
+    const response = await axios.get(url);
 
-    if (response.ok) {
-      return responseText.message;
-    }
-    return "Kích hoạt tài khoản thất bại!";
-  } catch (error) {
-    console.error("Fetch error:", error);
-    return "Không thể kết nối đến server";
+    return response.data.data.message;
+  } catch (error: any) {
+    return error.response.data.error;
   }
 };
 

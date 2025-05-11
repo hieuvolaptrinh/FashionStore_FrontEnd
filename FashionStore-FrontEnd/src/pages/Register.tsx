@@ -10,9 +10,7 @@ import getBase64 from "../utils/getBase64";
 
 export const Register: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-
   const [avatar, setAvatar] = useState<File | null>(null);
-
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
