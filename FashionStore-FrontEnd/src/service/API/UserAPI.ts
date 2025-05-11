@@ -162,3 +162,37 @@ export const updateUser = async (user: UserModel): Promise<string> => {
     return "Có lỗi xảy ra khi cập nhật người dùng!";
   }
 };
+
+export const changePassword = async (
+  email: string,
+  password: string,
+  activationCode: string
+) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/v1/auth/new-password?email=${email}&password=${password}&activationCode=${activationCode}`
+    );
+    console.log("response", response);
+    return response.data.message;
+  } catch (error: any) {
+    console.error("Error:", error);
+    return error.response.data.error;
+  }
+};
+
+export const forgotPassword = async (email: string, userName: string) => {
+  const payload = {
+    email,
+    userName,
+  };
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/v1/auth/reset-password`,
+      payload
+    );
+    return response.data.message;
+  } catch (error: any) {
+    console.error("Error:", error);
+    return error.response.data.error;
+  }
+};

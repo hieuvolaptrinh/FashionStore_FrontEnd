@@ -13,6 +13,8 @@ import Login from "./pages/Login";
 import { Register } from "./pages/Register";
 import { KeywordProvider } from "./contexts/KeywordContext";
 import PaymentResult from "./pages/Client/PaymentResult";
+import RestPassword from "./pages/Client/RestPassword";
+import ForgotPassword from "./pages/Client/ForgotPassword";
 function App() {
   return (
     <>
@@ -32,6 +34,11 @@ function App() {
                 path="/activateAccount/:email/:activationCode"
                 element={<ActivateAccount />}
               />
+              <Route
+                path="/rest-password/:email/:activationCode"
+                element={<RestPassword />}
+              />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/carts" element={<CartPage_User />} />
               <Route path="/loginRequired" element={<LoginRequiredPage />} />
               <Route path="/orders" element={<OrderPage_Checked />} />

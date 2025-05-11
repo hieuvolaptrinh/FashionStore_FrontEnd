@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAvatar } from "../../service/API/UserAPI";
 import { useKeyword } from "../../contexts/KeywordContext";
+import { Key } from "@mui/icons-material";
 
 const Header: React.FC = () => {
   // sử dụng setKeyword từ context để lưu từ khóa tìm kiếm
@@ -112,6 +113,9 @@ const Header: React.FC = () => {
                     </Link>
                     <Link to="/register" className="dropdown-item">
                       Đăng ký 📝
+                    </Link>
+                    <Link to="/rest-password" className="dropdown-item">
+                      Quên mật khẩu <Key />
                     </Link>
                   </>
                 ) : (

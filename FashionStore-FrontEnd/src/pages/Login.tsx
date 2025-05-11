@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { login } from "../service/API/UserAPI";
 import { Link } from "react-router-dom";
 
-
 export default function Login() {
   const [formData, setFormData] = useState({
     userName: "",
@@ -83,6 +82,12 @@ export default function Login() {
               >
                 Sign Up
               </button>
+              <div className="card-footer text-center py-3 bg-light">
+                <p className="mb-0">
+                  Bạn quên mật khẩu ư ?{" "}
+                  <Link to={"/forgot-password"}>Lấy lại mật khẩu ngay</Link>
+                </p>
+              </div>
             </div>
           </div>
         </div>
