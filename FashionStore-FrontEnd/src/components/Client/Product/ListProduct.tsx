@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import { ProductModelResponse } from "../../../models/ProductModel";
+import { ProductResponse } from "../../../models/ProductModel";
 import { getAllProducts, searchProduct } from "../../../service/API/ProductAPI";
 import { Pagination } from "@mui/material";
 
@@ -9,7 +9,7 @@ interface ListProductProps {
   typeId: number;
 }
 function ListProduct({ keyword, typeId }: ListProductProps) {
-  const [listProduct, setListProduct] = useState<ProductModelResponse[]>([]);
+  const [listProduct, setListProduct] = useState<ProductResponse[]>([]);
   const [loanding, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

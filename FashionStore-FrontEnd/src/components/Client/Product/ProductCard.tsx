@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ImageProduct from "./ImageProduct";
 import { fetchProductImages } from "../../../service/API/ImageAPI";
-import ProductModel from "../../../models/ProductModel";
+import { ProductResponse } from "../../../models/ProductModel";
 import ImageModel from "../../../models/ImageModel";
 import { addToCart } from "../../../service/API/CartAPI";
 
-const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
+const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
   const [images, setImages] = useState<ImageModel[]>([]);
   const [loanding, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -63,7 +63,7 @@ const ProductCard: React.FC<{ product: ProductModel }> = ({ product }) => {
   }
 
   return (
-    <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
+    <div className="col-lg-3 col-md-6 col-sm-6 pb-1">
       <div className="product-item bg-light mb-4">
         <div className="product-img position-relative overflow-hidden">
           {/* ảo giác vl phải tạo component */}
