@@ -10,7 +10,7 @@ import CartPage_User from "./pages/Client/CartPage";
 import ProductDetail from "./pages/Client/ProductDetailPage";
 import ActivateAccount from "./pages/Client/ActivateAccount";
 import Login from "./pages/Login";
-import { Register } from "./pages/Register";
+import Register from "./pages/Register";
 import { KeywordProvider } from "./contexts/KeywordContext";
 import PaymentResult from "./pages/Client/PaymentResult";
 import RestPassword from "./pages/Client/RestPassword";
