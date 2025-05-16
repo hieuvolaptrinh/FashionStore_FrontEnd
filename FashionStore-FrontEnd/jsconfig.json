@@ -1,0 +1,12 @@
+// config alias
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@api/*": ["src/service/API/*"],
+      "@models/*": ["src/models/*"]
+    }
+  },
+  //chỉ config trong src
+  "include": ["src/**/*"]
+}

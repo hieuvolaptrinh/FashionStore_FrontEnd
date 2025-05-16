@@ -14,10 +14,14 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { ProductRequest, ProductResponse } from "../../../models/ProductModel";
+import Type from "../../../models/TypeModel";
 import { getTypes } from "../../../service/API/TypeAPI";
 import { createProduct, updateProduct } from "../../../service/API/AdminAPI";
-import Type from "../../../models/TypeModel";
-import { ProductRequest, ProductResponse } from "../../../models/ProductModel";
+// import { getTypes } from "@api/TypeAPI";
+// import { createProduct, updateProduct } from "@api/AdminAPI";
+// import Type from "@models/models/TypeModel";
+// import { ProductRequest, ProductResponse } from "@models/ProductModel";
 
 interface AddProductFormProps {
   show: boolean;

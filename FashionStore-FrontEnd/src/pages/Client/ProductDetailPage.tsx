@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
-import ProductModel from "../../models/ProductModel";
+
 
 import { useParams } from "react-router-dom";
 import { getProductById } from "../../service/API/ProductAPI";
@@ -12,6 +12,7 @@ import { getReviewsWithUser } from "../../service/API/ReviewAPI";
 import Carousel from "../../layouts/Client/Carousel";
 import { addToCart } from "../../service/API/CartAPI";
 import InfoProduct from "../../components/Client/Product/InforProduct";
+import { ProductResponse } from "../../models/ProductModel";
 
 const ProductDetail: React.FC = () => {
   // lấy productId từ URL
@@ -23,7 +24,7 @@ const ProductDetail: React.FC = () => {
     console.error("Lỗi lấy productId từ URL: ", error);
   }
 
-  const [product, setProduct] = useState<ProductModel | null>(null);
+  const [product, setProduct] = useState<ProductResponse | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
