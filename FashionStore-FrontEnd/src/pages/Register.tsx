@@ -31,6 +31,9 @@ import {
 
 const Register: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRePassword, setShowRePassword] = useState(false);
   const [avatar, setAvatar] = useState<File | null>(null);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -39,8 +42,6 @@ const Register: React.FC = () => {
   const [phone, setPhone] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showRePassword, setShowRePassword] = useState(false);
   // error
   const [errorUserName, setErrorUserName] = useState("");
   const [errorEmail, setErrorEmail] = useState("");

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, ChangeEvent } from "react";
 import {
@@ -18,9 +19,12 @@ import { ProductRequest, ProductResponse } from "../../../models/ProductModel";
 import Type from "../../../models/TypeModel";
 import { getTypes } from "../../../service/API/TypeAPI";
 import { createProduct, updateProduct } from "../../../service/API/AdminAPI";
+// Dùng useForm để khởi tạo form.
+// Dùng Controller để bọc các component MUI như TextField, Checkbox vì chúng không hỗ trợ trực tiếp ref.
+import { useForm, Controller } from "react-hook-form";
 // import { getTypes } from "@api/TypeAPI";
 // import { createProduct, updateProduct } from "@api/AdminAPI";
-// import Type from "@models/models/TypeModel";
+// import Type from "@models/TypeModel";
 // import { ProductRequest, ProductResponse } from "@models/ProductModel";
 
 interface AddProductFormProps {
@@ -67,10 +71,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     fetchTypes();
   }, []);
 
-  // Reset form khi productToEdit hoặc show thay đổi
+  // Reset form
   useEffect(() => {
     if (productToEdit && show) {
-      // Cập nhật formData từ productToEdit
       setFormData({
         productId: productToEdit.productId,
         productName: productToEdit.productName || "",
@@ -83,7 +86,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
         listTypes: productToEdit.listTypes?.map((type) => type.typeId) || [],
         deletedImageIds: [],
       });
-      // Ánh xạ listImages thành { id, link }
       const existing =
         productToEdit.listImages?.map((image) => ({
           id: image.imageId, // ID thực từ backend
@@ -237,7 +239,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
       >
         <Paper elevation={3} className="p-4">
           <Typography variant="h4" align="center" gutterBottom>
-            {productToEdit ? "Sửa Sản Phẩm" : "Thêm Sản Phẩm Mới"}
+            {productToEdit ? "Sửa Sản Phẩm" : "Đăng Bán Sản Phẩm"}
           </Typography>
           <form onSubmit={handleSubmit}>
             <div className="row g-3">
@@ -334,7 +336,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
                   size="small"
                 />
               </div>
-
+              {/* loại sp */}
+              {/* 
               <div className="col-12">
                 <Typography variant="subtitle1" gutterBottom>
                   Loại sản phẩm
@@ -369,7 +372,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
                     ))}
                   </Box>
                 )}
-              </div>
+              </div> */}
 
               <div className="col-12">
                 <Button
@@ -469,7 +472,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
                     ? "Đang xử lý..."
                     : productToEdit
                     ? "Cập nhật"
-                    : "Thêm sản phẩm"}
+                    : "Đăng Bán Ngay"}
                 </Button>
               </div>
             </div>

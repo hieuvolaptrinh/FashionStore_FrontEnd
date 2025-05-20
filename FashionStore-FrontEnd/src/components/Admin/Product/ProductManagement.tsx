@@ -159,7 +159,7 @@ const ProductManagement: React.FC = () => {
               </IconButton>
             )}
             <img
-              src={images[validIndex].link} // Sửa link thành url
+              src={images[validIndex].link}
               alt={`product-${validIndex}`}
               style={{
                 width: "100%",
@@ -215,11 +215,11 @@ const ProductManagement: React.FC = () => {
     </>
   );
 
-  // Xử lý xóa sản phẩm (chưa được định nghĩa trong mã gốc)
+
   const handleDeleteProduct = (productId: number) => {
-    // Thêm logic xóa sản phẩm, ví dụ gọi API deleteProduct
+    
     console.log("Xóa sản phẩm:", productId);
-    alert("Chức năng xóa chưa được triển khai!");
+    alert("Ở đây không nên xóa, chỉ nên cập nhật số lượng =0 thôi để thống kê và quản lý doanh thu sau này");
   };
 
   return (
