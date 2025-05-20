@@ -21,8 +21,6 @@ function App() {
       <KeywordProvider>
         <BrowserRouter>
           <Routes>
-            {/* user */}
-
             <Route path="/" element={<UserLayout />}>
               <Route index element={<HomePage />} />
               <Route path="/:typeId" element={<HomePage />} />

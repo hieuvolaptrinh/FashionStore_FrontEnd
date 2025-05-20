@@ -12,7 +12,6 @@ import {
   IconButton,
   Badge,
   Container,
-
   Menu,
   MenuItem,
   ListItemIcon,
@@ -172,7 +171,7 @@ const Navbar: React.FC = () => {
                       },
                     }}
                   >
-                    <Typography variant="body1">{type.typeName}</Typography>
+                    <Typography variant="h6">{type.typeName}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -210,11 +209,11 @@ const Navbar: React.FC = () => {
                     selected={isLinkActive(link.path)}
                     sx={{
                       "&.Mui-selected": {
-                        backgroundColor: `${primaryColor}15`,
+                        backgroundColor: `${primaryColor}`,
                         color: primaryColor,
                       },
                       "&:hover": {
-                        backgroundColor: `${primaryColor}10`,
+                        backgroundColor: `${primaryColor}`,
                       },
                     }}
                   >
@@ -286,10 +285,11 @@ const Navbar: React.FC = () => {
                   sx={{
                     color: lightTextColor,
                     display: "block",
+                    fontSize: "1rem",
                     mx: 1,
                     textTransform: "none",
                     position: "relative",
-                    fontWeight: 500,
+                    fontWeight: 700,
                     padding: "6px 12px",
                     "&.active": {
                       color: accentColor,

@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
-
-
 import { useParams } from "react-router-dom";
 import { getProductById } from "../../service/API/ProductAPI";
 import ProductImage from "../../components/Client/Product/ProductImage";
@@ -113,7 +112,7 @@ const ProductDetail: React.FC = () => {
 
   return (
     <>
-      <Carousel />
+      {/* <Carousel /> */}
 
       <div className="container-fluid pb-5">
         <div className="row px-xl-5">

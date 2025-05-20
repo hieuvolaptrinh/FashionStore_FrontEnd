@@ -17,38 +17,35 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
   const [totalPages, setTotalPages] = useState<number>();
 
   // lấy dữ liệu
-  useEffect(
-    () => {
-      if (keyword === "" && typeId === 0) {
-        console.log("không có tìm kiếm và không có typeId");
-        getAllProducts(currentPage)
-          .then((result) => {
-            setListProduct(result.content);
-            setTotalPages(result.totalPages);
-            setLoading(false);
-          })
-          .catch((error) => {
-            setError(error);
-            setLoading(false);
-          });
-      } else {
-        console.log("có tìm kiếm");
-        console.log(keyword);
-        searchProduct(keyword, typeId)
-          .then((result) => {
-            setListProduct(result.content);
-            setTotalPages(result.totalPages);
-            setLoading(false);
-          })
-          .catch((error) => {
-            setError(error);
-            console.log("looix cho nay " + error.message);
-            setLoading(false);
-          });
-      }
-    },
-    [currentPage, keyword, typeId] // chạy 1 lần duy nhất khi component được render, khi currentPage hoặc keyword thay đổi thì chạy lại
-  );
+  useEffect(() => {
+    if (keyword === "" && typeId === 0) {
+      console.log("không có tìm kiếm và không có typeId");
+      getAllProducts(currentPage)
+        .then((result) => {
+          setListProduct(result.content);
+          setTotalPages(result.totalPages);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setError(error);
+          setLoading(false);
+        });
+    } else {
+      console.log("có tìm kiếm");
+      console.log(keyword);
+      searchProduct(keyword, typeId)
+        .then((result) => {
+          setListProduct(result.content);
+          setTotalPages(result.totalPages);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setError(error);
+          console.log("lỗi chỗ này " + error.message);
+          setLoading(false);
+        });
+    }
+  }, [currentPage, keyword, typeId]);
 
   if (loanding) {
     return (

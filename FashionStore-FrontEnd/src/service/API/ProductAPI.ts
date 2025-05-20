@@ -40,7 +40,7 @@ export async function getAllProducts(
 ): Promise<ProductPage> {
   const url: string = `${API_BASE_URL}/api/v1/products?page=${
     currentPage - 1
-  }&size=4&sort=productId,asc`;
+  }&size=8&sort=productId,asc`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
