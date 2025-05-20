@@ -196,3 +196,14 @@ export const forgotPassword = async (email: string, userName: string) => {
     return error.response.data.error;
   }
 };
+
+export const getUser = async (): Promise<UserModel> => {
+  const token = localStorage.getItem("token") || "";
+  if (!token) {
+    return "Bạn chưa đăng nhập!";
+  }
+  const response = await axios.get(`${API_BASE_URL}/api/v1/user/me`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data.data;
+};

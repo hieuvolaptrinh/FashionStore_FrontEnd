@@ -362,7 +362,7 @@ const Header: React.FC = () => {
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        navigate("/cart");
+                        navigate("/carts");
                         handleCloseMenu();
                       }}
                     >

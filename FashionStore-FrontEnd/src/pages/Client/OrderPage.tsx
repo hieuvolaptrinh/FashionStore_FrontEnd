@@ -112,7 +112,7 @@ const OrderPage: React.FC = () => {
             >
               <MenuItem value="all">Tất cả</MenuItem>
               <MenuItem value="Chưa xử lý">Chưa xử lý</MenuItem>
-              <MenuItem value="Đang giao">Đang giao</MenuItem>
+              <MenuItem value="Đang vận chuyển">Đang vận chuyển</MenuItem>
               <MenuItem value="Đã giao">Đã giao</MenuItem>
               <MenuItem value="Đã hủy">Đã hủy</MenuItem>
             </Select>

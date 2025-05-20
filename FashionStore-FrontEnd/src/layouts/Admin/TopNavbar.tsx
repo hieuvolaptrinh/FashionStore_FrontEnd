@@ -8,7 +8,7 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAvatar } from "../../service/API/UserAPI";
 
 interface NavbarProps {
@@ -18,7 +18,7 @@ interface NavbarProps {
 const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const userName = localStorage.getItem("username") || "Hiếu Võ ";
   const [avatar, setAvatar] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     getAvatar()
       .then((avatar) => {
@@ -28,6 +28,13 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
         console.error("Không có AVATAR", error);
       });
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("roles");
+    navigate("/login");
+  };
   return (
     <Navbar
       expand="lg"
@@ -137,13 +144,15 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             className="custom-nav-dropdown"
           >
             <NavDropdown.Item className="custom-dropdown-item">
-              My Profile
+              Cài đặt
             </NavDropdown.Item>
-            <NavDropdown.Item className="custom-dropdown-item">
-              Settings
-            </NavDropdown.Item>
-            <NavDropdown.Item className="custom-dropdown-item">
-              Log Out
+            <NavDropdown.Item
+              className="custom-dropdown-item"
+              onClick={() => {
+                handleLogout();
+              }}
+            >
+              Đăng xuất
             </NavDropdown.Item>
           </NavDropdown>
         </Nav>
