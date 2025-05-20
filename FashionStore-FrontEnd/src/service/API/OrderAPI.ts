@@ -84,8 +84,11 @@ export const getUserAddresses = async (): Promise<AddressModel[]> => {
 export const createAddress = async (
   address: AddressModel
 ): Promise<AddressModel> => {
+  console.log("OrderAPI - createAddress called with:", address);
+
   const token = localStorage.getItem("token");
   if (!token) {
+    console.error("OrderAPI - No authentication token found");
     throw new Error("Không tìm thấy token xác thực");
   }
 
@@ -95,6 +98,8 @@ export const createAddress = async (
     districtName: address.districtName,
     wardName: address.wardName,
   };
+
+  console.log("OrderAPI - Sending payload:", payload);
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/orders/address`, {
@@ -106,20 +111,31 @@ export const createAddress = async (
       body: JSON.stringify(payload),
     });
 
+    console.log("OrderAPI - Response status:", response.status);
+
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || "Không thể tạo địa chỉ mới");
+      let errorMessage = "Không thể tạo địa chỉ mới";
+      try {
+        const errorData = await response.json();
+        console.error("OrderAPI - Error response:", errorData);
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch (parseError) {
+        console.error("OrderAPI - Could not parse error response:", parseError);
+      }
+      throw new Error(errorMessage);
     }
 
     const result: RestResponse<AddressModel> = await response.json();
+    console.log("OrderAPI - Successful response data:", result);
 
     if (!result.data) {
+      console.error("OrderAPI - No data in response", result);
       throw new Error("Dữ liệu phản hồi không hợp lệ");
     }
 
     return result.data;
   } catch (error) {
-    console.error("Error creating address:", error);
+    console.error("OrderAPI - Error creating address:", error);
     throw error;
   }
 };

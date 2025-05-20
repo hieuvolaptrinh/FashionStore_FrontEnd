@@ -196,37 +196,28 @@ const Profile = () => {
     }
   };
 
-  const handleAddAddress = async (address: AddressModel) => {
+  // Updated handleAddAddress function to match Checkout functionality
+  const handleAddAddress = async (newAddress: AddressModel) => {
     try {
-      setUpdating(true);
+      // Show loading notification
+      showNotification("Đang thêm địa chỉ mới...", "info");
 
-      // Ensure address has all required fields
-      const addressData: AddressModel = {
-        streetName: address.streetName,
-        cityName: address.cityName,
-        districtName: address.districtName,
-        wardName: address.wardName,
-      };
+      // Call API to create address
+      const createdAddress = await createAddress(newAddress);
 
-      // Call API to create the address
-      const createdAddress = await createAddress(addressData);
+      // Update addresses state with new address
+      setAddresses((prev) => [...prev, createdAddress]);
 
-      // Update local state with the new address that includes the ID from the server
-      setAddresses((prevAddresses) => [...prevAddresses, createdAddress]);
+      // Select the newly created address
+      setSelectedAddressId(createdAddress.addressId ?? null);
 
-      // Automatically select the newly added address
-      if (createdAddress.addressId) {
-        setSelectedAddressId(createdAddress.addressId);
-      }
-
-      showNotification("Thêm địa chỉ thành công", "success");
+      // Show success notification
+      showNotification("Thêm địa chỉ mới thành công", "success");
     } catch (error) {
-      console.error("Lỗi khi thêm địa chỉ:", error);
+      console.error("Error adding address:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Không thể thêm địa chỉ mới";
       showNotification(errorMessage, "error");
-    } finally {
-      setUpdating(false);
     }
   };
 
@@ -304,7 +295,6 @@ const Profile = () => {
         setShowPasswordFields(false);
       }
 
-      // Reload user data to ensure we have latest state
       const refreshedUserData = await getUser();
       setUserProfile(refreshedUserData);
 

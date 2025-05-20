@@ -16,28 +16,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddAddress }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const validate = (): boolean => {
-    const newErrors: Record<string, string> = {};
 
-    if (!formData.streetName?.trim()) {
-      newErrors.streetName = "Vui lòng nhập tên đường";
-    }
-
-    if (!formData.cityName?.trim()) {
-      newErrors.cityName = "Vui lòng nhập tên thành phố";
-    }
-
-    if (!formData.districtName?.trim()) {
-      newErrors.districtName = "Vui lòng nhập tên quận/huyện";
-    }
-
-    if (!formData.wardName?.trim()) {
-      newErrors.wardName = "Vui lòng nhập tên phường/xã";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,11 +30,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddAddress }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!validate()) {
-      return;
-    }
-
     try {
       setIsSubmitting(true);
 
@@ -69,7 +43,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddAddress }) => {
 
       await onAddAddress(addressData);
 
-      // Reset form after successful submission
       setFormData({
         streetName: "",
         cityName: "",
