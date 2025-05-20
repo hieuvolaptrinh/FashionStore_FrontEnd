@@ -79,6 +79,7 @@ const Profile = () => {
     null
   );
   const [loading, setLoading] = useState<boolean>(true);
+  const [addingAddress, setAddingAddress] = useState<boolean>(false);
   const [updating, setUpdating] = useState<boolean>(false);
   const [notification, setNotification] = useState<{
     open: boolean;
@@ -196,11 +197,18 @@ const Profile = () => {
     }
   };
 
-  // Updated handleAddAddress function to match Checkout functionality
-  const handleAddAddress = async (newAddress: AddressModel) => {
+  // Updated handleAddAddress function similar to how it's implemented in Checkout.tsx
+  const handleAddAddress = async (
+    newAddress: AddressModel,
+    e?: React.FormEvent
+  ) => {
+    // Prevent form submission if event is provided
+    if (e) {
+      e.preventDefault();
+    }
+
     try {
-      // Show loading notification
-      showNotification("Đang thêm địa chỉ mới...", "info");
+      setAddingAddress(true);
 
       // Call API to create address
       const createdAddress = await createAddress(newAddress);
@@ -209,7 +217,9 @@ const Profile = () => {
       setAddresses((prev) => [...prev, createdAddress]);
 
       // Select the newly created address
-      setSelectedAddressId(createdAddress.addressId ?? null);
+      if (createdAddress.addressId) {
+        setSelectedAddressId(createdAddress.addressId);
+      }
 
       // Show success notification
       showNotification("Thêm địa chỉ mới thành công", "success");
@@ -218,6 +228,8 @@ const Profile = () => {
       const errorMessage =
         error instanceof Error ? error.message : "Không thể thêm địa chỉ mới";
       showNotification(errorMessage, "error");
+    } finally {
+      setAddingAddress(false);
     }
   };
 
@@ -225,7 +237,12 @@ const Profile = () => {
     setSelectedAddressId(addressId);
   };
 
-  const handleAddBank = (bank: BankAccount) => {
+  const handleAddBank = (bank: BankAccount, e?: React.FormEvent) => {
+    // Prevent form submission if event is provided
+    if (e) {
+      e.preventDefault();
+    }
+
     const newBank = {
       ...bank,
       id: bankAccounts.length
@@ -336,8 +353,7 @@ const Profile = () => {
         Thông tin cá nhân
       </Typography>
 
-      <form onSubmit={handleSaveChanges}>
-        {/* Basic Information */}
+      <div>
         <Card
           elevation={3}
           sx={{ mb: 4, borderRadius: "12px", overflow: "hidden" }}
@@ -600,6 +616,7 @@ const Profile = () => {
                   onSelectAddress={handleSelectAddress}
                 />
 
+                {/* Updated to align with AddressForm in Checkout.tsx by passing isLoading prop */}
                 <AddressForm onAddAddress={handleAddAddress} />
               </CardContent>
             </Card>
@@ -630,6 +647,7 @@ const Profile = () => {
         {/* Save button */}
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <Button
+            onClick={handleSaveChanges}
             type="submit"
             variant="contained"
             size="large"
@@ -652,7 +670,7 @@ const Profile = () => {
             {updating ? "Đang lưu..." : "Lưu thay đổi"}
           </Button>
         </Box>
-      </form>
+      </div>
 
       <Snackbar
         open={notification.open}
