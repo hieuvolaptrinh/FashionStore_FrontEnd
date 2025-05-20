@@ -139,6 +139,7 @@ export const updateUser = async (user: UserModel): Promise<string> => {
     avatarBase64: user.avatarBase64,
     roles: user.roles || [], // Đảm bảo roles là mảng
     active: user.active,
+    password: user.password,
   };
 
   try {
@@ -199,9 +200,7 @@ export const forgotPassword = async (email: string, userName: string) => {
 
 export const getUser = async (): Promise<UserModel> => {
   const token = localStorage.getItem("token") || "";
-  if (!token) {
-    return "Bạn chưa đăng nhập!";
-  }
+
   const response = await axios.get(`${API_BASE_URL}/api/v1/user/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });

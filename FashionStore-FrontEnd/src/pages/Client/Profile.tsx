@@ -1,25 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Avatar,
   Button,
   TextField,
   Typography,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
   Box,
   Card,
   CardContent,
   IconButton,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  InputAdornment,
 } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import EmailIcon from "@mui/icons-material/Email";
+import PhoneIcon from "@mui/icons-material/Phone";
+import PersonIcon from "@mui/icons-material/Person";
+import LockIcon from "@mui/icons-material/Lock";
 import AddressForm from "../../components/Client/Order/AddressForm";
 import AddressList from "../../components/Client/Order/AddressList";
 import BankForm from "../../components/Client/Checkout/BankForm";
 import ListBank from "../../components/Client/Checkout/ListBank";
 import { AddressModel } from "../../models/AddressModel";
+import { UserModel } from "../../models/UserModel";
+import { getUser, updateUser } from "../../service/API/UserAPI";
+import { createAddress, getUserAddresses } from "../../service/API/OrderAPI";
 
 interface BankAccount {
   id?: number;
@@ -29,32 +35,23 @@ interface BankAccount {
 }
 
 const Profile = () => {
-  const [userProfile, setUserProfile] = useState({
-    firstName: "Nguyễn",
-    lastName: "Văn A",
-    sex: "male",
-    email: "example@gmail.com",
-    phoneNumber: "0123456789",
-    userName: "nguyenvana",
-    avatar: "/avatar-placeholder.png",
+  const [userProfile, setUserProfile] = useState<UserModel>({
+    userId: 0,
+    email: "",
+    phoneNumber: "",
+    firstName: "",
+    lastName: "",
+    userName: "",
+    password: "",
+    avatarBase64: null,
   });
 
-  const [addresses, setAddresses] = useState<AddressModel[]>([
-    {
-      addressId: 1,
-      streetName: "123 Đường Lê Lợi",
-      cityName: "TP. Hồ Chí Minh",
-      districtName: "Quận 1",
-      wardName: "Phường Bến Nghé",
-    },
-    {
-      addressId: 2,
-      streetName: "456 Đường Nguyễn Huệ",
-      cityName: "TP. Hồ Chí Minh",
-      districtName: "Quận 1",
-      wardName: "Phường Bến Thành",
-    },
-  ]);
+  const [updatePassword, setUpdatePassword] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const [addresses, setAddresses] = useState<AddressModel[]>([]);
 
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([
     {
@@ -71,36 +68,108 @@ const Profile = () => {
     },
   ]);
 
-  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(1);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
+    null
+  );
+  const [loading, setLoading] = useState<boolean>(true);
+  const [updating, setUpdating] = useState<boolean>(false);
+  const [notification, setNotification] = useState<{
+    open: boolean;
+    message: string;
+    severity: "success" | "error" | "info" | "warning";
+  }>({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);
+        const userData = await getUser();
+        setUserProfile(userData);
+        const addressesData = await getUserAddresses();
+        setAddresses(addressesData);
+
+        if (addressesData.length > 0 && addressesData[0].addressId) {
+          setSelectedAddressId(addressesData[0].addressId);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        showNotification("Không thể tải thông tin người dùng", "error");
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const showNotification = (
+    message: string,
+    severity: "success" | "error" | "info" | "warning"
+  ) => {
+    setNotification({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const handleCloseNotification = () => {
+    setNotification({
+      ...notification,
+      open: false,
+    });
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserProfile((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUpdatePassword((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+
       const fileReader = new FileReader();
       fileReader.onload = (event) => {
         if (event.target && event.target.result) {
+          const base64String = (event.target.result as string).split(",")[1]; // Remove data:image/jpeg;base64,
           setUserProfile((prev) => ({
             ...prev,
-            avatar: (event.target?.result as string) || prev.avatar,
+            avatarBase64: base64String,
           }));
         }
       };
-      fileReader.readAsDataURL(e.target.files[0]);
+      fileReader.readAsDataURL(file);
     }
   };
 
-  const handleAddAddress = (address: AddressModel) => {
-    const newAddress = {
-      ...address,
-      addressId: addresses.length
-        ? Math.max(...addresses.map((a) => a.addressId || 0)) + 1
-        : 1,
-    };
-    setAddresses((prev) => [...prev, newAddress]);
+  const handleAddAddress = async (address: AddressModel) => {
+    try {
+      setUpdating(true);
+      const newAddress = await createAddress(address);
+      setAddresses((prev) => [...prev, newAddress]);
+      alert("Thêm địa chỉ thành công");
+
+      // Automatically select the newly added address
+      if (newAddress.addressId) {
+        setSelectedAddressId(newAddress.addressId);
+      }
+    } catch (error) {
+      console.error("Error adding address:", error);
+      showNotification("Không thể thêm địa chỉ mới", "error");
+    } finally {
+      setUpdating(false);
+    }
   };
 
   const handleSelectAddress = (addressId: number) => {
@@ -115,12 +184,64 @@ const Profile = () => {
         : 1,
     };
     setBankAccounts((prev) => [...prev, newBank]);
+    showNotification("Thêm tài khoản ngân hàng thành công", "success");
   };
 
-  const handleSaveChanges = (e: React.FormEvent) => {
+  const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Thông tin đã được lưu thành công!");
+
+    // Validate password update if requested
+    if (updatePassword.newPassword) {
+      if (updatePassword.newPassword !== updatePassword.confirmPassword) {
+        showNotification("Mật khẩu xác nhận không khớp", "error");
+        return;
+      }
+
+      // Add password to the update payload
+      setUserProfile((prev) => ({
+        ...prev,
+        password: updatePassword.newPassword,
+      }));
+    }
+
+    setUpdating(true);
+
+    try {
+      const userDataToUpdate: UserModel = {
+        ...userProfile,
+
+        password: updatePassword.newPassword || userProfile.password,
+      };
+
+      await updateUser(userDataToUpdate);
+      setUpdatePassword({
+        newPassword: "",
+        confirmPassword: "",
+      });
+
+      showNotification("Cập nhật thông tin thành công", "success");
+    } catch (error) {
+      console.error("Error updating user:", error);
+      showNotification("Cập nhật thông tin không thành công", "error");
+    } finally {
+      setUpdating(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <div className="container py-5">
@@ -134,9 +255,15 @@ const Profile = () => {
 
       <form onSubmit={handleSaveChanges}>
         {/* Basic Information */}
-        <Card elevation={3} sx={{ mb: 4 }}>
+        <Card
+          elevation={3}
+          sx={{ mb: 4, borderRadius: "12px", overflow: "hidden" }}
+        >
           <CardContent sx={{ p: 4 }}>
-            <Typography variant="h6" sx={{ mb: 3, fontWeight: "bold" }}>
+            <Typography
+              variant="h6"
+              sx={{ mb: 3, fontWeight: "bold", color: "#1976d2" }}
+            >
               Thông tin cơ bản
             </Typography>
 
@@ -154,13 +281,25 @@ const Profile = () => {
                   flexDirection: "column",
                   alignItems: "center",
                   minWidth: { xs: "100%", md: "250px" },
+                  background: "linear-gradient(to bottom, #e3f2fd, #ffffff)",
+                  p: 3,
+                  borderRadius: "8px",
                 }}
               >
                 <Box sx={{ position: "relative", mb: 2 }}>
                   <Avatar
-                    src={userProfile.avatar}
+                    src={
+                      userProfile.avatarBase64
+                        ? `data:image/jpeg;base64,${userProfile.avatarBase64}`
+                        : "/avatar-placeholder.png"
+                    }
                     alt={`${userProfile.firstName} ${userProfile.lastName}`}
-                    sx={{ width: 150, height: 150, boxShadow: 2 }}
+                    sx={{
+                      width: 150,
+                      height: 150,
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                      border: "4px solid white",
+                    }}
                   />
                   <label htmlFor="avatar-upload">
                     <input
@@ -178,6 +317,7 @@ const Profile = () => {
                         bottom: 0,
                         right: 0,
                         backgroundColor: "white",
+                        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
                         "&:hover": { backgroundColor: "#e3f2fd" },
                       }}
                     >
@@ -212,6 +352,13 @@ const Profile = () => {
                       onChange={handleInputChange}
                       variant="outlined"
                       margin="normal"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PersonIcon color="primary" />
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                   </div>
                   <div className="col-md-6">
@@ -223,35 +370,16 @@ const Profile = () => {
                       onChange={handleInputChange}
                       variant="outlined"
                       margin="normal"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PersonIcon color="primary" />
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                   </div>
                 </div>
-
-                <FormControl component="fieldset" sx={{ mb: 2 }}>
-                  <FormLabel component="legend">Giới tính</FormLabel>
-                  <RadioGroup
-                    row
-                    name="sex"
-                    value={userProfile.sex}
-                    onChange={handleInputChange}
-                  >
-                    <FormControlLabel
-                      value="male"
-                      control={<Radio />}
-                      label="Nam"
-                    />
-                    <FormControlLabel
-                      value="female"
-                      control={<Radio />}
-                      label="Nữ"
-                    />
-                    <FormControlLabel
-                      value="other"
-                      control={<Radio />}
-                      label="Khác"
-                    />
-                  </RadioGroup>
-                </FormControl>
 
                 <div className="row mb-3">
                   <div className="col-md-6">
@@ -264,6 +392,13 @@ const Profile = () => {
                       onChange={handleInputChange}
                       variant="outlined"
                       margin="normal"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <EmailIcon color="primary" />
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                   </div>
                   <div className="col-md-6">
@@ -275,6 +410,13 @@ const Profile = () => {
                       onChange={handleInputChange}
                       variant="outlined"
                       margin="normal"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PhoneIcon color="primary" />
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                   </div>
                 </div>
@@ -289,6 +431,54 @@ const Profile = () => {
                   disabled
                   sx={{ mb: 2 }}
                 />
+
+                <Typography
+                  variant="subtitle1"
+                  sx={{ mt: 2, mb: 2, fontWeight: "bold" }}
+                >
+                  Đổi mật khẩu
+                </Typography>
+
+                <div className="row">
+                  <div className="col-md-6">
+                    <TextField
+                      fullWidth
+                      type="password"
+                      label="Mật khẩu mới"
+                      name="newPassword"
+                      value={updatePassword.newPassword}
+                      onChange={handlePasswordChange}
+                      variant="outlined"
+                      margin="normal"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LockIcon color="primary" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      fullWidth
+                      type="password"
+                      label="Xác nhận mật khẩu"
+                      name="confirmPassword"
+                      value={updatePassword.confirmPassword}
+                      onChange={handlePasswordChange}
+                      variant="outlined"
+                      margin="normal"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LockIcon color="primary" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </div>
+                </div>
               </Box>
             </Box>
           </CardContent>
@@ -298,9 +488,15 @@ const Profile = () => {
         <div className="row">
           {/* Addresses */}
           <div className="col-md-6 mb-4">
-            <Card elevation={3} sx={{ height: "100%" }}>
+            <Card
+              elevation={3}
+              sx={{ height: "100%", borderRadius: "12px", overflow: "hidden" }}
+            >
               <CardContent sx={{ p: 4, height: "100%" }}>
-                <Typography variant="h6" sx={{ mb: 3, fontWeight: "bold" }}>
+                <Typography
+                  variant="h6"
+                  sx={{ mb: 3, fontWeight: "bold", color: "#1976d2" }}
+                >
                   Địa chỉ giao hàng
                 </Typography>
 
@@ -317,9 +513,15 @@ const Profile = () => {
 
           {/* Bank accounts */}
           <div className="col-md-6 mb-4">
-            <Card elevation={3} sx={{ height: "100%" }}>
+            <Card
+              elevation={3}
+              sx={{ height: "100%", borderRadius: "12px", overflow: "hidden" }}
+            >
               <CardContent sx={{ p: 4, height: "100%" }}>
-                <Typography variant="h6" sx={{ mb: 3, fontWeight: "bold" }}>
+                <Typography
+                  variant="h6"
+                  sx={{ mb: 3, fontWeight: "bold", color: "#1976d2" }}
+                >
                   Tài khoản ngân hàng
                 </Typography>
 
@@ -337,19 +539,42 @@ const Profile = () => {
             type="submit"
             variant="contained"
             size="large"
+            disabled={updating}
+            startIcon={
+              updating && <CircularProgress size={20} color="inherit" />
+            }
             sx={{
               px: 4,
-              py: 1,
+              py: 1.2,
               borderRadius: 28,
               backgroundColor: "#ffc107",
               color: "#212121",
+              boxShadow: "0 4px 12px rgba(255, 193, 7, 0.4)",
               "&:hover": { backgroundColor: "#ffb300" },
+              textTransform: "none",
+              fontSize: "1rem",
             }}
           >
-            Lưu thay đổi
+            {updating ? "Đang lưu..." : "Lưu thay đổi"}
           </Button>
         </Box>
       </form>
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
