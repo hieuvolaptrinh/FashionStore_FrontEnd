@@ -179,7 +179,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
       }));
       setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
     } else {
-      // Xóa ảnh mới
       setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
     }
   };

@@ -1,12 +1,42 @@
-import { useEffect, useState } from "react";
-
-import { Link, NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import Type from "../../models/TypeModel";
 import { getTypes } from "../../service/API/TypeAPI";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Button,
+  ListItemText,
+  IconButton,
+  Badge,
+  Container,
 
-function Navbar() {
-  const [isVerticalOpen, setIsVerticalOpen] = useState(false);
+  Menu,
+  MenuItem,
+  ListItemIcon,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  KeyboardArrowDown as ArrowDownIcon,
+  Favorite as FavoriteIcon,
+  ShoppingCart as ShoppingCartIcon,
+  Home as HomeIcon,
+  Info as InfoIcon,
+  ShoppingBasket as BasketIcon,
+  LocalShipping as ShippingIcon,
+  Payment as PaymentIcon,
+  ContactSupport as ContactIcon,
+} from "@mui/icons-material";
 
+const Navbar: React.FC = () => {
+  const location = useLocation();
+  const [categoryMenuAnchor, setCategoryMenuAnchor] =
+    useState<null | HTMLElement>(null);
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(
+    null
+  );
   const [types, setTypes] = useState<Type[]>([]);
 
   useEffect(() => {
@@ -16,126 +46,360 @@ function Navbar() {
         setTypes(data);
       })
       .catch((error) => {
-        console.error("ddLỗi khi lấy dữ liệu:", error.message);
+        console.error("Lỗi khi lấy dữ liệu:", error.message);
       });
   }, []);
-  return (
-    <>
-      {/* navbar */}
-      <div className="container-fluid bg-dark mb-30">
-        <div className="row px-xl-5">
-          <div className="col-lg-3 d-none d-lg-block">
-            <button
-              className="btn d-flex align-items-center justify-content-between bg-primary w-100"
-              style={{ height: "65px", padding: "0 30px" }}
-            >
-              <h6 className="text-dark m-0">
-                <i
-                  className="fa fa-bars mr-2"
-                  onClick={() => setIsVerticalOpen(!isVerticalOpen)}
-                ></i>
-                <Link
-                  to={"/"}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Sản phẩm bán chạy
-                </Link>
-              </h6>
-              <i
-                className="fa fa-angle-down text-dark"
-                onClick={() => setIsVerticalOpen(!isVerticalOpen)}
-              ></i>
-            </button>
-            {isVerticalOpen && (
-              <nav
-                className="position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light"
-                style={{ width: "calc(100% - 30px)", zIndex: 999 }}
-              >
-                <div className="navbar-nav w-100">
-                  {types.map((type) => (
-                    // sử dụng link thay cho a để không load lại trang trong react router
-                    <Link
-                      key={type.typeId}
-                      to={"/" + type.typeId?.toString() || ""}
-                      className="nav-item nav-link"
-                    >
-                      {type.typeName}
-                    </Link>
-                  ))}
-                </div>
-              </nav>
-            )}
-          </div>
-          <div className="col-lg-9">
-            <nav className="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
-              <a href="" className="text-decoration-none d-block d-lg-none">
-                <span className="h1 text-uppercase text-dark bg-light px-2">
-                  UTE
-                </span>
-                <span className="h1 text-uppercase text-light bg-primary px-2 ml-n1">
-                  Fashion
-                </span>
-              </a>
-              <button
-                type="button"
-                className="navbar-toggler"
-                data-toggle="collapse"
-                data-target="#navbarCollapse"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div
-                className="collapse navbar-collapse justify-content-between"
-                id="navbarCollapse"
-              >
-                <div className="navbar-nav mr-auto py-0">
-                  <NavLink to="/" className="nav-item nav-link ">
-                    Trang Chủ
-                  </NavLink>
 
-                  <NavLink to="/products/1" className="nav-item nav-link">
-                    Chi Tiết Sản Phẩm
-                  </NavLink>
-                  <NavLink to="/carts" className="nav-item nav-link">
-                    Giỏ Hàng
-                  </NavLink>
-                  <NavLink to="/orders" className="nav-item nav-link">
-                    Đơn Hàng
-                  </NavLink>
-                  <NavLink to="/checkouts" className="nav-item nav-link">
-                    Thanh Toán
-                  </NavLink>
-                  <NavLink to="/contacts" className="nav-item nav-link">
-                    Liên Hệ
-                  </NavLink>
-                </div>
-                <div className="navbar-nav ml-auto py-0 d-none d-lg-block">
-                  <a href="" className="btn px-0">
-                    <i className="fas fa-heart text-primary"></i>
-                    <span
-                      className="badge text-secondary border border-secondary rounded-circle"
-                      style={{ paddingBottom: "2px" }}
+  const handleOpenCategoryMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setCategoryMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseCategoryMenu = () => {
+    setCategoryMenuAnchor(null);
+  };
+
+  const handleOpenMobileMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setMobileMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseMobileMenu = () => {
+    setMobileMenuAnchor(null);
+  };
+
+  const isLinkActive = (path: string) => {
+    return location.pathname === path;
+  };
+  const navigationLinks = [
+    { name: "Trang Chủ", path: "/", icon: <HomeIcon fontSize="small" /> },
+    {
+      name: "Sản Phẩm",
+      path: "/products",
+      icon: <InfoIcon fontSize="small" />,
+    },
+    { name: "Giỏ Hàng", path: "/carts", icon: <BasketIcon fontSize="small" /> },
+    {
+      name: "Đơn Hàng",
+      path: "/orders",
+      icon: <ShippingIcon fontSize="small" />,
+    },
+    {
+      name: "Thanh Toán",
+      path: "/checkouts",
+      icon: <PaymentIcon fontSize="small" />,
+    },
+    {
+      name: "Liên Hệ",
+      path: "/contacts",
+      icon: <ContactIcon fontSize="small" />,
+    },
+  ];
+
+  // Màu sắc chính cho theme hiện đại
+  const primaryColor = "#3a86ff";
+  const accentColor = "rgb(255, 200, 0)";
+  const darkTextColor = "#333333";
+  const lightTextColor = "#ffffff";
+  const gradientStart = "#3a86ff";
+  const gradientEnd = "#0b4f9e";
+
+  return (
+    <Container maxWidth="xl">
+      <Box sx={{ flexGrow: 1, marginBottom: 4 }}>
+        <AppBar
+          position="sticky"
+          sx={{
+            top: 0,
+            zIndex: 1100,
+            background: `linear-gradient(135deg,${gradientEnd} 0%, ${gradientStart} 50%,${gradientEnd} 100% )`,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          }}
+        >
+          <Toolbar>
+            {/* Category Button & Menu */}
+            <Box sx={{ display: { xs: "none", lg: "block" }, width: "25%" }}>
+              <Button
+                startIcon={<MenuIcon />}
+                endIcon={<ArrowDownIcon />}
+                fullWidth
+                onClick={handleOpenCategoryMenu}
+                sx={{
+                  backgroundColor: accentColor,
+                  color: darkTextColor,
+                  height: "65px",
+                  justifyContent: "space-between",
+                  padding: "0 24px",
+                  borderRadius: 1,
+                  textTransform: "none",
+                  fontWeight: 600,
+                  "&:hover": {
+                    backgroundColor: "rgb(255, 200, 0)",
+                  },
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{ color: "white", fontWeight: 700 }}
+                >
+                  SẢN PHẨM BÁN CHẠY
+                </Typography>
+              </Button>
+
+              <Menu
+                anchorEl={categoryMenuAnchor}
+                open={Boolean(categoryMenuAnchor)}
+                onClose={handleCloseCategoryMenu}
+                PaperProps={{
+                  sx: {
+                    width: "calc(25% - 32px)",
+                    maxWidth: "none",
+                    borderRadius: 1,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  },
+                }}
+              >
+                {types.map((type) => (
+                  <MenuItem
+                    key={type.typeId}
+                    component={Link}
+                    to={"/" + type.typeId?.toString() || ""}
+                    onClick={handleCloseCategoryMenu}
+                    sx={{
+                      padding: "12px 24px",
+
+                      "&:hover": {
+                        backgroundColor: `${primaryColor}15`,
+                        color: primaryColor,
+                      },
+                    }}
+                  >
+                    <Typography variant="body1">{type.typeName}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+
+            {/* mobile toggle */}
+            <Box sx={{ display: { xs: "flex", lg: "none" } }}>
+              <IconButton
+                size="large"
+                onClick={handleOpenMobileMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                anchorEl={mobileMenuAnchor}
+                open={Boolean(mobileMenuAnchor)}
+                onClose={handleCloseMobileMenu}
+                sx={{
+                  display: { xs: "block", lg: "none" },
+                }}
+                PaperProps={{
+                  sx: {
+                    width: 250,
+                    borderRadius: 1,
+                  },
+                }}
+              >
+                {navigationLinks.map((link) => (
+                  <MenuItem
+                    key={link.path}
+                    component={Link}
+                    to={link.path}
+                    onClick={handleCloseMobileMenu}
+                    selected={isLinkActive(link.path)}
+                    sx={{
+                      "&.Mui-selected": {
+                        backgroundColor: `${primaryColor}15`,
+                        color: primaryColor,
+                      },
+                      "&:hover": {
+                        backgroundColor: `${primaryColor}10`,
+                      },
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        color: isLinkActive(link.path)
+                          ? primaryColor
+                          : "inherit",
+                      }}
                     >
-                      0
-                    </span>
-                  </a>
-                  <Link to={"/cart"}>
-                    <i className="fas fa-shopping-cart text-primary"></i>
-                    <span
-                      className="badge text-secondary border border-secondary rounded-circle"
-                      style={{ paddingBottom: "2px" }}
-                    >
-                      5
-                    </span>
-                  </Link>
-                </div>
-              </div>
-            </nav>
-          </div>
-        </div>
-      </div>
-    </>
+                      {link.icon}
+                    </ListItemIcon>
+                    <ListItemText>{link.name}</ListItemText>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+
+            {/* mobile logo */}
+            <Box
+              sx={{
+                display: { xs: "flex", lg: "none" },
+                flexGrow: 1,
+                justifyContent: "center",
+              }}
+            >
+              <Link to="/" style={{ textDecoration: "none", display: "flex" }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: lightTextColor,
+                    backgroundColor: primaryColor,
+                    padding: "4px 8px",
+                    borderRadius: "4px 0 0 4px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  UTE
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: darkTextColor,
+                    backgroundColor: accentColor,
+                    padding: "4px 8px",
+                    borderRadius: "0 4px 4px 0",
+                    fontWeight: "bold",
+                    marginLeft: "-1px",
+                  }}
+                >
+                  STORE
+                </Typography>
+              </Link>
+            </Box>
+
+            {/* Desktop Navigation */}
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", lg: "flex" },
+                paddingLeft: 2,
+              }}
+            >
+              {navigationLinks.map((link) => (
+                <Button
+                  key={link.path}
+                  component={NavLink}
+                  to={link.path}
+                  sx={{
+                    color: lightTextColor,
+                    display: "block",
+                    mx: 1,
+                    textTransform: "none",
+                    position: "relative",
+                    fontWeight: 500,
+                    padding: "6px 12px",
+                    "&.active": {
+                      color: accentColor,
+                      "&::after": {
+                        content: '""',
+                        position: "absolute",
+                        bottom: 8,
+                        left: "25%",
+                        width: "50%",
+                        height: 2,
+                        backgroundColor: accentColor,
+                      },
+                    },
+                    "&:hover": {
+                      color: accentColor,
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                      borderRadius: 1,
+                    },
+                  }}
+                >
+                  {link.name}
+                </Button>
+              ))}
+            </Box>
+
+            {/* Favorites & Cart */}
+            <Box
+              sx={{ display: { xs: "none", lg: "flex" }, alignItems: "center" }}
+            >
+              <IconButton
+                sx={{
+                  color: lightTextColor,
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                }}
+              >
+                <Badge
+                  badgeContent={0}
+                  color="error"
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      backgroundColor: accentColor,
+                      color: darkTextColor,
+                      fontWeight: "bold",
+                      border: `2px solid ${gradientEnd}`,
+                      borderRadius: "50%",
+                    },
+                  }}
+                >
+                  <FavoriteIcon sx={{ color: lightTextColor }} />
+                </Badge>
+              </IconButton>
+
+              <IconButton
+                component={Link}
+                to="/cart"
+                sx={{
+                  color: lightTextColor,
+                  ml: 1,
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                }}
+              >
+                <Badge
+                  badgeContent={5}
+                  color="error"
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      backgroundColor: accentColor,
+                      color: darkTextColor,
+                      fontWeight: "bold",
+                      border: `2px solid ${gradientEnd}`,
+                      borderRadius: "50%",
+                    },
+                  }}
+                >
+                  <ShoppingCartIcon sx={{ color: lightTextColor }} />
+                </Badge>
+              </IconButton>
+            </Box>
+
+            {/* Mobile Cart */}
+            <Box sx={{ display: { xs: "flex", lg: "none" } }}>
+              <IconButton
+                component={Link}
+                to="/cart"
+                size="large"
+                sx={{ color: lightTextColor }}
+              >
+                <Badge
+                  badgeContent={5}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      backgroundColor: accentColor,
+                      color: darkTextColor,
+                      fontWeight: "bold",
+                    },
+                  }}
+                >
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </Container>
   );
-}
+};
 
 export default Navbar;

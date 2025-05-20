@@ -67,11 +67,11 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
       <div className="product-item bg-light mb-4">
         <div className="product-img position-relative overflow-hidden">
           {/* ảo giác vl phải tạo component */}
-          <ImageProduct
+           <ImageProduct
             icon={icon || ""}
             productName={product.productName || ""}
-          />
-          {/* <img
+          /> 
+           {/* <img
             className="img-fluid w-100"
             src={icon ? `${icon}` : "/images/product-4.jpg"}
             alt={product.productName || "Product"}
@@ -80,7 +80,7 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
               width: "100%", // Đảm bảo ảnh full khung
               height: "300px", // Chiều cao cố định
             }}
-          /> */}
+          />  */}
           <div className="product-action">
             <button
               className="btn btn-outline-dark btn-square"
