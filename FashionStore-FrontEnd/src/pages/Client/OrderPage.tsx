@@ -115,7 +115,6 @@ const OrderPage: React.FC = () => {
               <MenuItem value="Đang giao">Đang giao</MenuItem>
               <MenuItem value="Đã giao">Đã giao</MenuItem>
               <MenuItem value="Đã hủy">Đã hủy</MenuItem>
-              <MenuItem value="Đã hủy"> Đang vận chuyển</MenuItem>
             </Select>
           </FormControl>
         </FilterBox>

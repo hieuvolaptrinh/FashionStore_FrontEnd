@@ -168,7 +168,7 @@ export const createOrder = async (order: OrderModel) => {
 
     return response.data.data;
   } catch (err) {
-    throw new Error("Không thể tạo đơn hàng" + err);
+    throw new Error("Không thể tạo đơn hàng: " + err);
   }
 };
 

@@ -30,7 +30,7 @@ function Footer() {
         bgcolor: "#181A20",
         color: "#b0b3b8",
         pt: 6,
-
+        mt: 2,
         fontSize: 16,
       }}
       component="footer"
