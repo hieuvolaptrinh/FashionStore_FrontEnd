@@ -88,7 +88,7 @@ const Navbar: React.FC = () => {
     },
     {
       name: "Liên Hệ",
-      path: "/contacts",
+      path: "/contact",
       icon: <ContactIcon fontSize="small" />,
     },
   ];

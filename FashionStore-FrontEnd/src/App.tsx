@@ -15,6 +15,7 @@ import { KeywordProvider } from "./contexts/KeywordContext";
 import PaymentResult from "./pages/Client/PaymentResult";
 import RestPassword from "./pages/Client/RestPassword";
 import ForgotPassword from "./pages/Client/ForgotPassword";
+import Contact from "./pages/Client/Contact";
 function App() {
   return (
     <>
@@ -43,6 +44,7 @@ function App() {
 
               <Route path="/checkouts" element={<Checkout />} />
               <Route path="/payment-result" element={<PaymentResult />} />
+              <Route path="/contact" element={<Contact />} />
             </Route>
 
             {/* admin */}

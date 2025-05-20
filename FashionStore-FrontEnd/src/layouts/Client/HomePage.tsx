@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import ListProduct from "../../components/Client/Product/ListProduct";
 import Carousel from "./Carousel";
 import { useKeyword } from "../../contexts/KeywordContext";
+import Trademark from "./Trademark";
 
 function HomePage() {
   const { keyword } = useKeyword();
@@ -24,6 +25,7 @@ function HomePage() {
     <>
       <Carousel />
       <ListProduct keyword={keyword} typeId={typeIdNumber} />
+      <Trademark />
     </>
   );
 }
