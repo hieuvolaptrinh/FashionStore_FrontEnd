@@ -96,21 +96,32 @@ export const createAddress = async (
     wardName: address.wardName,
   };
 
-  const response = await fetch(`${API_BASE_URL}/api/v1/orders/address`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(payload),
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/orders/address`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
 
-  if (!response.ok) {
-    throw new Error("Không thể tạo địa chỉ mới");
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || "Không thể tạo địa chỉ mới");
+    }
+
+    const result: RestResponse<AddressModel> = await response.json();
+
+    if (!result.data) {
+      throw new Error("Dữ liệu phản hồi không hợp lệ");
+    }
+
+    return result.data;
+  } catch (error) {
+    console.error("Error creating address:", error);
+    throw error;
   }
-
-  const result: RestResponse<AddressModel> = await response.json();
-  return result.data;
 };
 
 export const getAllPaymentTypes = async (): Promise<PaymentType[]> => {

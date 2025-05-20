@@ -12,6 +12,8 @@ import {
   Snackbar,
   Alert,
   InputAdornment,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import EmailIcon from "@mui/icons-material/Email";
@@ -52,6 +54,11 @@ const Profile = () => {
   });
 
   const [addresses, setAddresses] = useState<AddressModel[]>([]);
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [passwordErrors, setPasswordErrors] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([
     {
@@ -133,6 +140,42 @@ const Profile = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUpdatePassword((prev) => ({ ...prev, [name]: value }));
+
+    // Validate password
+    if (name === "newPassword") {
+      if (value.length > 0 && value.length < 6) {
+        setPasswordErrors((prev) => ({
+          ...prev,
+          newPassword: "Mật khẩu phải có ít nhất 6 ký tự",
+        }));
+      } else {
+        setPasswordErrors((prev) => ({ ...prev, newPassword: "" }));
+      }
+
+      // Validate confirm password if it has value
+      if (updatePassword.confirmPassword) {
+        if (value !== updatePassword.confirmPassword) {
+          setPasswordErrors((prev) => ({
+            ...prev,
+            confirmPassword: "Mật khẩu xác nhận không khớp",
+          }));
+        } else {
+          setPasswordErrors((prev) => ({ ...prev, confirmPassword: "" }));
+        }
+      }
+    }
+
+    // Validate confirm password
+    if (name === "confirmPassword") {
+      if (value !== updatePassword.newPassword) {
+        setPasswordErrors((prev) => ({
+          ...prev,
+          confirmPassword: "Mật khẩu xác nhận không khớp",
+        }));
+      } else {
+        setPasswordErrors((prev) => ({ ...prev, confirmPassword: "" }));
+      }
+    }
   };
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,17 +199,32 @@ const Profile = () => {
   const handleAddAddress = async (address: AddressModel) => {
     try {
       setUpdating(true);
-      const newAddress = await createAddress(address);
-      setAddresses((prev) => [...prev, newAddress]);
-      alert("Thêm địa chỉ thành công");
+
+      // Ensure address has all required fields
+      const addressData: AddressModel = {
+        streetName: address.streetName,
+        cityName: address.cityName,
+        districtName: address.districtName,
+        wardName: address.wardName,
+      };
+
+      // Call API to create the address
+      const createdAddress = await createAddress(addressData);
+
+      // Update local state with the new address that includes the ID from the server
+      setAddresses((prevAddresses) => [...prevAddresses, createdAddress]);
 
       // Automatically select the newly added address
-      if (newAddress.addressId) {
-        setSelectedAddressId(newAddress.addressId);
+      if (createdAddress.addressId) {
+        setSelectedAddressId(createdAddress.addressId);
       }
+
+      showNotification("Thêm địa chỉ thành công", "success");
     } catch (error) {
-      console.error("Error adding address:", error);
-      showNotification("Không thể thêm địa chỉ mới", "error");
+      console.error("Lỗi khi thêm địa chỉ:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Không thể thêm địa chỉ mới";
+      showNotification(errorMessage, "error");
     } finally {
       setUpdating(false);
     }
@@ -187,42 +245,77 @@ const Profile = () => {
     showNotification("Thêm tài khoản ngân hàng thành công", "success");
   };
 
+  const handleTogglePasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setShowPasswordFields(e.target.checked);
+    if (!e.target.checked) {
+      setUpdatePassword({
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setPasswordErrors({
+        newPassword: "",
+        confirmPassword: "",
+      });
+    }
+  };
+
   const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate password update if requested
-    if (updatePassword.newPassword) {
+    // Validate password if the password fields are shown
+    if (showPasswordFields && updatePassword.newPassword) {
+      if (updatePassword.newPassword.length < 6) {
+        showNotification("Mật khẩu phải có ít nhất 6 ký tự", "error");
+        return;
+      }
+
       if (updatePassword.newPassword !== updatePassword.confirmPassword) {
         showNotification("Mật khẩu xác nhận không khớp", "error");
         return;
       }
-
-      // Add password to the update payload
-      setUserProfile((prev) => ({
-        ...prev,
-        password: updatePassword.newPassword,
-      }));
     }
 
     setUpdating(true);
 
     try {
-      const userDataToUpdate: UserModel = {
+      // Create a complete user object for update
+      const updatedUser: UserModel = {
         ...userProfile,
-
-        password: updatePassword.newPassword || userProfile.password,
+        email: userProfile.email,
+        phoneNumber: userProfile.phoneNumber,
+        firstName: userProfile.firstName,
+        lastName: userProfile.lastName,
+        avatarBase64: userProfile.avatarBase64,
+        // Only include password if changing it
+        password: showPasswordFields ? updatePassword.newPassword : "",
       };
 
-      await updateUser(userDataToUpdate);
-      setUpdatePassword({
-        newPassword: "",
-        confirmPassword: "",
-      });
+      // Call API to update the user
+      await updateUser(updatedUser);
+
+      // Reset password fields if they were used
+      if (showPasswordFields) {
+        setUpdatePassword({
+          newPassword: "",
+          confirmPassword: "",
+        });
+        setShowPasswordFields(false);
+      }
+
+      // Reload user data to ensure we have latest state
+      const refreshedUserData = await getUser();
+      setUserProfile(refreshedUserData);
 
       showNotification("Cập nhật thông tin thành công", "success");
     } catch (error) {
-      console.error("Error updating user:", error);
-      showNotification("Cập nhật thông tin không thành công", "error");
+      console.error("Lỗi khi cập nhật thông tin:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Cập nhật thông tin không thành công";
+      showNotification(errorMessage, "error");
     } finally {
       setUpdating(false);
     }
@@ -432,53 +525,64 @@ const Profile = () => {
                   sx={{ mb: 2 }}
                 />
 
-                <Typography
-                  variant="subtitle1"
-                  sx={{ mt: 2, mb: 2, fontWeight: "bold" }}
-                >
-                  Đổi mật khẩu
-                </Typography>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={showPasswordFields}
+                      onChange={handleTogglePasswordChange}
+                      color="primary"
+                    />
+                  }
+                  label="Đổi mật khẩu"
+                  sx={{ mt: 2, mb: 2 }}
+                />
 
-                <div className="row">
-                  <div className="col-md-6">
-                    <TextField
-                      fullWidth
-                      type="password"
-                      label="Mật khẩu mới"
-                      name="newPassword"
-                      value={updatePassword.newPassword}
-                      onChange={handlePasswordChange}
-                      variant="outlined"
-                      margin="normal"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LockIcon color="primary" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
+                {showPasswordFields && (
+                  <div className="row">
+                    <div className="col-md-6">
+                      <TextField
+                        fullWidth
+                        type="password"
+                        label="Mật khẩu mới"
+                        name="newPassword"
+                        value={updatePassword.newPassword}
+                        onChange={handlePasswordChange}
+                        variant="outlined"
+                        margin="normal"
+                        error={!!passwordErrors.newPassword}
+                        helperText={passwordErrors.newPassword}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <LockIcon color="primary" />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        fullWidth
+                        type="password"
+                        label="Xác nhận mật khẩu"
+                        name="confirmPassword"
+                        value={updatePassword.confirmPassword}
+                        onChange={handlePasswordChange}
+                        variant="outlined"
+                        margin="normal"
+                        error={!!passwordErrors.confirmPassword}
+                        helperText={passwordErrors.confirmPassword}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <LockIcon color="primary" />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <TextField
-                      fullWidth
-                      type="password"
-                      label="Xác nhận mật khẩu"
-                      name="confirmPassword"
-                      value={updatePassword.confirmPassword}
-                      onChange={handlePasswordChange}
-                      variant="outlined"
-                      margin="normal"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LockIcon color="primary" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </div>
-                </div>
+                )}
               </Box>
             </Box>
           </CardContent>
