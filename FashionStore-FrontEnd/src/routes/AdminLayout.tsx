@@ -17,6 +17,7 @@ import RequireAdmin from "./RequireAdmin";
 import OrdersTable from "../components/Admin/Order/OrderTable";
 import AdminOrderPage from "../pages/Admin/AdminOrderPage";
 import VoucherPage from "../pages/Admin/VoucherManagerPage";
+import StudentManagerPage from "../pages/Admin/StudentManagerPage";
 interface StatItem {
   icon: string;
   title: string;
@@ -63,6 +64,7 @@ const AdminLayout: React.FC = () => {
             <Route path="/forms" element={<Forms />} />
             <Route path="/charts" element={<Charts />} />
             <Route path="/orders" element={<OrdersTable />} />
+            <Route path="/payment-student" element={<StudentManagerPage />} />
           </Routes>
         </Container>
         <Footer />

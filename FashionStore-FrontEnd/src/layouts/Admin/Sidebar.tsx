@@ -180,7 +180,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           <ListItem disablePadding>
             <ListItemButton
               component={Link}
-              to="/admin/user"
+              to="/admin/payment-student"
               sx={{
                 borderRadius: "50px",
                 mb: 1,
