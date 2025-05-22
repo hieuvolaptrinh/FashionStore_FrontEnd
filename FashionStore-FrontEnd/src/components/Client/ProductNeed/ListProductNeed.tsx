@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import ProductNeedCard from "./ProductNeedCard";
 import FilterProduct from "../FilterProduct";
-import { dataFake } from "./productneed";
+import { dataFake } from "./productFakeData";
 import ProductNeedInfor from "./ProductNeedInfor";
 import RegisterProduction from "./RegisterProduction";
-import { ProductNeed } from "./productneed";
+import { ProductNeed } from "./productFakeData";
 import { Pagination, Box } from "@mui/material";
 
 const ListProductNeed: React.FC = () => {

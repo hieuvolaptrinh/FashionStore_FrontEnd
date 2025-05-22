@@ -2,6 +2,7 @@
 import React from "react";
 import { CartDetailModel } from "../../../models/CartModel";
 import { PaymentType, ShippingMethod } from "../../../models/OrderModel";
+import { Box, Button, TextField } from "@mui/material";
 
 interface OrderSummaryProps {
   cartDetails: CartDetailModel[];
@@ -127,6 +128,41 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
           </>
         )}
       </div>
+      <Box
+        component="form"
+        noValidate
+        autoComplete="off"
+        sx={{
+          display: "flex",
+          gap: 2,
+          mb: 4,
+          alignItems: "center",
+        }}
+      >
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Nhập mã giảm giá"
+          sx={{
+            bgcolor: "white",
+            borderRadius: 1,
+            input: { padding: "14px" },
+          }}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{
+            height: "56px",
+            paddingX: 3,
+            fontWeight: "bold",
+            borderRadius: 1,
+            textTransform: "none",
+          }}
+        >
+          Áp dụng
+        </Button>
+      </Box>
     </div>
   );
 };

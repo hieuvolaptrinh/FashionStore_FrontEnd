@@ -59,13 +59,27 @@ const OrderDetailItem: React.FC<{
       header: "Đánh giá",
       accessor: (detail: OrderDetail) =>
         status === "Đã giao" ? (
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => handleReviewClick(detail.orderDetailId)}
-          >
-            Đánh giá Ngay
-          </Button>
+          <>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => handleReviewClick(detail.orderDetailId)}
+              sx={{
+                mb: 1,
+              }}
+            >
+              Đánh giá
+            </Button>
+            <Button
+              variant="contained"
+              color="warning"
+              onClick={() => {
+                navigate("/return-product");
+              }}
+            >
+              Đổi trả / hàng
+            </Button>
+          </>
         ) : (
           <Typography
             variant="body2"

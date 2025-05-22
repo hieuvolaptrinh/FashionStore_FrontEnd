@@ -12,7 +12,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import { ProductNeed } from "./productneed";
+import { ProductNeed } from "./productFakeData";
 
 interface ProductNeedInforProps {
   open: boolean;

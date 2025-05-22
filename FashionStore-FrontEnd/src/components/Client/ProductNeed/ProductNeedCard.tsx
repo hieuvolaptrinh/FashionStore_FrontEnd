@@ -11,7 +11,7 @@ import {
   Stack,
   Tooltip,
 } from "@mui/material";
-import { ProductNeed } from "./productneed";
+import { ProductNeed } from "./productFakeData";
 
 interface ProductNeedCardProps {
   product: ProductNeed;
