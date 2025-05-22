@@ -4,6 +4,8 @@ import ListProduct from "../../components/Client/Product/ListProduct";
 import Carousel from "./Carousel";
 import { useKeyword } from "../../contexts/KeywordContext";
 import Trademark from "./Trademark";
+import { Col, Container, Row } from "react-bootstrap";
+import FilterProduct from "../../components/Client/FilterProduct";
 
 function HomePage() {
   const { keyword } = useKeyword();
@@ -24,7 +26,17 @@ function HomePage() {
   return (
     <>
       <Carousel />
-      <ListProduct keyword={keyword} typeId={typeIdNumber} />
+      {/* <ListProduct keyword={keyword} typeId={typeIdNumber} /> */}
+      <Container fluid className="m-3">
+        <Row>
+          <Col lg={3} md={3} sm={12} xs={12}>
+            <FilterProduct />
+          </Col>
+          <Col lg={9} md={9} sm={12} xs={12}>
+            <ListProduct keyword={keyword} typeId={typeIdNumber} />
+          </Col>
+        </Row>
+      </Container>
       <Trademark />
     </>
   );

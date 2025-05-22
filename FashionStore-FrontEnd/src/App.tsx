@@ -17,6 +17,8 @@ import RestPassword from "./pages/Client/RestPassword";
 import ForgotPassword from "./pages/Client/ForgotPassword";
 import Contact from "./pages/Client/Contact";
 import Profile from "./pages/Client/Profile";
+import ListProductNeed from "./components/Client/ProductNeed/ListProductNeed";
+
 function App() {
   return (
     <>
@@ -47,6 +49,7 @@ function App() {
               <Route path="/payment-result" element={<PaymentResult />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/need-products" element={<ListProductNeed />} />
             </Route>
 
             {/* admin */}
