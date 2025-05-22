@@ -15,6 +15,7 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
 import {
   Dashboard as DashboardIcon,
   Laptop as LaptopIcon,
@@ -158,7 +159,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           <ListItem disablePadding>
             <ListItemButton
               component={Link}
-              to="/admin/widgets"
+              to="/admin/vouchers"
               sx={{
                 borderRadius: "50px",
                 mb: 1,
@@ -173,10 +174,30 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
               <ListItemIcon sx={{ color: "#A0AEC0", minWidth: 40 }}>
                 <WidgetsIcon />
               </ListItemIcon>
-              <ListItemText primary="Tiện Ích" />
+              <ListItemText primary="Voucher" />
             </ListItemButton>
           </ListItem>
-
+          <ListItem disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/admin/user"
+              sx={{
+                borderRadius: "50px",
+                mb: 1,
+                "&:hover": {
+                  backgroundColor: "#EF4444",
+                  "& .MuiListItemIcon-root": {
+                    color: "#ffffff",
+                  },
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "#A0AEC0", minWidth: 40 }}>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary="Thanh toán tiền hoa hồng" />
+            </ListItemButton>
+          </ListItem>
           <ListItem disablePadding>
             <ListItemButton
               component={Link}

@@ -23,19 +23,8 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-interface StatItem {
-  icon: string;
-  title: string;
-  value: string;
-}
-const Dashboard: React.FC = () => {
-  const stats: StatItem[] = [
-    { icon: "chart-line", title: "Lược Truy Cập ", value: "10000" },
-    { icon: "chart-bar", title: "Doanh Thu Hôm Nay", value: "$1234" },
-    { icon: "chart-area", title: "Tổng Lợi Nhuận", value: "$25245" },
-    { icon: "chart-pie", title: "Tỷ Lệ Trả Hàng", value: "0%" },
-  ];
 
+const Dashboard: React.FC = () => {
   return (
     <Container fluid>
       <Row>
@@ -52,19 +41,7 @@ const Dashboard: React.FC = () => {
           </div>
         </Col>
       </Row>
-      <Row className="g-4">
-        {stats.map((item, index) => (
-          <Col sm={6} xl={3} key={index}>
-            <div className="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-              <i className={`fa fa-${item.icon} fa-5x text-primary`}></i>
-              <div className="ms-3">
-                <p className="mb-2 ">{item.title}</p>
-                <h6 className="mb-0">{item.value}</h6>
-              </div>
-            </div>
-          </Col>
-        ))}
-      </Row>
+
       <Row className="g-4 mt-4">
         <Col sm={12}>
           <div className="bg-secondary text-center rounded p-4">
