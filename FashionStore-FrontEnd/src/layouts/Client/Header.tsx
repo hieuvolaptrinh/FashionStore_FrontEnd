@@ -26,6 +26,7 @@ import {
   AdminPanelSettings as AdminIcon,
   Logout as LogoutIcon,
   AccountCircle as AccountCircleIcon,
+  ProductionQuantityLimitsOutlined,
 } from "@mui/icons-material";
 
 const Header: React.FC = () => {
@@ -371,6 +372,17 @@ const Header: React.FC = () => {
                         fontSize="small"
                       />
                       Giỏ hàng
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        navigate("/need-products");
+                      }}
+                    >
+                      <ProductionQuantityLimitsOutlined
+                        sx={{ mr: 1.5, color: "#f44336" }}
+                        fontSize="small"
+                      />
+                      Xem sản phẩm cần sản xuất
                     </MenuItem>
                     <MenuItem onClick={handleLogout}>
                       <LogoutIcon

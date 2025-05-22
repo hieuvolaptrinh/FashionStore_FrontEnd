@@ -28,6 +28,7 @@ import {
   Payment as PaymentIcon,
   ContactSupport as ContactIcon,
 } from "@mui/icons-material";
+import Notification from "../../components/Client/Notification/Notification";
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -344,33 +345,7 @@ const Navbar: React.FC = () => {
                 </Badge>
               </IconButton>
 
-              <IconButton
-                component={Link}
-                to="/cart"
-                sx={{
-                  color: lightTextColor,
-                  ml: 1,
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                }}
-              >
-                <Badge
-                  badgeContent={5}
-                  color="error"
-                  sx={{
-                    "& .MuiBadge-badge": {
-                      backgroundColor: accentColor,
-                      color: darkTextColor,
-                      fontWeight: "bold",
-                      border: `2px solid ${gradientEnd}`,
-                      borderRadius: "50%",
-                    },
-                  }}
-                >
-                  <ShoppingCartIcon sx={{ color: lightTextColor }} />
-                </Badge>
-              </IconButton>
+              <Notification />
             </Box>
 
             {/* Mobile Cart */}

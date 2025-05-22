@@ -80,7 +80,7 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
               width: "100%", // Đảm bảo ảnh full khung
               height: "300px", // Chiều cao cố định
             }}
-          />  */}
+          /> */}
           <div className="product-action">
             <a
               className="btn btn-outline-dark btn-square"

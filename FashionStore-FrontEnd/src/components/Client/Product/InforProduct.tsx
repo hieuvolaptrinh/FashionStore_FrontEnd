@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { ReviewModel } from "../../../models/ReviewModel";
-import ProductModel from "../../../models/ProductModel";
-import ReviewForm from "./ReviewForm";
 
+import ReviewForm from "./ReviewForm";
+import { ProductResponse } from "../../../models/ProductModel";
 interface InfoProductProps {
   reviews: ReviewModel[];
-  product: ProductModel;
+  product: ProductResponse;
   onReviewAdded: () => void;
 }
 

@@ -57,8 +57,8 @@ const BankForm: React.FC<BankFormProps> = ({ onAddBank }) => {
   return (
     <div>
       <Button
-        variant="outlined"
-        color="primary"
+        variant="contained"
+        color="secondary"
         fullWidth
         onClick={() => setIsOpen(!isOpen)}
         sx={{

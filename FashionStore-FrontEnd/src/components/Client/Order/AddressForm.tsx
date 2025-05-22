@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AddressModel } from "../../../models/AddressModel";
+import { Button } from "@mui/material";
 
 interface AddressFormProps {
   onAddAddress: (address: AddressModel) => void;
@@ -15,8 +16,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddAddress }) => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -61,12 +60,18 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddAddress }) => {
 
   return (
     <div className="mt-4">
-      <button
-        className="btn btn-outline-primary w-100 rounded-pill"
+      <Button
+        variant="contained"
+        color="secondary"
+        fullWidth
         onClick={() => setIsOpen(!isOpen)}
+        sx={{
+          borderRadius: "50px",
+          mb: 2,
+        }}
       >
         {isOpen ? "Ẩn form thêm địa chỉ" : "Thêm địa chỉ mới"}
-      </button>
+      </Button>
       {isOpen && (
         <div className="card border-0 mt-3 shadow-sm">
           <div className="card-body">
