@@ -4,11 +4,8 @@ import { Route, Routes } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import Sidebar from "../layouts/Admin/Sidebar";
 import TopNavbar from "../layouts/Admin/TopNavbar";
-
 import Footer from "../layouts/Admin/Footer";
-
 import ForbiddenPage from "../pages/ForbiddenPage";
-
 import Forms from "../components/Admin/Forms";
 import Charts from "../components/Admin/Charts/Charts";
 import UserAdminManager from "../components/Admin/User/UserAdminManager";
@@ -20,6 +17,32 @@ import StudentManagerPage from "../pages/Admin/StudentManagerPage";
 import AdminRevenuePage from "../pages/Admin/AdminRevenuePage";
 import RevenueSummary from "../components/Admin/Revenue/RevenueSummary";
 import { mockRevenueSummary } from "../components/Admin/Revenue/revenueTypes";
+import AdminChat from "../components/Admin/AdminChat/AdminChat";
+import { IconButton } from "@mui/material";
+import { Chat as ChatIcon } from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
+
+const FloatingButton = styled(IconButton)({
+  position: "fixed",
+  bottom: "20px",
+  right: "20px",
+  background: "linear-gradient(135deg, #2196F3 0%, #1976D2 100%)",
+  color: "#fff",
+  width: "48px",
+  height: "48px",
+  boxShadow: "0 4px 12px rgba(33, 150, 243, 0.3)",
+  "&:hover": {
+    background: "linear-gradient(135deg, #1976D2 0%, #1565C0 100%)",
+    boxShadow: "0 6px 16px rgba(33, 150, 243, 0.4)",
+  },
+  zIndex: 1002,
+  transition: "all 0.3s ease",
+  "@media (max-width: 600px)": {
+    bottom: "16px",
+    right: "16px",
+  },
+});
+
 // interface StatItem {
 //   icon: string;
 //   title: string;
@@ -27,8 +50,10 @@ import { mockRevenueSummary } from "../components/Admin/Revenue/revenueTypes";
 // }
 const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
   const toggleSidebar = (): void => setSidebarOpen(!sidebarOpen);
+  const toggleChat = (): void => setIsChatOpen(!isChatOpen);
 
   // const stats: StatItem[] = [
   //   { icon: "chart-line", title: "Lược Truy Cập ", value: "824" },
@@ -72,6 +97,10 @@ const AdminLayout: React.FC = () => {
             <Route path="/payment-student" element={<StudentManagerPage />} />
           </Routes>
         </Container>
+        <FloatingButton onClick={toggleChat}>
+          <ChatIcon />
+        </FloatingButton>
+        {isChatOpen && <AdminChat />}
         <Footer />
       </div>
     </div>
