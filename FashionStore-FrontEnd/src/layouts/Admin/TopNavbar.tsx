@@ -66,39 +66,6 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
           <NavDropdown
             title={
               <>
-                <i className="fa fa-envelope me-lg-2"></i>
-                <span className="d-none d-lg-inline-flex">Tin Nhắn</span>
-              </>
-            }
-            id="message-dropdown"
-            className="custom-nav-dropdown"
-          >
-            {[...Array(3)].map((_, i: number) => (
-              <NavDropdown.Item key={i} className="custom-dropdown-item">
-                <div className="d-flex align-items-center">
-                  <img
-                    className="rounded-circle"
-                    src="/images/user.jpg"
-                    alt="User"
-                    style={{ width: "40px", height: "40px" }}
-                  />
-                  <div className="ms-2">
-                    <h6 className="fw-normal mb-0">
-                      HIếu võ đã nhắn tin cho you{" "}
-                    </h6>
-                    <small>15 minutes ago</small>
-                  </div>
-                </div>
-              </NavDropdown.Item>
-            ))}
-            <NavDropdown.Divider className="bg-light" />
-            <NavDropdown.Item className="text-center custom-dropdown-item">
-              See all messages
-            </NavDropdown.Item>
-          </NavDropdown>
-          <NavDropdown
-            title={
-              <>
                 <i className="fa fa-bell me-lg-2"></i>
                 <span className="d-none d-lg-inline-flex">Thông báo</span>
               </>
