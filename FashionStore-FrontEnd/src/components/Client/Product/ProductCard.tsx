@@ -111,11 +111,11 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
             {product.originalPrice &&
               product.originalPrice > product.salePrice! && (
                 <h6 className="text-muted ml-2">
-                  <del>{product.originalPrice.toFixed(2)} vnđ</del>
+                  <del>{product.originalPrice.toFixed(0)} vnđ</del>
                 </h6>
               )}
 
-            <h5>{product.salePrice?.toFixed(2) || "0.00"} vnđ</h5>
+            <h5>{product.salePrice?.toFixed(0)  } vnđ</h5>
           </div>
           <div className="d-flex align-items-center justify-content-center mb-1">
             {[...Array(5)].map((_, index) => (

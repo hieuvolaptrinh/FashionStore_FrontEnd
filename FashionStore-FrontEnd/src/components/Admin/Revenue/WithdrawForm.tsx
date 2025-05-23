@@ -9,10 +9,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Grid,
   MenuItem,
 } from "@mui/material";
 import { BankAccount } from "./revenueTypes";
+import { Row, Col } from "react-bootstrap";
 
 interface WithdrawFormProps {
   availableBalance: number;
@@ -64,19 +64,47 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({
   };
 
   return (
-    <Card sx={{ p: 3, mb: 4 }}>
-      <Typography variant="h6" sx={{ mb: 3 }}>
+    <Card
+      sx={{
+        p: 3,
+        mb: 4,
+        backgroundColor: "#ffffff",
+        borderRadius: "12px",
+        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+        border: "1px solid rgba(0, 0, 0, 0.05)",
+      }}
+    >
+      <Typography
+        variant="h6"
+        sx={{
+          mb: 3,
+          color: "#1976d2",
+          fontWeight: "600",
+          fontSize: "1.25rem",
+        }}
+      >
         Rút tiền
       </Typography>
 
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="subtitle1" sx={{ mb: 1 }}>
+      <Box
+        sx={{
+          mb: 3,
+          p: 2,
+          backgroundColor: "rgba(25, 118, 210, 0.05)",
+          borderRadius: "8px",
+          border: "1px solid rgba(25, 118, 210, 0.1)",
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          sx={{ color: "#1976d2", fontWeight: "500" }}
+        >
           Số dư khả dụng: {formatCurrency(availableBalance)}
         </Typography>
       </Box>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+      <Row className="g-3">
+        <Col md={6}>
           <TextField
             fullWidth
             label="Số tiền muốn rút"
@@ -89,15 +117,29 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({
                 ? "Số tiền vượt quá số dư khả dụng"
                 : ""
             }
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#1976d2",
+                },
+              },
+            }}
           />
-        </Grid>
-        <Grid item xs={12} md={6}>
+        </Col>
+        <Col md={6}>
           <TextField
             fullWidth
             select
             label="Chọn tài khoản ngân hàng"
             value={selectedBank}
             onChange={(e) => setSelectedBank(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#1976d2",
+                },
+              },
+            }}
           >
             {bankAccounts.map((account) => (
               <MenuItem key={account.id} value={account.id}>
@@ -106,8 +148,8 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
-      </Grid>
+        </Col>
+      </Row>
 
       <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
         <Button
@@ -117,6 +159,13 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({
           disabled={
             !amount || !selectedBank || Number(amount) > availableBalance
           }
+          sx={{
+            backgroundColor: "#1976d2",
+            "&:hover": {
+              backgroundColor: "#1565c0",
+            },
+            boxShadow: "0 2px 8px rgba(25, 118, 210, 0.3)",
+          }}
         >
           Gửi yêu cầu rút tiền
         </Button>
@@ -124,16 +173,41 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({
           variant="outlined"
           color="primary"
           onClick={() => setOpenDialog(true)}
+          sx={{
+            borderColor: "#1976d2",
+            color: "#1976d2",
+            "&:hover": {
+              borderColor: "#1565c0",
+              backgroundColor: "rgba(25, 118, 210, 0.05)",
+            },
+          }}
         >
           Thêm tài khoản ngân hàng
         </Button>
       </Box>
 
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Thêm tài khoản ngân hàng mới</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        PaperProps={{
+          sx: {
+            borderRadius: "12px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            backgroundColor: "#1976d2",
+            color: "#fff",
+            fontWeight: "600",
+          }}
+        >
+          Thêm tài khoản ngân hàng mới
+        </DialogTitle>
+        <DialogContent sx={{ p: 3 }}>
+          <Row className="g-3">
+            <Col xs={12}>
               <TextField
                 fullWidth
                 label="Tên ngân hàng"
@@ -144,9 +218,16 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({
                     bankName: e.target.value,
                   })
                 }
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: "#1976d2",
+                    },
+                  },
+                }}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </Col>
+            <Col xs={12}>
               <TextField
                 fullWidth
                 label="Số tài khoản"
@@ -157,9 +238,16 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({
                     accountNumber: e.target.value,
                   })
                 }
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: "#1976d2",
+                    },
+                  },
+                }}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </Col>
+            <Col xs={12}>
               <TextField
                 fullWidth
                 label="Tên chủ tài khoản"
@@ -170,12 +258,29 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({
                     accountHolder: e.target.value,
                   })
                 }
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: "#1976d2",
+                    },
+                  },
+                }}
               />
-            </Grid>
-          </Grid>
+            </Col>
+          </Row>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Hủy</Button>
+        <DialogActions sx={{ p: 2, borderTop: "1px solid rgba(0, 0, 0, 0.1)" }}>
+          <Button
+            onClick={() => setOpenDialog(false)}
+            sx={{
+              color: "#666",
+              "&:hover": {
+                backgroundColor: "rgba(0, 0, 0, 0.05)",
+              },
+            }}
+          >
+            Hủy
+          </Button>
           <Button
             onClick={handleAddBankAccount}
             variant="contained"
@@ -185,6 +290,13 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({
               !newBankAccount.accountNumber ||
               !newBankAccount.accountHolder
             }
+            sx={{
+              backgroundColor: "#1976d2",
+              "&:hover": {
+                backgroundColor: "#1565c0",
+              },
+              boxShadow: "0 2px 8px rgba(25, 118, 210, 0.3)",
+            }}
           >
             Thêm
           </Button>
