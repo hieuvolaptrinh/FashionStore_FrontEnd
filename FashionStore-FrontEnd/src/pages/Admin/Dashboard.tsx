@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import RevenueChart from "./Charts/RevenueChart";
+import RevenueChart from "../../components/Admin/Revenue/RevenueChart";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,14 +30,12 @@ const Dashboard: React.FC = () => {
       <Row>
         <Col sm={12} xl={6}>
           <div className="bg-secondary rounded h-100 p-4">
-            <h6 className="mb-4">Biểu Đồ Doanh Thu</h6>
-            <RevenueChart />
+            <RevenueChart titleName="Biểu Đồ Doanh Thu Theo Ngày" />
           </div>
         </Col>
         <Col sm={12} xl={6}>
           <div className="bg-secondary rounded h-100 p-4">
-            <h6 className="mb-4">Biểu Đồ Doanh Thu Theo Tháng</h6>
-            <RevenueChart />
+            <RevenueChart titleName="Biểu Đồ Doanh Thu Theo Tháng" />
           </div>
         </Col>
       </Row>

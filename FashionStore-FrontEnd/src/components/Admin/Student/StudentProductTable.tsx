@@ -19,17 +19,40 @@ const StudentProductTable: React.FC<StudentProductTableProps> = ({
     {
       header: "Hình ảnh sản phẩm",
       accessor: (item: StudentProduct) => (
-        <img
-          src={item.image}
-          alt={item.productName}
-          style={{ width: "100px", height: "100px", objectFit: "cover" }}
-        />
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <img
+            src={item.image}
+            alt={item.productName}
+            style={{
+              width: "100px",
+              height: "100px",
+              objectFit: "cover",
+              borderRadius: "4px",
+            }}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = "./images/p11.jpg";
+            }}
+          />
+        </Box>
       ),
     },
     {
-      header: "Số tiền thanh toán",
+      header: "Số lượng",
+      accessor: (item: StudentProduct) => (
+        <Typography>{item.quantity}</Typography>
+      ),
+    },
+    {
+      header: "Tổng tiền",
       accessor: (item: StudentProduct) => (
         <Typography>{item.money.toLocaleString("vi-VN")} VNĐ</Typography>
+      ),
+    },
+    {
+      header: "Hoa hồng (10%",
+      accessor: (item: StudentProduct) => (
+        <Typography>{item.commission.toLocaleString("vi-VN")} VNĐ</Typography>
       ),
     },
     { header: "Trạng thái", accessor: "status" },

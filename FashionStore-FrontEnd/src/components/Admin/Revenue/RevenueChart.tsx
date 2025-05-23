@@ -21,7 +21,7 @@ ChartJS.register(
   Legend
 );
 
-const RevenueChart: React.FC = () => {
+const RevenueChart: React.FC<{ titleName: string }> = ({ titleName }) => {
   const [orderData, setOrderData] = useState<ResponseOrder[]>([]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const RevenueChart: React.FC = () => {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
-    }); 
+    });
   };
 
   // Tổng hợp doanh thu theo ngày
@@ -51,7 +51,7 @@ const RevenueChart: React.FC = () => {
     const dailyData: { [key: string]: number } = {};
 
     orders.forEach((order) => {
-      const dateKey = formatDate(order.createAt); 
+      const dateKey = formatDate(order.createAt);
       if (!dailyData[dateKey]) {
         dailyData[dateKey] = 0;
       }
@@ -105,7 +105,7 @@ const RevenueChart: React.FC = () => {
       },
       title: {
         display: true,
-        text: "Biểu Đồ Doanh Thu Theo Ngày",
+        text: titleName,
         font: {
           size: 18,
           weight: "bold" as const,

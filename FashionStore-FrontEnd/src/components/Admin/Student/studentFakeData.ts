@@ -5,6 +5,8 @@ export interface StudentProduct {
   productName: string;
   image: string;
   money: number;
+  quantity: number;
+  commission: number;
   status: "Chưa nộp" | "Đã nộp" | "Đang làm";
 }
 
@@ -14,8 +16,10 @@ export const studentProductData: StudentProduct[] = [
     name: "Nguyễn Văn A",
     msv: "123456",
     productName: "Ví da",
-    image: "./images/p11.jpg",
+    image: "/images/p11.jpg",
     money: 1232132,
+    quantity: 86,
+    commission: 123213,
     status: "Đã nộp",
   },
   {
@@ -23,8 +27,10 @@ export const studentProductData: StudentProduct[] = [
     name: "Trần Thị B",
     msv: "123457",
     productName: "Túi xách",
-    image: "./images/p12.jpg",
+    image: "/images/p12.jpg",
     money: 1500000,
+    quantity: 53,
+    commission: 150000,
     status: "Đang làm",
   },
   {
@@ -32,8 +38,10 @@ export const studentProductData: StudentProduct[] = [
     name: "Lê Văn C",
     msv: "123458",
     productName: "Balo",
-    image: "./images/p13.jpg",
+    image: "/images/p13.jpg",
     money: 2000000,
+    quantity: 64,
+    commission: 200000,
     status: "Chưa nộp",
   },
   {
@@ -41,8 +49,10 @@ export const studentProductData: StudentProduct[] = [
     name: "Phạm Thị D",
     msv: "123459",
     productName: "Ví nữ",
-    image: "./images/p14.jpg",
+    image: "/images/p14.jpg",
     money: 1800000,
+    quantity: 63,
+    commission: 180000,
     status: "Đã nộp",
   },
 ];

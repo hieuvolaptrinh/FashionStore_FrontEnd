@@ -7,7 +7,7 @@ import GenericTable from "../../GenericTable";
 import OrderStatusSelect from "./OrderStatusSelect";
 import { ResponseOrder } from "../../../models/OrderModel";
 import { Container, Row, Col } from "react-bootstrap";
-import RevenueChart from "../Charts/RevenueChart";
+import RevenueChart from "../Revenue/RevenueChart";
 
 const OrdersTable: React.FC = () => {
   const [orders, setOrders] = useState<ResponseOrder[]>([]);
