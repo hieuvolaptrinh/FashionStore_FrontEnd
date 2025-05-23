@@ -229,7 +229,7 @@ function Footer() {
       </Container>
 
       {/* Back to top button */}
-      <IconButton
+      {/* <IconButton
         href="#"
         sx={{
           position: "fixed",
@@ -243,7 +243,7 @@ function Footer() {
         size="large"
       >
         <ArrowUpward />
-      </IconButton>
+      </IconButton> */}
     </Box>
   );
 }

@@ -42,14 +42,14 @@ const Trademark: React.FC = () => {
         >
           {/* Lặp lại hình ảnh 2 lần để tạo hiệu ứng trượt vô tận */}
           {[
-            "/images/vendor-1.jpg",
-            "/images/vendor-2.jpg",
-            "/images/vendor-3.jpg",
-            "/images/vendor-4.jpg",
-            "/images/vendor-5.jpg",
-            "/images/vendor-6.jpg",
-            "/images/vendor-7.jpg",
-            "/images/vendor-8.jpg",
+            "./images/vendor-1.jpg",
+            "./images/vendor-2.jpg",
+            "./images/vendor-3.jpg",
+            "./images/vendor-4.jpg",
+            "./images/vendor-5.jpg",
+            "./images/vendor-6.jpg",
+            "./images/vendor-7.jpg",
+            "./images/vendor-8.jpg",
           ].map((src, index) => (
             <div
               key={index}

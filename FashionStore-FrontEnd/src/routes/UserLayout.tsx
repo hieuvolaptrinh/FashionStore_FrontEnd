@@ -1,4 +1,4 @@
-
+import UserChatBox from "../components/UserChatBox";
 import Footer from "../layouts/Client/Footer";
 import Header from "../layouts/Client/Header";
 
@@ -11,6 +11,7 @@ function UserLayout() {
       <Header />
       <Navbar />
       <Outlet /> {/* Nội dung chính của trang */}
+      <UserChatBox />
       <Footer />
     </>
   );
