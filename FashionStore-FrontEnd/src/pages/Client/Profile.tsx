@@ -374,7 +374,7 @@ const Profile = () => {
                 gap: 4,
               }}
             >
-              {/* Avatar Section */}
+              {/* avt*/}
               <Box
                 sx={{
                   display: "flex",
@@ -386,19 +386,23 @@ const Profile = () => {
                   borderRadius: "8px",
                 }}
               >
+                {" "}
                 <Box sx={{ position: "relative", mb: 2 }}>
                   <Avatar
                     src={
-                      userProfile.avatarBase64
+                      userProfile && userProfile.avatarBase64
                         ? `data:image/jpeg;base64,${userProfile.avatarBase64}`
-                        : "/avatar-placeholder.png"
+                        : "/images/user.jpg"
                     }
-                    alt={`${userProfile.firstName} ${userProfile.lastName}`}
+                    alt={`${userProfile?.firstName || ""} ${
+                      userProfile?.lastName || ""
+                    }`}
                     sx={{
                       width: 150,
                       height: 150,
                       boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                       border: "4px solid white",
+                      bgcolor: "#1976d2",
                     }}
                   />
                   <label htmlFor="avatar-upload">
@@ -424,19 +428,19 @@ const Profile = () => {
                       <PhotoCameraIcon />
                     </IconButton>
                   </label>
-                </Box>
+                </Box>{" "}
                 <Typography
                   variant="subtitle1"
                   sx={{ fontWeight: "bold", mb: 1 }}
                 >
-                  {userProfile.firstName} {userProfile.lastName}
-                </Typography>
+                  {userProfile?.firstName || ""} {userProfile?.lastName || ""}
+                </Typography>{" "}
                 <Typography
                   variant="body2"
                   color="text.secondary"
                   sx={{ mb: 1 }}
                 >
-                  @{userProfile.userName}
+                  @{userProfile?.userName || "user"}
                 </Typography>
               </Box>
 
@@ -448,7 +452,7 @@ const Profile = () => {
                       fullWidth
                       label="Họ"
                       name="firstName"
-                      value={userProfile.firstName}
+                      value={userProfile?.firstName}
                       onChange={handleInputChange}
                       variant="outlined"
                       margin="normal"
@@ -466,7 +470,7 @@ const Profile = () => {
                       fullWidth
                       label="Tên"
                       name="lastName"
-                      value={userProfile.lastName}
+                      value={userProfile?.lastName}
                       onChange={handleInputChange}
                       variant="outlined"
                       margin="normal"
@@ -482,13 +486,14 @@ const Profile = () => {
                 </div>
 
                 <div className="row mb-3">
+                  {" "}
                   <div className="col-md-6">
                     <TextField
                       fullWidth
                       label="Email"
                       name="email"
                       type="email"
-                      value={userProfile.email}
+                      value={userProfile?.email || ""}
                       onChange={handleInputChange}
                       variant="outlined"
                       margin="normal"
@@ -500,13 +505,13 @@ const Profile = () => {
                         ),
                       }}
                     />
-                  </div>
+                  </div>{" "}
                   <div className="col-md-6">
                     <TextField
                       fullWidth
                       label="Số điện thoại"
                       name="phoneNumber"
-                      value={userProfile.phoneNumber}
+                      value={userProfile?.phoneNumber || ""}
                       onChange={handleInputChange}
                       variant="outlined"
                       margin="normal"
@@ -525,7 +530,7 @@ const Profile = () => {
                   fullWidth
                   label="Tên đăng nhập"
                   name="userName"
-                  value={userProfile.userName}
+                  value={userProfile?.userName}
                   variant="outlined"
                   margin="normal"
                   disabled

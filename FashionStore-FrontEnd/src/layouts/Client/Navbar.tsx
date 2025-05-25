@@ -109,7 +109,7 @@ const Navbar: React.FC = () => {
           position="sticky"
           sx={{
             top: 0,
-            zIndex: 1100,
+            zIndex: 10,
             background: `linear-gradient(135deg,${gradientEnd} 0%, ${gradientStart} 50%,${gradientEnd} 100% )`,
             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
           }}
