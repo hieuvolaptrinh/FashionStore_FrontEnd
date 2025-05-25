@@ -361,29 +361,48 @@ const Header: React.FC = () => {
                       />
                       Chỉnh sửa thông tin
                     </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        navigate("/carts");
-                        handleCloseMenu();
-                      }}
-                    >
-                      <ShoppingCartIcon
-                        sx={{ mr: 1.5, color: headerColors.primary }}
-                        fontSize="small"
-                      />
-                      Giỏ hàng
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        navigate("/need-products");
-                      }}
-                    >
-                      <ProductionQuantityLimitsOutlined
-                        sx={{ mr: 1.5, color: "#f44336" }}
-                        fontSize="small"
-                      />
-                      Xem sản phẩm cần sản xuất
-                    </MenuItem>
+                    {roles?.includes("USER") && (
+                      <>
+                        <MenuItem
+                          onClick={() => {
+                            navigate("/carts");
+                            handleCloseMenu();
+                          }}
+                        >
+                          <ShoppingCartIcon
+                            sx={{ mr: 1.5, color: headerColors.primary }}
+                            fontSize="small"
+                          />
+                          Giỏ hàng
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            navigate("/need-products");
+                          }}
+                        >
+                          <ProductionQuantityLimitsOutlined
+                            sx={{ mr: 1.5, color: "#f44336" }}
+                            fontSize="small"
+                          />
+                          Xem sản phẩm cần sản xuất
+                        </MenuItem>
+                      </>
+                    )}
+                    {roles?.includes("SHIPPER") && (
+                      <>
+                        <MenuItem
+                          onClick={() => {
+                            navigate("/update-order");
+                          }}
+                        >
+                          <ProductionQuantityLimitsOutlined
+                            sx={{ mr: 1.5, color: "#f44336" }}
+                            fontSize="small"
+                          />
+                          Cập nhật giao hàng
+                        </MenuItem>
+                      </>
+                    )}
                     <MenuItem onClick={handleLogout}>
                       <LogoutIcon
                         sx={{ mr: 1.5, color: "#f44336" }}

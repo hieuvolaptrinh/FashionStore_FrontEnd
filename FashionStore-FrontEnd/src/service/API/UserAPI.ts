@@ -199,6 +199,7 @@ export const forgotPassword = async (email: string, userName: string) => {
 };
 
 export const getUser = async (): Promise<UserModel> => {
+  console.log("getUser");
   const token = localStorage.getItem("token") || "";
 
   const response = await axios.get(`${API_BASE_URL}/api/v1/user/me`, {

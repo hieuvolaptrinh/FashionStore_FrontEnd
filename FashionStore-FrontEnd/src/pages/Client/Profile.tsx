@@ -273,7 +273,7 @@ const Profile = () => {
   const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate password if the password fields are shown
+    
     if (showPasswordFields && updatePassword.newPassword) {
       if (updatePassword.newPassword.length < 6) {
         showNotification("Mật khẩu phải có ít nhất 6 ký tự", "error");
