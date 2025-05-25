@@ -190,7 +190,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
   };
 
   // Danh sách quyền khả dụng
-  const availableRoles = ["ADMIN", "USER", "STAFF"];
+  const availableRoles = ["ADMIN", "USER", "SHIPPER"];
 
   return (
     <Modal show={show} onHide={onHide} centered>
