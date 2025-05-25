@@ -5,7 +5,10 @@ interface ImageProductProps {
   productName: string;
 }
 
-const ImageProduct: React.FC<ImageProductProps> = ({ icon, productName }) => {
+export const ImageProduct: React.FC<ImageProductProps> = ({
+  icon,
+  productName,
+}) => {
   return (
     <img
       src={icon}
@@ -18,5 +21,20 @@ const ImageProduct: React.FC<ImageProductProps> = ({ icon, productName }) => {
     />
   );
 };
-
-export default ImageProduct;
+export const AdminImageProduct: React.FC<ImageProductProps> = ({
+  icon,
+  productName,
+}) => {
+  return (
+    <img
+      src={icon}
+      alt={productName}
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        borderRadius: "4px",
+      }}
+    />
+  );
+};

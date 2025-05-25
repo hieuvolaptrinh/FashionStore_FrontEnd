@@ -36,35 +36,35 @@ const FilterProduct: React.FC = () => {
   return (
     <Box
       sx={{
-        p: 3,
-        borderRadius: 3,
-        boxShadow: "0 8px 32px rgba(58,134,255,0.1)",
+        p: 2, // giảm padding
+        borderRadius: 2,
+        boxShadow: "0 4px 16px rgba(58,134,255,0.08)", // giảm shadow
         background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)",
-        minWidth: 240,
-        maxWidth: 320,
+        maxWidth: 260, // giảm maxWidth
         width: "100%",
-        border: "1.5px solid #e9ecef",
+        border: "1px solid #e9ecef",
         transition: "all 0.3s ease",
         "&:hover": {
-          boxShadow: "0 12px 36px rgba(58,134,255,0.15)",
+          boxShadow: "0 8px 24px rgba(58,134,255,0.12)",
           borderColor: "#3a86ff",
         },
       }}
     >
       <Typography
-        variant="h6"
-        fontWeight={700}
-        mb={2}
+        variant="subtitle1" // nhỏ hơn h6
+        fontWeight={600}
+        mb={1.5}
         sx={{
+          fontSize: 18, // nhỏ hơn
           background: "linear-gradient(45deg, #0b4f9e 0%, #3a86ff 100%)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
-          textShadow: "0 2px 4px rgba(58,134,255,0.1)",
+          textShadow: "0 1px 2px rgba(58,134,255,0.08)",
         }}
       >
-        Bộ lọc sản phẩm
+        Lọc sản phẩm
       </Typography>
-      <Stack spacing={3}>
+      <Stack spacing={2}>
         <TextField
           label="Tìm kiếm sản phẩm"
           variant="outlined"
@@ -74,7 +74,8 @@ const FilterProduct: React.FC = () => {
           fullWidth
           sx={{
             "& .MuiOutlinedInput-root": {
-              borderRadius: 2,
+              borderRadius: 1.5,
+              fontSize: 13, // nhỏ hơn
               transition: "all 0.3s ease",
               "&:hover": {
                 "& .MuiOutlinedInput-notchedOutline": {
@@ -89,6 +90,7 @@ const FilterProduct: React.FC = () => {
               },
             },
             "& label": {
+              fontSize: 13,
               color: "#0b4f9e",
               "&.Mui-focused": {
                 color: "#3a86ff",
@@ -98,10 +100,11 @@ const FilterProduct: React.FC = () => {
         />
         <Box>
           <Typography
-            variant="subtitle1"
+            variant="body2"
             fontWeight={600}
-            mb={1}
+            mb={0.5}
             sx={{
+              fontSize: 14,
               background: "linear-gradient(45deg, #3a86ff 0%, #0b4f9e 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -125,15 +128,18 @@ const FilterProduct: React.FC = () => {
                           },
                           transition: "all 0.3s ease",
                           "&:hover": {
-                            transform: "scale(1.1)",
+                            transform: "scale(1.08)",
                           },
+                          p: 0.5, // giảm padding
                         }}
+                        size="small" // nhỏ hơn
                       />
                     }
                     label={
                       <Typography
                         fontWeight={500}
                         sx={{
+                          fontSize: 13,
                           color: checkedTypes.includes(type)
                             ? "#0b4f9e"
                             : "text.secondary",
@@ -151,10 +157,11 @@ const FilterProduct: React.FC = () => {
         </Box>
         <Box>
           <Typography
-            variant="subtitle1"
+            variant="body2"
             fontWeight={600}
-            mb={1}
+            mb={0.5}
             sx={{
+              fontSize: 14,
               background: "linear-gradient(45deg, #3a86ff 0%, #0b4f9e 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -171,11 +178,14 @@ const FilterProduct: React.FC = () => {
             step={5000}
             sx={{
               color: "#ffd700",
+              height: 4, // nhỏ hơn
               "& .MuiSlider-thumb": {
-                border: "2px solid #3a86ff",
-                boxShadow: "0 2px 8px rgba(58,134,255,0.3)",
+                border: "1.5px solid #3a86ff",
+                width: 16, // nhỏ hơn
+                height: 16,
+                boxShadow: "0 1px 4px rgba(58,134,255,0.2)",
                 "&:hover": {
-                  boxShadow: "0 4px 12px rgba(58,134,255,0.4)",
+                  boxShadow: "0 2px 6px rgba(58,134,255,0.25)",
                 },
               },
               "& .MuiSlider-track": {
@@ -190,6 +200,7 @@ const FilterProduct: React.FC = () => {
             <Typography
               variant="caption"
               sx={{
+                fontSize: 12,
                 color: "#0b4f9e",
                 fontWeight: 600,
                 background: "linear-gradient(45deg, #0b4f9e 0%, #3a86ff 100%)",
@@ -202,6 +213,7 @@ const FilterProduct: React.FC = () => {
             <Typography
               variant="caption"
               sx={{
+                fontSize: 12,
                 color: "#0b4f9e",
                 fontWeight: 600,
                 background: "linear-gradient(45deg, #0b4f9e 0%, #3a86ff 100%)",
@@ -218,20 +230,20 @@ const FilterProduct: React.FC = () => {
           fullWidth
           sx={{
             background: "linear-gradient(45deg, #3a86ff 0%, #0b4f9e 100%)",
-            borderRadius: 2,
-            fontWeight: 700,
-            py: 1.2,
+            borderRadius: 1.5,
+            fontWeight: 600,
+            py: 0.8, // giảm padding
             color: "#fff",
-            boxShadow: "0 4px 16px rgba(58,134,255,0.2)",
-            letterSpacing: 1,
-            fontSize: 16,
+            boxShadow: "0 2px 8px rgba(58,134,255,0.15)",
+            letterSpacing: 0.5,
+            fontSize: 14, // nhỏ hơn
             textTransform: "none",
             transition: "all 0.3s ease",
             "&:hover": {
               background: "linear-gradient(45deg, #0b4f9e 0%, #3a86ff 100%)",
               color: "#ffd700",
-              transform: "translateY(-2px)",
-              boxShadow: "0 6px 20px rgba(58,134,255,0.3)",
+              transform: "translateY(-1px)",
+              boxShadow: "0 4px 12px rgba(58,134,255,0.2)",
             },
           }}
         >

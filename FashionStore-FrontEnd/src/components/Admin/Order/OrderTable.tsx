@@ -73,8 +73,7 @@ const OrdersTable: React.FC = () => {
       <Row>
         <Col sm={12} xl={12}>
           <div className="bg-secondary rounded h-100 p-4">
-            <Typography variant="h4">Doanh Thu</Typography>
-            <RevenueChart />
+            <RevenueChart titleName="Biểu đồ doanh thu" />
           </div>
         </Col>
         <Col sm={12} xl={12}>

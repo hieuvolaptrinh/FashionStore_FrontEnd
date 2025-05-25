@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
 import Type from "../../../models/TypeModel";
 import { ProductResponse } from "../../../models/ProductModel";
+import { AdminImageProduct } from "../../Client/Product/ImageProduct";
 
 const ProductManagement: React.FC = () => {
   // State quản lý danh sách sản phẩm và modal
@@ -158,15 +159,9 @@ const ProductManagement: React.FC = () => {
                 <ChevronLeft />
               </IconButton>
             )}
-            <img
-              src={images[validIndex].link}
-              alt={`product-${validIndex}`}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                borderRadius: "4px",
-              }}
+            <AdminImageProduct
+              icon={images[validIndex].link || ""}
+              productName={`product-${validIndex}`}
             />
             {images.length > 1 && (
               <IconButton
@@ -215,11 +210,11 @@ const ProductManagement: React.FC = () => {
     </>
   );
 
-
   const handleDeleteProduct = (productId: number) => {
-    
     console.log("Xóa sản phẩm:", productId);
-    alert("Ở đây không nên xóa, chỉ nên cập nhật số lượng =0 thôi để thống kê và quản lý doanh thu sau này");
+    alert(
+      "Ở đây không nên xóa, chỉ nên cập nhật số lượng =0 thôi để thống kê và quản lý doanh thu sau này"
+    );
   };
 
   return (

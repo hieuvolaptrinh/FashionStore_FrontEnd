@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ImageProduct from "./ImageProduct";
+import { ImageProduct } from "./ImageProduct";
 import { fetchProductImages } from "../../../service/API/ImageAPI";
 import { ProductResponse } from "../../../models/ProductModel";
 import ImageModel from "../../../models/ImageModel";
@@ -63,7 +63,7 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
   }
 
   return (
-    <div className="col-lg-3 col-md-6 col-sm-6 pb-1">
+    <div className="col-lg-4 col-md-4 col-sm-6 pb-1">
       <div className="product-item bg-light mb-4">
         <div className="product-img position-relative overflow-hidden">
           {/* ảo giác vl phải tạo component */}
@@ -115,7 +115,7 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
                 </h6>
               )}
 
-            <h5>{product.salePrice?.toFixed(0)  } vnđ</h5>
+            <h5>{product.salePrice?.toFixed(0)} vnđ</h5>
           </div>
           <div className="d-flex align-items-center justify-content-center mb-1">
             {[...Array(5)].map((_, index) => (

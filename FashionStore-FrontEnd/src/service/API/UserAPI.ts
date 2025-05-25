@@ -23,7 +23,7 @@ export const getAvatar = async (): Promise<string | null> => {
 
     return response.data; // Dữ liệu ảnh dưới dạng base64
   } catch (error) {
-    console.error("Lỗi khi gọi API:", error);
+    console.error("lỗi avatar", error);
     return null;
   }
 };
@@ -112,7 +112,7 @@ export const login = async (userName: string, password: string) => {
 
       localStorage.setItem("token", token);
       localStorage.setItem("username", username);
-      localStorage.setItem("roles", JSON.stringify(roles)); // ["ADMIN", "STAFF"]
+      localStorage.setItem("roles", JSON.stringify(roles)); // ["ADMIN", "USER","SHIPPER"]
 
       return true;
     } else {

@@ -12,6 +12,8 @@ import {
   Tooltip,
 } from "@mui/material";
 import { ProductNeed } from "./productFakeData";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 interface ProductNeedCardProps {
   product: ProductNeed;
@@ -30,17 +32,17 @@ const ProductNeedCard: React.FC<ProductNeedCardProps> = ({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        borderRadius: 4,
+        borderRadius: 3,
         boxShadow: "0 8px 32px 0 rgba(0,0,0,0.08)",
         transition: "all 0.3s ease-in-out",
-        border: "1.5px solid #f0f0f0",
+        border: "1px solid #f0f0f0",
         position: "relative",
         overflow: "hidden",
         background: "linear-gradient(145deg, #ffffff 0%, #fafafa 100%)",
         "&:hover": {
           boxShadow: "0 12px 36px 0 rgba(0,0,0,0.12)",
           borderColor: "#e0e0e0",
-          transform: "translateY(-4px) scale(1.02)",
+          transform: "translateY(-4px)",
           "& .MuiCardMedia-root": {
             transform: "scale(1.05)",
           },
@@ -55,7 +57,6 @@ const ProductNeedCard: React.FC<ProductNeedCardProps> = ({
           alt={product.productName}
           sx={{
             objectFit: "cover",
-            borderRadius: "18px 18px 0 0",
             transition: "transform 0.3s ease-in-out",
           }}
         />
@@ -67,30 +68,30 @@ const ProductNeedCard: React.FC<ProductNeedCardProps> = ({
             top: 14,
             left: 14,
             background:
-              "linear-gradient(45deg,rgb(149, 0, 255) 0%,rgb(0, 102, 255) 100%)",
+              "linear-gradient(45deg, #6366f1 0%, #8b5cf6 100%)",
             color: "#fff",
-            fontWeight: 700,
-            fontSize: 13,
+            fontWeight: 600,
+            fontSize: 12,
             letterSpacing: 0.5,
-            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            boxShadow: "0 4px 12px rgba(99, 102, 241, 0.3)",
             px: 1.5,
             borderRadius: 2,
             backdropFilter: "blur(4px)",
             border: "1px solid rgba(255,255,255,0.2)",
+            textTransform: "uppercase",
           }}
         />
       </Box>
-      <CardContent sx={{ flexGrow: 1, pb: 1 }}>
+      <CardContent sx={{ flexGrow: 1, pb: 1, pt: 2, px: 2.5 }}>
         <Tooltip title={product.productName} arrow>
           <Typography
             gutterBottom
             variant="h6"
-            fontWeight={800}
+            fontWeight={700}
             noWrap
             sx={{
-              background: "linear-gradient(45deg, #2d3436 0%, #636e72 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              fontSize: "1.1rem",
+              color: "#1e293b",
             }}
           >
             {product.productName}
@@ -98,91 +99,100 @@ const ProductNeedCard: React.FC<ProductNeedCardProps> = ({
         </Tooltip>
         <Typography
           variant="body2"
-          color="text.secondary"
-          sx={{ mb: 1, minHeight: 40 }}
+          color="#64748b"
+          sx={{ 
+            mb: 2, 
+            height: "40px",
+            display: '-webkit-box',
+            overflow: 'hidden',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 2,
+            fontSize: "0.85rem",
+            lineHeight: 1.5,
+            textOverflow: "ellipsis"
+          }}
         >
           {product.description}
         </Typography>
-        <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-          <Chip
-            label={product.salePrice.toLocaleString() + " đ"}
-            size="small"
-            sx={{
-              background: "linear-gradient(45deg, #fdcb6e 0%, #e17055 100%)",
-              color: "#2d3436",
-              fontWeight: 700,
-              fontSize: 14,
-              px: 1.5,
-              borderRadius: 2,
-              boxShadow: "0 2px 8px rgba(253,203,110,0.3)",
-            }}
-          />
-          <Typography
-            variant="caption"
-            sx={{
-              fontWeight: 600,
-              background: "linear-gradient(45deg, #636e72 0%, #2d3436 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            {product.materials.slice(0, 2).join(", ")}
-            {product.materials.length > 2 ? "..." : ""}
-          </Typography>
-        </Stack>
+        
+        {/* Price section with fixed position */}
+        <Box sx={{ height: "50px" }}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Chip
+              label={product.salePrice.toLocaleString() + " đ"}
+              size="small"
+              sx={{
+                background: "linear-gradient(45deg, #f59e0b 0%, #fbbf24 100%)",
+                color: "#1e293b",
+                fontWeight: 700,
+                fontSize: 14,
+                px: 1.5,
+                borderRadius: 2,
+                boxShadow: "0 2px 8px rgba(245, 158, 11, 0.25)",
+              }}
+            />
+          </Stack>
+        </Box>
       </CardContent>
-      <CardActions sx={{ justifyContent: "space-between", px: 2, pb: 2 }}>
+      
+      <CardActions sx={{ 
+        flexDirection: "column", 
+        alignItems: "center",
+        justifyContent: "center", 
+        px: 2, 
+        pb: 2, 
+        gap: 1.5 
+      }}>
         <Button
           variant="outlined"
-          size="small"
+          fullWidth
           onClick={onViewDetail}
           sx={{
             borderRadius: 2,
-            color: "#2d3436",
-            borderColor: "#e0e0e0",
-
-            px: 2,
+            color: "#475569",
+            borderColor: "#cbd5e1",
+            py: 0.8,
             textTransform: "none",
-            transition: "all 0.3s ease",
-            background:
-              "linear-gradient(45deg, rgba(45,52,54,0.05) 0%, rgba(99,110,114,0.05) 100%)",
+            fontSize: "0.9rem",
+            fontWeight: 600,
+            transition: "all 0.2s ease",
             "&:hover": {
-              borderColor: "#fdcb6e",
-              color: "#e17055",
-              background:
-                "linear-gradient(45deg, rgba(253,203,110,0.1) 0%, rgba(225,112,85,0.1) 100%)",
+              borderColor: "#94a3b8",
+              background: "rgba(148, 163, 184, 0.05)",
               transform: "translateY(-2px)",
-              boxShadow: "0 4px 12px rgba(253,203,110,0.2)",
             },
+            display: "flex",
+            gap: 1
           }}
         >
+          <VisibilityOutlinedIcon fontSize="small" />
           Xem chi tiết
         </Button>
+        
         <Button
           variant="contained"
-          size="small"
+          fullWidth
           onClick={onRegister}
           sx={{
             borderRadius: 2,
-            background:
-              "linear-gradient(45deg,rgb(82, 137, 157) 0%,rgb(13, 94, 216) 100%)",
-
-            px: 2.5,
+            background: "linear-gradient(45deg, #6366f1 0%, #8b5cf6 100%)",
+            py: 0.8,
             textTransform: "none",
-            letterSpacing: 1,
-            fontSize: 15,
-            transition: "all 0.3s ease",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            fontWeight: 600,
+            fontSize: "0.9rem",
+            transition: "all 0.2s ease",
+            boxShadow: "rgba(99, 102, 241, 0.3) 0px 4px 12px",
             "&:hover": {
-              background:
-                "linear-gradient(45deg,rgb(0, 186, 253) 0%,rgb(0, 30, 255) 100%)",
-              color: "#fdcb6e",
+              background: "linear-gradient(45deg, #4f46e5 0%, #7c3aed 100%)",
               transform: "translateY(-2px)",
-              boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
+              boxShadow: "rgba(79, 70, 229, 0.45) 0px 6px 18px",
             },
+            display: "flex",
+            gap: 1
           }}
         >
-          Đăng ký sản xuất
+          <FavoriteBorderIcon fontSize="small" />
+          Đăng ký
         </Button>
       </CardActions>
     </Card>
