@@ -392,7 +392,7 @@ const Header: React.FC = () => {
                       <>
                         <MenuItem
                           onClick={() => {
-                            navigate("/update-order");
+                            navigate("/shipper");
                           }}
                         >
                           <ProductionQuantityLimitsOutlined
