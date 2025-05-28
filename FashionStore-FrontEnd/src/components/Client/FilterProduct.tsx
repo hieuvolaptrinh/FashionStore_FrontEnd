@@ -40,7 +40,7 @@ const FilterProduct: React.FC = () => {
         borderRadius: 2,
         boxShadow: "0 4px 16px rgba(58,134,255,0.08)", // giảm shadow
         background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)",
-        maxWidth: 260, // giảm maxWidth
+       
         width: "100%",
         border: "1px solid #e9ecef",
         transition: "all 0.3s ease",

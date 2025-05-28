@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
@@ -29,13 +30,7 @@ import { AddressModel } from "../../models/AddressModel";
 import { UserModel } from "../../models/UserModel";
 import { getUser, updateUser } from "../../service/API/UserAPI";
 import { createAddress, getUserAddresses } from "../../service/API/OrderAPI";
-
-interface BankAccount {
-  id?: number;
-  bankName: string;
-  accountNumber: string;
-  accountName: string;
-}
+import { bankAccountsFakeData } from "../../components/Client/Checkout/bankAccountFakeData";
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState<UserModel>({
@@ -61,21 +56,7 @@ const Profile = () => {
     confirmPassword: "",
   });
 
-  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([
-    {
-      id: 1,
-      bankName: "Vietcombank",
-      accountNumber: "1234567890",
-      accountName: "NGUYEN VAN A",
-    },
-    {
-      id: 2,
-      bankName: "TPBank",
-      accountNumber: "0987654321",
-      accountName: "NGUYEN VAN A",
-    },
-  ]);
-
+  const [bankAccounts, setBankAccounts] = useState<any>(bankAccountsFakeData);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null
   );
@@ -167,7 +148,6 @@ const Profile = () => {
       }
     }
 
-    // Validate confirm password
     if (name === "confirmPassword") {
       if (value !== updatePassword.newPassword) {
         setPasswordErrors((prev) => ({
@@ -198,12 +178,10 @@ const Profile = () => {
     }
   };
 
-  // Updated handleAddAddress function similar to how it's implemented in Checkout.tsx
   const handleAddAddress = async (
     newAddress: AddressModel,
     e?: React.FormEvent
   ) => {
-    // Prevent form submission if event is provided
     if (e) {
       e.preventDefault();
     }
@@ -211,18 +189,14 @@ const Profile = () => {
     try {
       setAddingAddress(true);
 
-      // Call API to create address
       const createdAddress = await createAddress(newAddress);
 
-      // Update addresses state with new address
       setAddresses((prev) => [...prev, createdAddress]);
 
-      // Select the newly created address
       if (createdAddress.addressId) {
         setSelectedAddressId(createdAddress.addressId);
       }
 
-      // Show success notification
       showNotification("Thêm địa chỉ mới thành công", "success");
     } catch (error) {
       console.error("Error adding address:", error);
@@ -238,8 +212,7 @@ const Profile = () => {
     setSelectedAddressId(addressId);
   };
 
-  const handleAddBank = (bank: BankAccount, e?: React.FormEvent) => {
-    // Prevent form submission if event is provided
+  const handleAddBank = (bank: any, e?: React.FormEvent) => {
     if (e) {
       e.preventDefault();
     }
@@ -247,10 +220,10 @@ const Profile = () => {
     const newBank = {
       ...bank,
       id: bankAccounts.length
-        ? Math.max(...bankAccounts.map((b) => b.id || 0)) + 1
+        ? Math.max(...bankAccounts.map((b: any) => b.id || 0)) + 1
         : 1,
     };
-    setBankAccounts((prev) => [...prev, newBank]);
+    setBankAccounts((prev: any) => [...prev, newBank]);
     showNotification("Thêm tài khoản ngân hàng thành công", "success");
   };
 
@@ -273,7 +246,6 @@ const Profile = () => {
   const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    
     if (showPasswordFields && updatePassword.newPassword) {
       if (updatePassword.newPassword.length < 6) {
         showNotification("Mật khẩu phải có ít nhất 6 ký tự", "error");
@@ -289,7 +261,6 @@ const Profile = () => {
     setUpdating(true);
 
     try {
-      // Create a complete user object for update
       const updatedUser: UserModel = {
         ...userProfile,
         email: userProfile.email,
@@ -297,14 +268,11 @@ const Profile = () => {
         firstName: userProfile.firstName,
         lastName: userProfile.lastName,
         avatarBase64: userProfile.avatarBase64,
-        // Only include password if changing it
         password: showPasswordFields ? updatePassword.newPassword : "",
       };
 
-      // Call API to update the user
       await updateUser(updatedUser);
 
-      // Reset password fields if they were used
       if (showPasswordFields) {
         setUpdatePassword({
           newPassword: "",
@@ -600,15 +568,19 @@ const Profile = () => {
           </CardContent>
         </Card>
 
-        {/* Addresses and Banks section */}
         <div className="row">
-          {/* Addresses */}
           <div className="col-md-6 mb-4">
             <Card
               elevation={3}
-              sx={{ height: "100%", borderRadius: "12px", overflow: "hidden" }}
+              sx={{
+                height: "auto",
+                borderRadius: "12px",
+                overflow: "hidden",
+                position: "relative",
+                display: "block",
+              }}
             >
-              <CardContent sx={{ p: 4, height: "100%" }}>
+              <CardContent sx={{ p: 4 }}>
                 <Typography
                   variant="h6"
                   sx={{ mb: 3, fontWeight: "bold", color: "#1976d2" }}
@@ -621,8 +593,6 @@ const Profile = () => {
                   selectedAddressId={selectedAddressId}
                   onSelectAddress={handleSelectAddress}
                 />
-
-                {/* Updated to align with AddressForm in Checkout.tsx by passing isLoading prop */}
                 <AddressForm onAddAddress={handleAddAddress} />
               </CardContent>
             </Card>
@@ -632,9 +602,15 @@ const Profile = () => {
           <div className="col-md-6 mb-4">
             <Card
               elevation={3}
-              sx={{ height: "100%", borderRadius: "12px", overflow: "hidden" }}
+              sx={{
+                height: "auto",
+                borderRadius: "12px",
+                overflow: "hidden",
+                position: "relative",
+                display: "block",
+              }}
             >
-              <CardContent sx={{ p: 4, height: "100%" }}>
+              <CardContent sx={{ p: 4 }}>
                 <Typography
                   variant="h6"
                   sx={{ mb: 3, fontWeight: "bold", color: "#1976d2" }}

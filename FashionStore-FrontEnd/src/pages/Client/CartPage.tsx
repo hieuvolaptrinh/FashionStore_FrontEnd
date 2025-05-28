@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { getCart, getCartDetails } from "../../service/API/CartAPI";
 import CartItem from "../../components/Client/Cart/CartItem";
 import RequireUser from "../../routes/RequireUser";
+import VoucherForm from "../../components/Client/Checkout/VoucherForm";
+import { Box } from "@mui/material";
 
 function CartPage() {
   const [cart, setCart] = useState<CartModel>();
@@ -99,20 +101,9 @@ function CartPage() {
           </div>
           {/* Đặt hàng */}
           <div className="col-lg-4">
-            <form className="mb-30" action="">
-              <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control border-0 p-4"
-                  placeholder="Nhập mã giảm giá "
-                />
-                <div className="input-group-append">
-                  <button className="btn btn-primary">
-                    Apply Mã giảm giá{" "}
-                  </button>
-                </div>
-              </div>
-            </form>
+            <Box>
+              <VoucherForm />
+            </Box>
             <h5 className="section-title position-relative text-uppercase mb-3">
               <span className="bg-secondary pr-3">Giỏ Hàng</span>
             </h5>

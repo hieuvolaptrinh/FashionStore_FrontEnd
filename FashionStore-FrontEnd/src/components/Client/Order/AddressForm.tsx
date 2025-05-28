@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AddressModel } from "../../../models/AddressModel";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 interface AddressFormProps {
   onAddAddress: (address: AddressModel) => void;
@@ -21,7 +21,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddAddress }) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear error when user types
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -32,7 +31,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddAddress }) => {
     try {
       setIsSubmitting(true);
 
-      // Ensure all required fields are present
       const addressData: AddressModel = {
         streetName: formData.streetName || "",
         cityName: formData.cityName || "",
@@ -49,7 +47,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddAddress }) => {
         wardName: "",
       });
 
-      // Close form after submission
       setIsOpen(false);
     } catch (error) {
       console.error("Error submitting address form:", error);
@@ -75,7 +72,9 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddAddress }) => {
       {isOpen && (
         <div className="card border-0 mt-3 shadow-sm">
           <div className="card-body">
-            <h6 className="mb-3 fw-bold">Thêm địa chỉ mới</h6>
+            <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
+              Thêm địa chỉ mới
+            </Typography>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="streetName" className="form-label">

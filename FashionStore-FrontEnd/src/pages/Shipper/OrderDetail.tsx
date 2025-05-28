@@ -396,7 +396,7 @@ const OrderDetail: React.FC = () => {
                     0
                   )}{" "}
                   sản phẩm
-                </Typography>
+               </Typography>
               </Box>
 
               <Divider sx={{ my: 2 }} />

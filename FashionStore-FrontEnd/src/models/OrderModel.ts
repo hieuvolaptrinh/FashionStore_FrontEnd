@@ -3,6 +3,7 @@ export interface OrderModel {
   paymentTypeId: number;
   shippingMethodId: number;
   selectedIds: number[]; // Danh sách cartDetailId
+  bankAccountId?: number; // Optional bank account ID for bank transfer payments
 }
 export interface PaymentType {
   paymentTypeId?: number;

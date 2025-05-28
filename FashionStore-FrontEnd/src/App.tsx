@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminLayout from "./routes/AdminLayout";
 import UserLayout from "./routes/UserLayout";
 import HomePage from "./layouts/Client/HomePage";
-import Checkout from "./pages/Client/Checkout";
+import CheckoutPage from "./pages/Client/CheckoutPage";
 import OrderPage_Checked from "./pages/Client/OrderPage";
 import LoginRequiredPage from "./pages/LoginRequiredPage";
 import CartPage_User from "./pages/Client/CartPage";
@@ -48,7 +48,7 @@ function App() {
               <Route path="/loginRequired" element={<LoginRequiredPage />} />
               <Route path="/orders" element={<OrderPage_Checked />} />
 
-              <Route path="/checkouts" element={<Checkout />} />
+              <Route path="/checkouts" element={<CheckoutPage />} />
               <Route path="/payment-result" element={<PaymentResult />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/profile" element={<Profile />} />

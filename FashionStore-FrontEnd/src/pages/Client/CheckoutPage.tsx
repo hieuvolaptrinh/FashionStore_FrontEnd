@@ -18,9 +18,32 @@ import { getSelectedCartDetails } from "../../service/API/CartAPI";
 import AddressList from "../../components/Client/Order/AddressList";
 import AddressForm from "../../components/Client/Order/AddressForm";
 import OrderSummary from "../../components/Client/Order/OrderSummary";
+import BankForm from "../../components/Client/Checkout/BankForm";
+import ListBank from "../../components/Client/Checkout/ListBank";
 import { getUrlPayment } from "../../service/API/PaymentAPI";
+import {
+  Typography,
+  Card,
+  CardContent,
+  FormControl,
+  Select,
+  MenuItem,
+  Button,
+  Box,
+  Paper,
+  InputLabel,
+  CircularProgress,
+} from "@mui/material";
+import { bankAccountsFakeData } from "../../components/Client/Checkout/bankAccountFakeData";
 
-const Checkout: React.FC = () => {
+interface BankAccount {
+  id?: number;
+  bankName: string;
+  accountNumber: string;
+  accountName: string;
+}
+
+const CheckoutPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const selectedIds = location.state?.selectedIds || [];
@@ -38,6 +61,9 @@ const Checkout: React.FC = () => {
   const [cartDetails, setCartDetails] = useState<CartDetailModel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [bankAccounts, setBankAccounts] =
+    useState<BankAccount[]>(bankAccountsFakeData);
+  const [selectedBankId, setSelectedBankId] = useState<number | undefined>(1);
 
   useEffect(() => {
     console.log("Received selectedIds:", selectedIds);
@@ -106,6 +132,21 @@ const Checkout: React.FC = () => {
     }
   };
 
+  const handleAddBank = (bank: BankAccount) => {
+    const newBank = {
+      ...bank,
+      id: bankAccounts.length
+        ? Math.max(...bankAccounts.map((b) => b.id || 0)) + 1
+        : 1,
+    };
+    setBankAccounts((prev) => [...prev, newBank]);
+    setSelectedBankId(newBank.id);
+  };
+
+  const handleSelectBank = (bankId: number | undefined) => {
+    setSelectedBankId(bankId);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -122,6 +163,12 @@ const Checkout: React.FC = () => {
       return;
     }
 
+    // Kiểm tra nếu phương thức thanh toán là chuyển khoản (id = 1) thì phải chọn tài khoản ngân hàng
+    if (selectedPaymentType.paymentTypeId === 1 && !selectedBankId) {
+      alert("Vui lòng chọn tài khoản ngân hàng để chuyển khoản");
+      return;
+    }
+
     const token = localStorage.getItem("token");
     if (!token) {
       alert("Vui lòng đăng nhập để đặt hàng");
@@ -134,6 +181,8 @@ const Checkout: React.FC = () => {
       paymentTypeId: selectedPaymentType?.paymentTypeId ?? 0,
       shippingMethodId: selectedShippingMethod?.shippingMethodId ?? 0,
       selectedIds,
+      bankAccountId:
+        selectedPaymentType.paymentTypeId === 1 ? selectedBankId : undefined,
     };
 
     try {
@@ -153,45 +202,60 @@ const Checkout: React.FC = () => {
 
         const paymentUrl = await getUrlPayment(orderId, productTotal);
         window.location.href = paymentUrl; // Chuyển hướng đến VNPay
-        // 
+        //
       }
     } catch (err) {
       alert("Có lỗi xảy ra, vui lòng thử lại: " + err);
     }
   };
 
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", py: 5 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <div className="container-fluid py-5">
+    <Box className="container-fluid py-5">
       <div className="row px-xl-5">
         <div className="col-lg-6 mb-5">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h5 className="section-title position-relative text-uppercase mb-4">
-                <span
-                  className="px-3 py-1 rounded text-white"
-                  style={{
-                    background: "linear-gradient(90deg, #007bff, #00d4ff)",
-                  }}
-                >
-                  Thông tin giao hàng
-                </span>
-              </h5>
+          <Card elevation={3} sx={{ borderRadius: 2 }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: 3,
+                  position: "relative",
+                  display: "inline-block",
+                  background: "linear-gradient(90deg, #007bff, #00d4ff)",
+                  color: "white",
+                  px: 2,
+                  py: 0.5,
+                  borderRadius: 1,
+                }}
+              >
+                Thông tin giao hàng
+              </Typography>
+
               <AddressList
                 addresses={addresses}
                 selectedAddressId={selectedAddressId}
                 onSelectAddress={setSelectedAddressId}
               />
               <AddressForm onAddAddress={handleAddAddress} />
-              <form onSubmit={handleSubmit} className="mt-4">
-                <div className="mb-3">
-                  <label htmlFor="paymentTypeId" className="form-label fw-bold">
+
+              <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
+                <FormControl fullWidth sx={{ mb: 3 }}>
+                  <InputLabel id="payment-type-label">
                     Phương Thức Thanh Toán
-                  </label>
-                  <select
-                    className="form-select"
-                    id="paymentTypeId"
-                    name="paymentTypeId"
+                  </InputLabel>
+                  <Select
+                    labelId="payment-type-label"
+                    id="payment-type"
                     value={selectedPaymentType?.paymentTypeId || ""}
+                    label="Phương Thức Thanh Toán"
                     onChange={(e) => {
                       const selected = paymentTypes.find(
                         (pt) => pt.paymentTypeId === Number(e.target.value)
@@ -200,29 +264,46 @@ const Checkout: React.FC = () => {
                     }}
                     required
                   >
-                    <option value="" disabled>
+                    <MenuItem value="" disabled>
                       Chọn phương thức thanh toán
-                    </option>
+                    </MenuItem>
                     {paymentTypes.map((pt) => (
-                      <option key={pt.paymentTypeId} value={pt.paymentTypeId}>
+                      <MenuItem key={pt.paymentTypeId} value={pt.paymentTypeId}>
                         {pt.paymentTypeName} ({pt.fee.toLocaleString("vi-VN")}{" "}
                         vnđ)
-                      </option>
+                      </MenuItem>
                     ))}
-                  </select>
-                </div>
-                <div className="mb-3">
-                  <label
-                    htmlFor="shippingMethodId"
-                    className="form-label fw-bold"
-                  >
+                  </Select>
+                </FormControl>
+
+                {/* Hiển thị ListBank và BankForm khi chọn phương thức thanh toán có id = 1 */}
+                {selectedPaymentType?.paymentTypeId === 1 && (
+                  <Paper sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      sx={{ mb: 2 }}
+                    >
+                      Chọn Tài Khoản Ngân Hàng
+                    </Typography>
+                    <ListBank
+                      bankAccounts={bankAccounts}
+                      selectedBankId={selectedBankId}
+                      onSelectBank={handleSelectBank}
+                    />
+                    <BankForm onAddBank={handleAddBank} />
+                  </Paper>
+                )}
+
+                <FormControl fullWidth sx={{ mb: 3 }}>
+                  <InputLabel id="shipping-method-label">
                     Phương Thức Vận Chuyển
-                  </label>
-                  <select
-                    className="form-select"
-                    id="shippingMethodId"
-                    name="shippingMethodId"
+                  </InputLabel>
+                  <Select
+                    labelId="shipping-method-label"
+                    id="shipping-method"
                     value={selectedShippingMethod?.shippingMethodId || ""}
+                    label="Phương Thức Vận Chuyển"
                     onChange={(e) => {
                       const selected = shippingMethods.find(
                         (sm) => sm.shippingMethodId === Number(e.target.value)
@@ -231,34 +312,41 @@ const Checkout: React.FC = () => {
                     }}
                     required
                   >
-                    <option value="" disabled>
+                    <MenuItem value="" disabled>
                       Chọn phương thức vận chuyển
-                    </option>
+                    </MenuItem>
                     {shippingMethods.map((sm) => (
-                      <option
+                      <MenuItem
                         key={sm.shippingMethodId}
                         value={sm.shippingMethodId}
                       >
                         {sm.shippingMethodName} (
                         {sm.fee.toLocaleString("vi-VN")} vnđ)
-                      </option>
+                      </MenuItem>
                     ))}
-                  </select>
-                </div>
-                <div className="d-flex justify-content-between">
-                  <button
+                  </Select>
+                </FormControl>
+
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Button
                     type="submit"
-                    className="btn text-white rounded-pill"
-                    style={{
+                    variant="contained"
+                    sx={{
+                      py: 1,
+                      px: 3,
+                      borderRadius: 28,
                       background: "linear-gradient(90deg, #007bff, #00d4ff)",
+                      "&:hover": {
+                        background: "linear-gradient(90deg, #0062cc, #00aeff)",
+                      },
                     }}
                   >
                     Xác Nhận Đơn Hàng
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+                  </Button>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
         </div>
         <div className="col-lg-6 mb-5">
           <OrderSummary
@@ -270,8 +358,8 @@ const Checkout: React.FC = () => {
           />
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 
-export default Checkout;
+export default CheckoutPage;

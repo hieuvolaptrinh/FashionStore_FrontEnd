@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import Type from "../../models/TypeModel";
 import { getTypes } from "../../service/API/TypeAPI";
+import { Container } from "react-bootstrap";
 import {
   AppBar,
   Box,
@@ -11,7 +12,6 @@ import {
   ListItemText,
   IconButton,
   Badge,
-  Container,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -103,7 +103,7 @@ const Navbar: React.FC = () => {
   const gradientEnd = "#0b4f9e";
 
   return (
-    <Container maxWidth="xl">
+    <Container fluid>
       <Box sx={{ flexGrow: 1, marginBottom: 4 }}>
         <AppBar
           position="sticky"

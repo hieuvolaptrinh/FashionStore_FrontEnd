@@ -72,7 +72,7 @@ const BankForm: React.FC<BankFormProps> = ({ onAddBank }) => {
       {isOpen && (
         <Card variant="outlined" sx={{ mb: 3 }}>
           <CardContent>
-            <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: "bold" }}>
+            <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
               Thêm tài khoản ngân hàng mới
             </Typography>
 

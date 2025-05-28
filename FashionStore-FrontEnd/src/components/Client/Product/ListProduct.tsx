@@ -3,6 +3,7 @@ import ProductCard from "./ProductCard";
 import { ProductResponse } from "../../../models/ProductModel";
 import { getAllProducts, searchProduct } from "../../../service/API/ProductAPI";
 import { Pagination } from "@mui/material";
+import { Container } from "react-bootstrap";
 
 interface ListProductProps {
   keyword: string;
@@ -49,13 +50,13 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
 
   if (loanding) {
     return (
-      <div>
+      <Container>
         <div className="d-flex justify-content-center mt-5">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
-      </div>
+      </Container>
     );
   }
 
@@ -71,7 +72,7 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
 
   return (
     <>
-      <div className="container">
+      <Container fluid>
         <div className="row mt-4">
           {listProduct.length != 0 ? (
             listProduct.map((product) => (
@@ -94,7 +95,7 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
             size="large"
           />
         </div>
-      </div>
+      </Container>
     </>
   );
 }
