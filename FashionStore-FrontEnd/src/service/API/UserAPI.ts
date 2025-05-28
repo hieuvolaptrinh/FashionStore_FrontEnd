@@ -123,7 +123,6 @@ export const login = async (userName: string, password: string) => {
     return false;
   }
 };
-
 // src/service/API/UserAPI.ts
 export const updateUser = async (user: UserModel): Promise<string> => {
   const token = localStorage.getItem("token") || "";
@@ -131,7 +130,8 @@ export const updateUser = async (user: UserModel): Promise<string> => {
     return "Bạn chưa đăng nhập!";
   }
 
-  const payload = {
+  // Tạo payload cơ bản
+  const payload: any = {
     email: user.email,
     phoneNumber: user.phoneNumber,
     firstName: user.firstName,
@@ -139,27 +139,27 @@ export const updateUser = async (user: UserModel): Promise<string> => {
     avatarBase64: user.avatarBase64,
     roles: user.roles || [], // Đảm bảo roles là mảng
     active: user.active,
-    password: user.password,
+    // Backend yêu cầu password không được null, nên gửi một giá trị mặc định
+    password: user.password || "current-password-placeholder",
   };
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/v1/user/${user.userId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await axios.put(
+      `${API_BASE_URL}/api/v1/user/${user.userId}`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    const result = await response.json();
-    if (response.ok) {
-      return result.message || "Cập nhật thành công";
-    } else {
-      return result.message || "Có lỗi khi cập nhật người dùng";
-    }
-  } catch (error) {
+    return response.data.message || "Cập nhật thành công";
+  } catch (error: any) {
     console.error("Lỗi khi cập nhật người dùng:", error);
+    if (error.response && error.response.data) {
+      return error.response.data.message || "Có lỗi khi cập nhật người dùng";
+    }
     return "Có lỗi xảy ra khi cập nhật người dùng!";
   }
 };

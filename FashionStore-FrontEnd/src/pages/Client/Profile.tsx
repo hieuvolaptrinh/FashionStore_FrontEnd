@@ -263,12 +263,17 @@ const Profile = () => {
     try {
       const updatedUser: UserModel = {
         ...userProfile,
+        userId: userProfile.userId,
+        userName: userProfile.userName,
         email: userProfile.email,
         phoneNumber: userProfile.phoneNumber,
         firstName: userProfile.firstName,
         lastName: userProfile.lastName,
         avatarBase64: userProfile.avatarBase64,
-        password: showPasswordFields ? updatePassword.newPassword : "",
+        password:
+          showPasswordFields && updatePassword.newPassword
+            ? updatePassword.newPassword
+            : "",
       };
 
       await updateUser(updatedUser);
@@ -313,12 +318,8 @@ const Profile = () => {
   }
 
   return (
-    <div className="container py-5">
-      <Typography
-        variant="h4"
-        component="h1"
-        sx={{ mb: 4, color: "#1976d2", fontWeight: "bold" }}
-      >
+    <div className="container py-2">
+      <Typography variant="h3" sx={{ mb: 4, fontWeight: "bold" }}>
         Thông tin cá nhân
       </Typography>
 
@@ -329,7 +330,7 @@ const Profile = () => {
         >
           <CardContent sx={{ p: 4 }}>
             <Typography
-              variant="h6"
+              variant="h5"
               sx={{ mb: 3, fontWeight: "bold", color: "#1976d2" }}
             >
               Thông tin cơ bản

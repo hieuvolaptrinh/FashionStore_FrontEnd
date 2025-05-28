@@ -37,7 +37,7 @@ function HomePage() {
           </Col>
         </Row>
       </Container>
-      <Trademark />
+      {/* <Trademark /> */}
     </>
   );
 }

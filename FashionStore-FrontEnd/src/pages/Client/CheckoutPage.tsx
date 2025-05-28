@@ -218,7 +218,7 @@ const CheckoutPage: React.FC = () => {
   }
 
   return (
-    <Box className="container-fluid py-5">
+    <Box className="container-fluid py-2">
       <div className="row px-xl-5">
         <div className="col-lg-6 mb-5">
           <Card elevation={3} sx={{ borderRadius: 2 }}>

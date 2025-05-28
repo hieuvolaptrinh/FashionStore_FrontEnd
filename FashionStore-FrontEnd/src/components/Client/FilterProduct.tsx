@@ -36,11 +36,12 @@ const FilterProduct: React.FC = () => {
   return (
     <Box
       sx={{
-        p: 2, // giảm padding
+        p: 2,
         borderRadius: 2,
-        boxShadow: "0 4px 16px rgba(58,134,255,0.08)", // giảm shadow
-        background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)",
-       
+        boxShadow: "0 4px 16px rgba(58, 58, 58, 0.45)", // giảm shadow
+        background:
+          "linear-gradient(145deg,rgb(228, 221, 221) 0%,rgba(215, 216, 217, 0.26) 100%)",
+
         width: "100%",
         border: "1px solid #e9ecef",
         transition: "all 0.3s ease",

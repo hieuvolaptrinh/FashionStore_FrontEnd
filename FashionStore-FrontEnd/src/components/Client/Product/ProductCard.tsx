@@ -97,7 +97,7 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
   };
   if (loanding) {
     return (
-      <div className="col-lg-4 col-md-4 col-sm-6 pb-1">
+      <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
         <ThemeProvider theme={modernTheme}>
           <Box display="flex" justifyContent="center" mt={3}>
             <CircularProgress
@@ -115,7 +115,7 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
     );
   }
   return (
-    <div className="col-lg-4 col-md-4 col-sm-6 pb-4">
+    <div className="col-lg-3 col-md-4 col-sm-6 pb-4">
       <ThemeProvider theme={modernTheme}>
         <Card
           sx={{
@@ -153,7 +153,7 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
             sx={{
               position: "relative",
               overflow: "hidden",
-              height: 300,
+              height: 200,
               background: "linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)",
             }}
           >

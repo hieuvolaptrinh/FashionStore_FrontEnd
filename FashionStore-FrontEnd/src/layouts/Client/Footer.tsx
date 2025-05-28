@@ -17,7 +17,6 @@ import {
   Facebook,
   LinkedIn,
   Instagram,
-  ArrowUpward,
   ChevronRight,
 } from "@mui/icons-material";
 
@@ -46,9 +45,9 @@ function Footer() {
               Liên hệ ngay
             </Typography>
             <Typography sx={{ mb: 2 }}>
-              Hiếu Store là cửa hàng chuyên cung cấp các sản phẩm thời trang
-              nam, nữ, trẻ em, giày dép, phụ kiện, mỹ phẩm, đồ gia dụng, đồ điện
-              tử, đồ chơi, sách vở, thực phẩm, đồ uống, ...
+              UTE Store là website chuyên cung cấp các sản phẩm handmade độc đáo
+              dành cho hội sinh viên, cùng với đa dạng các mặt hàng thuộc nhiều
+              lĩnh vực khác nhau, đáp ứng mọi nhu cầu mua sắm của bạn.
             </Typography>
             <Stack
               direction="row"
@@ -216,14 +215,6 @@ function Footer() {
             <Typography variant="body2" sx={{ color: "#888" }}>
               © {new Date().getFullYear()} Hiếu Store. All rights reserved.
             </Typography>
-          </div>
-          <div className="col-12 col-md-6 text-center text-md-right">
-            <Box
-              component="img"
-              src="/img/payments.png"
-              alt="Payments"
-              sx={{ height: 32, mt: { xs: 2, md: 0 } }}
-            />
           </div>
         </div>
       </Container>

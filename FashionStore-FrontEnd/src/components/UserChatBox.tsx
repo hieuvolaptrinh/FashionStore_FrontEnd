@@ -53,7 +53,7 @@ const ChatContainer = styled(Paper)(({ theme }) => ({
   position: "fixed",
   bottom: "80px",
   right: "20px",
-  width: "300px",
+  width: "450px",
   height: "400px",
   display: "flex",
   flexDirection: "column",
@@ -146,7 +146,6 @@ const UserChatBox: React.FC = () => {
     const savedMessages = localStorage.getItem("chatMessages");
     if (savedMessages) {
       try {
-        // Parse saved messages but convert timestamp strings back to Date objects
         const parsed = JSON.parse(savedMessages) as SerializedMessage[];
         return parsed.map((msg) => ({
           ...msg,
@@ -160,7 +159,6 @@ const UserChatBox: React.FC = () => {
     return [welcomeMessage];
   });
 
-  // Save messages to localStorage when they change
   useEffect(() => {
     localStorage.setItem("chatMessages", JSON.stringify(messages));
   }, [messages]);

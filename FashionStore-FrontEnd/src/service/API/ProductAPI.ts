@@ -18,14 +18,14 @@ export async function searchProduct(
   productName: string,
   typeId: number
 ): Promise<ProductPage> {
-  let url: string = `${API_BASE_URL}/api/v1/products/search?page=0&size=6&sort=productId,desc`;
+  let url: string = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc`;
 
   if (productName != "" && typeId === 0) {
-    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=6&sort=productId,desc&productName=${productName}`;
+    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc&productName=${productName}`;
   } else if (productName != "" && typeId > 0) {
-    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=6&sort=productId,desc&productName=${productName}&typeId=${typeId}`;
+    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc&productName=${productName}&typeId=${typeId}`;
   } else {
-    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=6&sort=productId,desc&typeId=${typeId}`;
+    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc&typeId=${typeId}`;
   }
 
   const result = await getProduct(url);
@@ -40,7 +40,7 @@ export async function getAllProducts(
 ): Promise<ProductPage> {
   const url: string = `${API_BASE_URL}/api/v1/products?page=${
     currentPage - 1
-  }&size=6&sort=productId,asc`;
+  }&size=8&sort=productId,asc`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
