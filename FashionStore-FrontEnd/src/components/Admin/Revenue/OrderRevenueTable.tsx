@@ -74,9 +74,9 @@ const OrderRevenueTable: React.FC<OrderRevenueTableProps> = ({ data }) => {
   });
 
   return (
-    <Card sx={{ p: 3, mb: 4 }}>
-      <Typography variant="h6" sx={{ mb: 3 }}>
-        Lịch sử đơn hàng
+    <>
+      <Typography variant="h5" color="primary" className="mb-4">
+        Lịch sử thanh toán
       </Typography>
 
       <Grid container spacing={2} sx={{ mb: 3 }}>
@@ -129,7 +129,7 @@ const OrderRevenueTable: React.FC<OrderRevenueTableProps> = ({ data }) => {
       <Box sx={{ overflowX: "auto" }}>
         <GenericTable data={filteredData} columns={columns} rowKey="id" />
       </Box>
-    </Card>
+    </>
   );
 };
 

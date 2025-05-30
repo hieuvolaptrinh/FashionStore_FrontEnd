@@ -28,7 +28,7 @@ import BankForm from "../../components/Client/Checkout/BankForm";
 import ListBank from "../../components/Client/Checkout/ListBank";
 import { AddressModel } from "../../models/AddressModel";
 import { UserModel } from "../../models/UserModel";
-import { getUser, updateUser } from "../../service/API/UserAPI";
+import { getUser, updateUser, updateProfile } from "../../service/API/UserAPI";
 import { createAddress, getUserAddresses } from "../../service/API/OrderAPI";
 import { bankAccountsFakeData } from "../../components/Client/Checkout/bankAccountFakeData";
 
@@ -270,13 +270,16 @@ const Profile = () => {
         firstName: userProfile.firstName,
         lastName: userProfile.lastName,
         avatarBase64: userProfile.avatarBase64,
-        password:
-          showPasswordFields && updatePassword.newPassword
-            ? updatePassword.newPassword
-            : "",
+        password: showPasswordFields ? updatePassword.newPassword : "",
       };
 
-      await updateUser(updatedUser);
+      // Call appropriate API based on whether password is being changed
+      let message;
+      if (showPasswordFields && updatePassword.newPassword) {
+        message = await updateProfile(updatedUser);
+      } else {
+        message = await updateUser(updatedUser);
+      }
 
       if (showPasswordFields) {
         setUpdatePassword({
@@ -289,7 +292,7 @@ const Profile = () => {
       const refreshedUserData = await getUser();
       setUserProfile(refreshedUserData);
 
-      showNotification("Cập nhật thông tin thành công", "success");
+      showNotification(message || "Cập nhật thông tin thành công", "success");
     } catch (error) {
       console.error("Lỗi khi cập nhật thông tin:", error);
       const errorMessage =

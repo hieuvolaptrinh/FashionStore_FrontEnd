@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Button, Box, Typography } from "@mui/material";
+import {
+  Button,
+  Box,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import GenericTable from "../../components/GenericTable";
 import VoucherFormDialog from "../../components/Admin/Voucher/VoucherFormDialog";
 import {
@@ -11,21 +20,45 @@ const VoucherManagerPage: React.FC = () => {
   const [vouchers, setVouchers] = useState<Voucher[]>(voucherData);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedVoucher, setSelectedVoucher] = useState<Voucher | undefined>();
+  const [confirmDialog, setConfirmDialog] = useState({
+    open: false,
+    title: "",
+    message: "",
+    voucherId: "",
+  });
 
   const columns = [
     { header: "Mã voucher", accessor: "code" },
-    { header: "Thời hạn", accessor: "expiryDate" },
-    { header: "Số tiền giảm", accessor: "discountAmount" },
+    { header: "Ngày bắt đầu", accessor: "startDate" },
+    { header: "Ngày kết thúc", accessor: "endDate" },
+    {
+      header: "Số tiền giảm",
+      accessor: (voucher: Voucher) =>
+        `${voucher.discountAmount.toLocaleString()} VNĐ`,
+    },
+    { header: "Số lượng", accessor: "quantity" },
     { header: "Điều kiện áp dụng", accessor: "conditions" },
   ];
 
   const handleEdit = (voucher: Voucher) => {
-    setSelectedVoucher(voucher);
+    // Tạo một bản sao của voucher để tránh ảnh hưởng trực tiếp đến dữ liệu
+    const voucherToEdit = { ...voucher };
+    setSelectedVoucher(voucherToEdit);
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (voucher: Voucher) => {
-    setVouchers(vouchers.filter((v) => v.id !== voucher.id));
+  const handleDeleteConfirm = (voucher: Voucher) => {
+    setConfirmDialog({
+      open: true,
+      title: "Xác nhận xóa voucher",
+      message: `Bạn có chắc chắn muốn xóa voucher "${voucher.code}" không?`,
+      voucherId: voucher.id,
+    });
+  };
+
+  const handleDelete = () => {
+    setVouchers(vouchers.filter((v) => v.id !== confirmDialog.voucherId));
+    setConfirmDialog({ ...confirmDialog, open: false });
   };
 
   const handleAdd = () => {
@@ -34,24 +67,37 @@ const VoucherManagerPage: React.FC = () => {
   };
 
   const handleSubmit = (voucherData: Partial<Voucher>) => {
-    if (selectedVoucher) {
+    if (selectedVoucher && selectedVoucher.id) {
       // Edit existing voucher
       setVouchers(
         vouchers.map((v) =>
           v.id === selectedVoucher.id ? { ...v, ...voucherData } : v
         )
       );
+      console.log("Voucher đã được cập nhật:", {
+        ...selectedVoucher,
+        ...voucherData,
+      });
     } else {
       // Add new voucher
       const newVoucher: Voucher = {
         id: Date.now().toString(),
         code: voucherData.code || "",
-        expiryDate: voucherData.expiryDate || "",
+        startDate: voucherData.startDate || "",
+        endDate: voucherData.endDate || "",
         discountAmount: voucherData.discountAmount || 0,
         conditions: voucherData.conditions || "",
+        quantity: voucherData.quantity || 0,
       };
       setVouchers([...vouchers, newVoucher]);
+      console.log("Voucher mới đã được thêm:", newVoucher);
     }
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    // Reset selectedVoucher sau khi đóng dialog
+    setTimeout(() => setSelectedVoucher(undefined), 300);
   };
 
   const renderActions = (voucher: Voucher) => {
@@ -69,7 +115,7 @@ const VoucherManagerPage: React.FC = () => {
           variant="contained"
           color="error"
           size="small"
-          onClick={() => handleDelete(voucher)}
+          onClick={() => handleDeleteConfirm(voucher)}
         >
           Xóa
         </Button>
@@ -81,7 +127,12 @@ const VoucherManagerPage: React.FC = () => {
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Typography variant="h4">Quản lý Voucher</Typography>
-        <Button variant="contained" color="primary" onClick={handleAdd}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAdd}
+          startIcon={<span>+</span>}
+        >
           Thêm Voucher
         </Button>
       </Box>
@@ -95,10 +146,37 @@ const VoucherManagerPage: React.FC = () => {
 
       <VoucherFormDialog
         open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
+        onClose={handleCloseDialog}
         onSubmit={handleSubmit}
         initialData={selectedVoucher}
       />
+
+      {/* Confirm Dialog */}
+      <Dialog
+        open={confirmDialog.open}
+        onClose={() => setConfirmDialog({ ...confirmDialog, open: false })}
+      >
+        <DialogTitle>{confirmDialog.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{confirmDialog.message}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setConfirmDialog({ ...confirmDialog, open: false })}
+            color="primary"
+          >
+            Hủy
+          </Button>
+          <Button
+            onClick={handleDelete}
+            color="error"
+            variant="contained"
+            autoFocus
+          >
+            Xóa
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

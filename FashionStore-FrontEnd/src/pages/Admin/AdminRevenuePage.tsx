@@ -13,6 +13,7 @@ import {
   BankAccount,
   WithdrawRequest,
 } from "../../components/Admin/Revenue/revenueTypes";
+import { Typography } from "@mui/material";
 
 const AdminRevenuePage: React.FC = () => {
   const [bankAccounts, setBankAccounts] =
@@ -64,9 +65,9 @@ const AdminRevenuePage: React.FC = () => {
         <Row className="mb-4 g-4">
           <Col xs={12} lg={6}>
             <div className="bg-white rounded shadow-sm h-100">
-              <div className="p-4">
+             
                 <RevenueChart titleName="Biểu Đồ Doanh Thu Theo Ngày" />
-              </div>
+             
             </div>
           </Col>
           <Col xs={12} lg={6}>
@@ -83,17 +84,12 @@ const AdminRevenuePage: React.FC = () => {
           </Col>
           <Col xs={12} lg={12}>
             <div className="bg-white rounded shadow-sm h-100">
-              <div className="p-4">
-                <WithdrawHistory data={withdrawHistory} />
-              </div>
+              <WithdrawHistory data={withdrawHistory} />
             </div>
           </Col>
           <Col xs={12} lg={12}>
             <div className="bg-white rounded shadow-sm">
-              <div className="p-4">
-                <h5 className="mb-4">Lịch sử đơn hàng</h5>
-                <OrderRevenueTable data={mockOrders} />
-              </div>
+              <OrderRevenueTable data={mockOrders} />
             </div>
           </Col>
 

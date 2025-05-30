@@ -15,6 +15,7 @@ import {
   FormLabel,
 } from "@mui/material";
 import ReasonSelect from "./ReasonSelect";
+import { Col, Row } from "react-bootstrap";
 
 interface Product {
   id: number;
@@ -63,25 +64,30 @@ const ProductItem: React.FC<ProductItemProps> = ({
   return (
     <Card sx={{ mb: 2 }}>
       <CardContent>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={3}>
-            <CardMedia
+        <Row spacing={2}>
+            <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={4}>
+              <CardMedia
               component="img"
               height="140"
               image={product.image}
               alt={product.name}
-              sx={{ objectFit: "contain" }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={9}>
-            <Typography variant="h6" gutterBottom>
-              {product.name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" paragraph>
-              {product.description}
-            </Typography>
-
-            <FormControl component="fieldset" sx={{ mb: 2 }}>
+              sx={{ objectFit: "contain", width: "100%" }}
+              />
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Box>
+              <Typography variant="h5" gutterBottom>
+                {product.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" paragraph>
+                {product.description}
+              </Typography>
+              </Box>
+            </Grid>
+            </Grid>
+          <Box>
+            <FormControl component="fieldset" sx={{ mt: 2 }}>
               <FormLabel component="legend">Loại yêu cầu</FormLabel>
               <RadioGroup
                 row
@@ -170,8 +176,8 @@ const ProductItem: React.FC<ProductItemProps> = ({
                 </Box>
               )}
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Row>
       </CardContent>
     </Card>
   );

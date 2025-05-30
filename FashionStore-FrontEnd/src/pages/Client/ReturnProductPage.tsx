@@ -69,7 +69,7 @@ const ReturnProductPage = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom color="primary">
         Đổi/Trả sản phẩm
       </Typography>
 

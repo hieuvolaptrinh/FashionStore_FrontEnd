@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Container,
@@ -18,14 +18,19 @@ import {
 } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Order } from "../../models/OrderModel";
+
 import OrderStatusBadge from "../../components/Shipper/OrderStatusBadge";
+import { mockOrders } from "../../components/Shipper/OrderFake";
 
 const OrderDetail: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
-  const [order, setOrder] = useState<Order | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const orderData = mockOrders.find((o) => o.orderId === Number(orderId));
+
+  const [currentStatus, setCurrentStatus] = useState<string>(
+    orderData?.status || ""
+  );
+
   const [notification, setNotification] = useState<{
     open: boolean;
     message: string;
@@ -36,121 +41,12 @@ const OrderDetail: React.FC = () => {
     type: "success",
   });
 
-  useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      // Sample data - in a real app, this would be fetched from an API
-      const orderIdNumber = parseInt(orderId || "0", 10);
-      const mockOrders: Order[] = [
-        {
-          orderId: 1001,
-          status: "shipping",
-          totalPrice: 350000,
-          createAt: Date.now() - 24 * 60 * 60 * 1000, // yesterday
-          pay: true,
-          recipientName: "Nguyễn Văn A",
-          recipientPhone: "0123456789",
-          recipientAddress: "123 Đường Lê Lợi, Quận 1, TP.HCM",
-          orderDetails: [
-            {
-              orderDetailId: 1,
-              quantity: 2,
-              price: 65000,
-              mainImage: "/images/p11.jpg",
-              productName: "Vòng tay đá tự nhiên",
-              description:
-                "Vòng tay thủ công sử dụng đá tự nhiên, mang lại vẻ đẹp tinh tế và ý nghĩa phong thủy.",
-            },
-            {
-              orderDetailId: 2,
-              quantity: 1,
-              price: 220000,
-              mainImage: "/images/p81.jpg",
-              productName: "Gối tựa thêu tay",
-              description:
-                "Gối lưng handmade có họa tiết thêu tay tinh tế, dùng trang trí hoặc nghỉ ngơi.",
-            },
-          ],
-        },
-        {
-          orderId: 1002,
-          status: "delivered",
-          totalPrice: 325000,
-          createAt: Date.now() - 2 * 24 * 60 * 60 * 1000, // 2 days ago
-          pay: true,
-          recipientName: "Trần Thị B",
-          recipientPhone: "0987654321",
-          recipientAddress: "456 Nguyễn Huệ, Quận 1, TP.HCM",
-          orderDetails: [
-            {
-              orderDetailId: 3,
-              quantity: 1,
-              price: 100000,
-              mainImage: "/images/p21.jpg",
-              productName: "Túi vải bố họa tiết tay",
-              description:
-                "Túi handmade từ vải bố thân thiện với môi trường, in họa tiết vẽ tay độc đáo.",
-            },
-            {
-              orderDetailId: 4,
-              quantity: 3,
-              price: 75000,
-              mainImage: "/images/p51.jpg",
-              productName: "Nến thơm thiên nhiên",
-              description:
-                "Nến handmade từ sáp đậu nành, hương liệu thiên nhiên giúp thư giãn.",
-            },
-          ],
-        },
-        {
-          orderId: 1003,
-          status: "return_requested",
-          totalPrice: 310000,
-          createAt: Date.now() - 3 * 24 * 60 * 60 * 1000, // 3 days ago
-          pay: true,
-          recipientName: "Lê Văn C",
-          recipientPhone: "0909123456",
-          recipientAddress: "789 Trần Hưng Đạo, Quận 5, TP.HCM",
-          orderDetails: [
-            {
-              orderDetailId: 5,
-              quantity: 1,
-              price: 130000,
-              mainImage: "/images/p31.jpg",
-              productName: "Sổ tay da vintage",
-              description:
-                "Sổ tay thủ công bọc da, giấy kraft phong cách cổ điển phù hợp học sinh, sinh viên.",
-            },
-            {
-              orderDetailId: 6,
-              quantity: 2,
-              price: 90000,
-              mainImage: "/images/p91.jpg",
-              productName: "Bình gốm mini decor",
-              description:
-                "Bình gốm thủ công nhỏ gọn, trang trí bàn làm việc hoặc kệ sách.",
-            },
-          ],
-        },
-      ];
-
-      const foundOrder =
-        mockOrders.find((o) => o.orderId === orderIdNumber) || null;
-
-      setOrder(foundOrder);
-      setLoading(false);
-    }, 1000);
-  }, [orderId]);
-
   const handleUpdateStatus = (newStatus: string) => {
-    if (!order) return;
-
-    // In a real app, make an API call to update the status
-    setOrder({ ...order, status: newStatus });
-
+    if (!orderData) return;
+    setCurrentStatus(newStatus);
     setNotification({
       open: true,
-      message: `Cập nhật trạng thái đơn hàng #${order.orderId} thành công!`,
+      message: `Cập nhật trạng thái đơn hàng #${orderData.orderId} thành công!`,
       type: "success",
     });
   };
@@ -180,54 +76,32 @@ const OrderDetail: React.FC = () => {
     navigate("/shipper");
   };
 
-  if (loading) {
+  if (!orderData) {
     return (
       <Container className="py-4">
-        <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
-          <Typography>Đang tải dữ liệu...</Typography>
-        </Box>
+        <Typography variant="h5" color="error">
+          Không tìm thấy đơn hàng
+        </Typography>
+        <Button startIcon={<ArrowBackIcon />} onClick={handleBackToList}>
+          Quay lại danh sách
+        </Button>
       </Container>
     );
   }
 
-  if (!order) {
-    return (
-      <Container className="py-4">
-        <Card sx={{ borderRadius: 2, boxShadow: 2 }}>
-          <CardContent>
-            <Typography variant="h5" color="error">
-              Không tìm thấy đơn hàng
-            </Typography>
-            <Button
-              startIcon={<ArrowBackIcon />}
-              onClick={handleBackToList}
-              sx={{ mt: 2 }}
-            >
-              Quay lại danh sách
-            </Button>
-          </CardContent>
-        </Card>
-      </Container>
-    );
-  }
+  const order = { ...orderData, status: currentStatus || orderData.status };
 
   return (
     <Container className="py-4">
-      <Row className="mb-3">
-        <Col>
-          <Button startIcon={<ArrowBackIcon />} onClick={handleBackToList}>
-            Quay lại danh sách
-          </Button>
-        </Col>
-      </Row>
+      <Button startIcon={<ArrowBackIcon />} onClick={handleBackToList}>
+        Quay lại danh sách
+      </Button>
 
-      <Row className="mb-4">
-        <Col>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Chi tiết đơn hàng #{order.orderId}
-          </Typography>
-        </Col>
-      </Row>
+      <Col>
+        <Typography variant="h4" component="h1" color="primary">
+          Chi tiết đơn hàng #{order.orderId}
+        </Typography>
+      </Col>
 
       <Row>
         <Col xs={12} lg={8}>
@@ -396,7 +270,7 @@ const OrderDetail: React.FC = () => {
                     0
                   )}{" "}
                   sản phẩm
-               </Typography>
+                </Typography>
               </Box>
 
               <Divider sx={{ my: 2 }} />

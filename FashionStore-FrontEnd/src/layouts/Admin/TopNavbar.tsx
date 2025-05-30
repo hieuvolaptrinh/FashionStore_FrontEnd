@@ -74,17 +74,17 @@ const TopNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             className="custom-nav-dropdown"
           >
             <NavDropdown.Item className="custom-dropdown-item">
-              <h6 className="fw-normal mb-0">Profile updated</h6>
+              <h6>Profile updated</h6>
               <small>15 minutes ago</small>
             </NavDropdown.Item>
             <NavDropdown.Divider className="bg-light" />
             <NavDropdown.Item className="custom-dropdown-item">
-              <h6 className="fw-normal mb-0">New user added</h6>
+              <h6>New user added</h6>
               <small>15 minutes ago</small>
             </NavDropdown.Item>
             <NavDropdown.Divider className="bg-light" />
             <NavDropdown.Item className="custom-dropdown-item">
-              <h6 className="fw-normal mb-0">Password changed</h6>
+              <h6>Password changed</h6>
               <small>15 minutes ago</small>
             </NavDropdown.Item>
             <NavDropdown.Divider className="bg-light" />

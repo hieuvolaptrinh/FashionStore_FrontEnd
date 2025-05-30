@@ -13,7 +13,7 @@ const StudentManagerPage: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" sx={{ mb: 3 }}>
+      <Typography variant="h4" sx={{ mb: 3 }} color="primary">
         Quản lý Sản phẩm Sinh viên
       </Typography>
 

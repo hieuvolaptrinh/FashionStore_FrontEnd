@@ -58,8 +58,8 @@ const WithdrawHistory: React.FC<WithdrawHistoryProps> = ({ data }) => {
   );
 
   return (
-    <Card sx={{ p: 3 }}>
-      <Typography variant="h6" sx={{ mb: 3 }}>
+    <>
+      <Typography variant="h5" color="primary" className="mb-4">
         Lịch sử rút tiền
       </Typography>
 
@@ -84,7 +84,7 @@ const WithdrawHistory: React.FC<WithdrawHistoryProps> = ({ data }) => {
       <Box sx={{ overflowX: "auto" }}>
         <GenericTable data={filteredData} columns={columns} rowKey="id" />
       </Box>
-    </Card>
+    </>
   );
 };
 
