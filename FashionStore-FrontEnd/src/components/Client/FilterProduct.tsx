@@ -24,7 +24,7 @@ const FilterProduct: React.FC<FilterProductProps> = ({
   onChange,
 }) => {
   const { setKeyword } = useKeyword();
-  const [price, setPrice] = useState<number[]>([0, 150000]);
+const [price, setPrice] = useState<number[]>([0, 150000]);
   const [search, setSearch] = useState<string>("");
   const [productTypes, setProductTypes] = useState<Type[]>([]);
   const [checkedTypes, setCheckedTypes] = useState<number[]>(selectedTypeIds);

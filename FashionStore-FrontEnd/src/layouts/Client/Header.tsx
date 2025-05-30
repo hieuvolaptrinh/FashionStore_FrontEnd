@@ -321,7 +321,7 @@ const Header: React.FC = () => {
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        navigate("/rest-password");
+                        navigate("/forgot-password");
                         handleCloseMenu();
                       }}
                     >

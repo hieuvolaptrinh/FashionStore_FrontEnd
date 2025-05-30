@@ -103,13 +103,15 @@ const RestPassword = () => {
     <main>
       <Container maxWidth="sm">
         <Paper
-          elevation={3}
-          style={{
-            margin: "40px 0",
-            padding: "32px",
-            borderRadius: "16px",
-            background: "#ffffff",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          elevation={12}
+          sx={{
+            p: 4,
+            borderRadius: 3,
+            background: "linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%)",
+            boxShadow:
+              "0 20px 60px rgba(0, 0, 0, 0.2), 0 10px 25px rgba(58, 134, 255, 0.15)",
+            position: "relative",
+            overflow: "hidden",
           }}
         >
           <Box
