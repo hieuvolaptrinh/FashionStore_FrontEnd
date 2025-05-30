@@ -7,9 +7,9 @@ import { Container } from "react-bootstrap";
 
 interface ListProductProps {
   keyword: string;
-  typeId: number;
+  typeIds: number[];
 }
-function ListProduct({ keyword, typeId }: ListProductProps) {
+function ListProduct({ keyword, typeIds }: ListProductProps) {
   const [listProduct, setListProduct] = useState<ProductResponse[]>([]);
   const [loanding, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
 
   // lấy dữ liệu
   useEffect(() => {
-    if (keyword === "" && typeId === 0) {
+    if (keyword === "" && typeIds.length === 0) {
       console.log("không có tìm kiếm và không có typeId");
       getAllProducts(currentPage)
         .then((result) => {
@@ -34,7 +34,7 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
     } else {
       console.log("có tìm kiếm");
       console.log(keyword);
-      searchProduct(keyword, typeId)
+      searchProduct(keyword, typeIds)
         .then((result) => {
           setListProduct(result.content);
           setTotalPages(result.totalPages);
@@ -46,7 +46,7 @@ function ListProduct({ keyword, typeId }: ListProductProps) {
           setLoading(false);
         });
     }
-  }, [currentPage, keyword, typeId]);
+  }, [currentPage, keyword, typeIds]);
 
   if (loanding) {
     return (

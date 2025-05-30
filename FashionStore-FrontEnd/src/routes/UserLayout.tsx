@@ -10,7 +10,7 @@ function UserLayout() {
     <>
       <Header />
       <Navbar />
-      <Outlet /> {/* Nội dung chính của trang */}
+      <Outlet /> {/* nội dung chính của trang */}
       <UserChatBox />
       <Footer />
     </>

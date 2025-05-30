@@ -16,16 +16,18 @@ async function getProduct(url: string): Promise<ProductPage | null> {
 
 export async function searchProduct(
   productName: string,
-  typeId: number
+  typeIds: number[]
 ): Promise<ProductPage> {
   let url: string = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc`;
 
-  if (productName != "" && typeId === 0) {
+  if (productName != "" && typeIds.length === 0) {
     url = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc&productName=${productName}`;
-  } else if (productName != "" && typeId > 0) {
-    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc&productName=${productName}&typeId=${typeId}`;
+  } else if (productName != "" && typeIds.length > 0) {
+    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc&productName=${productName}&typeIds=${typeIds.join(
+      ","
+    )}`;
   } else {
-    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc&typeId=${typeId}`;
+    url = `${API_BASE_URL}/api/v1/products/search?page=0&size=8&sort=productId,desc&typeIds=${typeIds.join(",")}`;
   }
 
   const result = await getProduct(url);

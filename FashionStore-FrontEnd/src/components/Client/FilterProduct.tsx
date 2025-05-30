@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -11,26 +11,54 @@ import {
   Stack,
 } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
+import Type from "../../models/TypeModel";
+import { getTypes } from "../../service/API/TypeAPI";
+import { useKeyword } from "../../contexts/KeywordContext";
 
-const productTypes = [
-  "Trang sức",
-  "Phụ kiện",
-  "Túi xách",
-  "Đồ dùng cá nhân",
-  "Văn phòng phẩm",
-  "Đồ trang trí",
-  "Đồ gia dụng",
-];
+interface FilterProductProps {
+  selectedTypeIds?: number[];
+  onChange?: (typeIds: number[]) => void;
+}
+const FilterProduct: React.FC<FilterProductProps> = ({
+  selectedTypeIds = [],
+  onChange,
+}) => {
+  const { setKeyword } = useKeyword();
+  const [price, setPrice] = useState<number[]>([0, 150000]);
+  const [search, setSearch] = useState<string>("");
+  const [productTypes, setProductTypes] = useState<Type[]>([]);
+  const [checkedTypes, setCheckedTypes] = useState<number[]>(selectedTypeIds);
 
-const FilterProduct: React.FC = () => {
-  const [checkedTypes, setCheckedTypes] = React.useState<string[]>([]);
-  const [price, setPrice] = React.useState<number[]>([0, 150000]);
-  const [search, setSearch] = React.useState("");
+  useEffect(() => {
+    getTypes()
+      .then((types) => {
+        setProductTypes(types);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi lấy loại sản phẩm:", error);
+      });
+  }, []);
 
-  const handleTypeChange = (type: string) => {
-    setCheckedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
+  useEffect(() => {
+    setCheckedTypes(selectedTypeIds);
+  }, [selectedTypeIds]);
+
+  const handleTypeChange = (typeId: number) => {
+    setCheckedTypes((prev) => {
+      if (prev.includes(typeId)) {
+        return prev.filter((id) => id !== typeId);
+      } else {
+        return [...prev, typeId];
+      }
+    });
+  };
+
+  const handleSearch = () => {
+    // Apply both keyword search and type filter
+    setKeyword(search);
+    if (onChange) {
+      onChange(checkedTypes);
+    }
   };
 
   return (
@@ -38,7 +66,7 @@ const FilterProduct: React.FC = () => {
       sx={{
         p: 2,
         borderRadius: 2,
-        boxShadow: "0 4px 16px rgba(58, 58, 58, 0.45)", // giảm shadow
+        boxShadow: "0 4px 16px rgba(58, 58, 58, 0.45)",
         background:
           "linear-gradient(145deg,rgb(228, 221, 221) 0%,rgba(215, 216, 217, 0.26) 100%)",
 
@@ -52,11 +80,11 @@ const FilterProduct: React.FC = () => {
       }}
     >
       <Typography
-        variant="subtitle1" // nhỏ hơn h6
+        variant="subtitle1"
         fontWeight={600}
         mb={1.5}
         sx={{
-          fontSize: 18, // nhỏ hơn
+          fontSize: 18,
           background: "linear-gradient(45deg, #0b4f9e 0%, #3a86ff 100%)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
@@ -116,12 +144,12 @@ const FilterProduct: React.FC = () => {
           <FormGroup>
             <Row>
               {productTypes.map((type) => (
-                <Col xs={12} key={type} className="mb-1">
+                <Col xs={12} key={type.typeId} className="mb-1">
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={checkedTypes.includes(type)}
-                        onChange={() => handleTypeChange(type)}
+                        checked={checkedTypes.includes(type.typeId)}
+                        onChange={() => handleTypeChange(type.typeId)}
                         sx={{
                           color: "#3a86ff",
                           "&.Mui-checked": {
@@ -133,7 +161,7 @@ const FilterProduct: React.FC = () => {
                           },
                           p: 0.5, // giảm padding
                         }}
-                        size="small" // nhỏ hơn
+                        size="small"
                       />
                     }
                     label={
@@ -141,13 +169,11 @@ const FilterProduct: React.FC = () => {
                         fontWeight={500}
                         sx={{
                           fontSize: 13,
-                          color: checkedTypes.includes(type)
-                            ? "#0b4f9e"
-                            : "text.secondary",
+
                           transition: "all 0.3s ease",
                         }}
                       >
-                        {type}
+                        {type.typeName}
                       </Typography>
                     }
                   />
@@ -247,6 +273,7 @@ const FilterProduct: React.FC = () => {
               boxShadow: "0 4px 12px rgba(58,134,255,0.2)",
             },
           }}
+          onClick={handleSearch}
         >
           Lọc
         </Button>
