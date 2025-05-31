@@ -195,8 +195,8 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
                   backdropFilter: "blur(10px)",
                   border: "1px solid rgba(255, 255, 255, 0.2)",
                   borderRadius: "50%",
-                  width: 48,
-                  height: 48,
+                  width: 40,
+                  height: 40,
                   boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
                   "&:hover": {
                     backgroundColor: "primary.main",
@@ -216,8 +216,8 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
                   backdropFilter: "blur(10px)",
                   border: "1px solid rgba(255, 255, 255, 0.2)",
                   borderRadius: "50%",
-                  width: 48,
-                  height: 48,
+                  width: 40,
+                  height: 40,
                   boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
                   "&:hover": {
                     backgroundColor: "#ef4444",
@@ -237,8 +237,8 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
                   backdropFilter: "blur(10px)",
                   border: "1px solid rgba(255, 255, 255, 0.2)",
                   borderRadius: "50%",
-                  width: 48,
-                  height: 48,
+                  width: 40,
+                  height: 40,
                   boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
                   "&:hover": {
                     backgroundColor: "#06b6d4",
@@ -260,8 +260,8 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
                   backdropFilter: "blur(10px)",
                   border: "1px solid rgba(255, 255, 255, 0.2)",
                   borderRadius: "50%",
-                  width: 48,
-                  height: 48,
+                  width: 40,
+                  height: 40,
                   boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
                   "&:hover": {
                     backgroundColor: "#8b5cf6",
@@ -280,8 +280,8 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
             className="card-content"
             sx={{
               textAlign: "center",
-              py: 3,
-              px: 2,
+              py: 1,
+              px: 1,
               flexGrow: 1,
               transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             }}
@@ -303,11 +303,11 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
               {product.productName || "Sản phẩm chưa có tên"}
             </Typography>
 
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ mb: 1 }}>
               {product.originalPrice &&
                 product.originalPrice > product.salePrice! && (
                   <Typography
-                    variant="body2"
+                    variant="subtitle2"
                     sx={{
                       textDecoration: "line-through",
                       color: "#94a3b8",
@@ -320,11 +320,11 @@ const ProductCard: React.FC<{ product: ProductResponse }> = ({ product }) => {
                 )}
 
               <Typography
-                variant="h5"
+                variant="h6"
                 sx={{
                   fontWeight: 700,
                   color: "#2563eb",
-                  fontSize: "1.4rem",
+                  fontSize: "1rem",
                   background:
                     "linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)",
                   backgroundClip: "text",

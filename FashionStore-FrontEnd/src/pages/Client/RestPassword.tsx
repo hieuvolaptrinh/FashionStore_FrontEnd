@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
-  Container,
   Box,
   Typography,
   TextField,
@@ -11,8 +10,10 @@ import {
   Alert,
   CircularProgress,
   Paper,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
-import LockResetIcon from "@mui/icons-material/LockReset";
+import { LockReset, Visibility, VisibilityOff } from "@mui/icons-material";
 import { validatePassword, validateRePassword } from "../../utils/Validation";
 import { changePassword } from "../../service/API/UserAPI";
 
@@ -28,6 +29,8 @@ const RestPassword = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handlePasswordChange = (e: any) => {
     setNewPassword(e.target.value);
@@ -85,6 +88,14 @@ const RestPassword = () => {
     }
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   // Tối ưu SEO
   useEffect(() => {
     document.title = "Đặt lại mật khẩu - Tên Công Ty";
@@ -100,162 +111,280 @@ const RestPassword = () => {
   }, []);
 
   return (
-    <main>
-      <Container maxWidth="sm">
-        <Paper
-          elevation={12}
-          sx={{
-            p: 4,
-            borderRadius: 3,
-            background: "linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%)",
-            boxShadow:
-              "0 20px 60px rgba(0, 0, 0, 0.2), 0 10px 25px rgba(58, 134, 255, 0.15)",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <Box
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <Paper
+            elevation={12}
+            sx={{
+              p: 4,
+              borderRadius: 3,
+              background: "linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%)",
+              boxShadow:
+                "0 20px 60px rgba(0, 0, 0, 0.2), 0 10px 25px rgba(58, 134, 255, 0.15)",
+              position: "relative",
+              overflow: "hidden",
             }}
           >
-            <LockResetIcon
-              style={{
-                fontSize: "60px",
-                color: "#4F6DF5",
-                marginBottom: "20px",
-              }}
-            />
-            <Typography
-              variant="h4"
-              style={{
-                marginBottom: "20px",
-                fontWeight: 700,
-                color: "#333333",
-                fontSize: "2rem",
-              }}
-            >
-              Đặt lại mật khẩu
-            </Typography>
-            <Typography
-              variant="body1"
-              style={{
-                marginBottom: "32px",
-                color: "#666666",
-                fontSize: "1rem",
-                lineHeight: "1.5",
-              }}
-            >
-              Vui lòng nhập mật khẩu mới để tiếp tục sử dụng tài khoản của bạn.
-            </Typography>
-
-            {error && (
-              <Alert
-                severity="error"
-                style={{
-                  width: "100%",
-                  marginBottom: "20px",
-                  borderRadius: "8px",
-                }}
-              >
-                {error}
-              </Alert>
-            )}
-            {success && (
-              <Alert
-                severity="success"
-                style={{
-                  width: "100%",
-                  marginBottom: "20px",
-                  borderRadius: "8px",
-                }}
-              >
-                {success}
-              </Alert>
-            )}
-
+            {/* Header with Icon */}
             <Box
-              component="form"
-              onSubmit={handleSubmit}
-              style={{ width: "100%" }}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+                mb: 2,
+              }}
             >
+              <LockReset
+                sx={{
+                  fontSize: 60,
+                  color: "#3a86ff",
+                  mb: 2,
+                  filter: "drop-shadow(0 4px 8px rgba(58, 134, 255, 0.3))",
+                }}
+              />
+              <Typography
+                variant="h4"
+                align="center"
+                gutterBottom
+                sx={{
+                  fontWeight: 700,
+                  mb: 1,
+                  background:
+                    "linear-gradient(45deg, #0b4f9e 0%, #3a86ff 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  textShadow: "0 2px 10px rgba(58, 134, 255, 0.25)",
+                }}
+              >
+                Đặt lại mật khẩu
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "#666666",
+                  fontSize: "1rem",
+                  lineHeight: 1.6,
+                  mb: 3,
+                }}
+              >
+                Vui lòng nhập mật khẩu mới để tiếp tục sử dụng tài khoản của
+                bạn.
+              </Typography>
+            </Box>
+
+            <Box component="form" onSubmit={handleSubmit}>
               <TextField
                 fullWidth
                 label="Mật khẩu mới"
-                type="password"
+                variant="outlined"
+                margin="normal"
+                type={showPassword ? "text" : "password"}
                 value={newPassword}
                 onChange={handlePasswordChange}
-                margin="normal"
+                placeholder="Nhập mật khẩu mới"
                 required
                 disabled={loading}
                 error={!!errorPassword}
                 helperText={errorPassword}
-                style={{
-                  marginBottom: "20px",
-                  borderRadius: "8px",
-                }}
-                inputProps={{
-                  style: {
-                    borderRadius: "8px",
-                    padding: "12px",
+                sx={{
+                  mb: 2.5,
+                  "& .MuiOutlinedInput-root": {
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+                    borderRadius: 2,
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      boxShadow: "0 6px 16px rgba(58, 134, 255, 0.1)",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#3a86ff",
+                      borderWidth: "2px",
+                    },
+                    "&.Mui-focused": {
+                      boxShadow: "0 8px 20px rgba(58, 134, 255, 0.15)",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#0b4f9e",
+                      borderWidth: "2px",
+                    },
+                    "&.Mui-error fieldset": {
+                      borderColor: "#f44336",
+                    },
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#0b4f9e",
+                    fontWeight: "600",
+                  },
+                  "& .MuiInputLabel-root.Mui-error": {
+                    color: "#f44336",
                   },
                 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={toggleShowPassword}
+                        edge="end"
+                        disabled={loading}
+                        sx={{
+                          color: "#3a86ff",
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            backgroundColor: "rgba(58, 134, 255, 0.08)",
+                            transform: "scale(1.1)",
+                          },
+                        }}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
+
               <TextField
                 fullWidth
                 label="Xác nhận mật khẩu"
-                type="password"
+                variant="outlined"
+                margin="normal"
+                type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={handleRePasswordChange}
-                margin="normal"
+                placeholder="Nhập lại mật khẩu mới"
                 required
                 disabled={loading}
                 error={!!errorRePassword}
                 helperText={errorRePassword}
-                style={{
-                  marginBottom: "20px",
-                  borderRadius: "8px",
-                }}
-                inputProps={{
-                  style: {
-                    borderRadius: "8px",
-                    padding: "12px",
+                sx={{
+                  mb: 2.5,
+                  "& .MuiOutlinedInput-root": {
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+                    borderRadius: 2,
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      boxShadow: "0 6px 16px rgba(58, 134, 255, 0.1)",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#3a86ff",
+                      borderWidth: "2px",
+                    },
+                    "&.Mui-focused": {
+                      boxShadow: "0 8px 20px rgba(58, 134, 255, 0.15)",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#0b4f9e",
+                      borderWidth: "2px",
+                    },
+                    "&.Mui-error fieldset": {
+                      borderColor: "#f44336",
+                    },
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#0b4f9e",
+                    fontWeight: "600",
+                  },
+                  "& .MuiInputLabel-root.Mui-error": {
+                    color: "#f44336",
                   },
                 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle confirm password visibility"
+                        onClick={toggleShowConfirmPassword}
+                        edge="end"
+                        disabled={loading}
+                        sx={{
+                          color: "#3a86ff",
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            backgroundColor: "rgba(58, 134, 255, 0.08)",
+                            transform: "scale(1.1)",
+                          },
+                        }}
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
+
+              {error && (
+                <Alert
+                  severity="error"
+                  sx={{
+                    mb: 2.5,
+                    borderRadius: 2,
+                    boxShadow: "0 4px 12px rgba(239, 83, 80, 0.2)",
+                  }}
+                >
+                  {error}
+                </Alert>
+              )}
+
+              {success && (
+                <Alert
+                  severity="success"
+                  sx={{
+                    mb: 2.5,
+                    borderRadius: 2,
+                    boxShadow: "0 4px 12px rgba(76, 175, 80, 0.2)",
+                  }}
+                >
+                  {success}
+                </Alert>
+              )}
+
               <Button
                 type="submit"
                 variant="contained"
                 fullWidth
                 disabled={loading}
-                style={{
-                  marginTop: "32px",
-                  marginBottom: "20px",
-                  padding: "14px 28px",
-                  borderRadius: "10px",
-                  backgroundColor: loading ? "#cccccc" : "#4F6DF5",
-                  color: "#ffffff",
+                sx={{
+                  mt: 1.5,
+                  mb: 3.5,
+                  py: 1.5,
+                  background: loading
+                    ? "linear-gradient(45deg, #cccccc 0%, #999999 100%)"
+                    : "linear-gradient(45deg, #3a86ff 0%, #0b4f9e 100%)",
+                  borderRadius: 2,
                   fontWeight: 700,
-                  fontSize: "1rem",
+                  boxShadow: loading
+                    ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                    : "0 10px 20px rgba(58, 134, 255, 0.3), 0 6px 10px rgba(0, 0, 0, 0.1)",
                   textTransform: "none",
-                  boxShadow: "0 2px 8px rgba(79, 109, 245, 0.3)",
-                  transition: "background-color 0.3s, transform 0.2s",
+                  fontSize: 16,
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    background: loading
+                      ? "linear-gradient(45deg, #cccccc 0%, #999999 100%)"
+                      : "linear-gradient(45deg, #0b4f9e 0%, #3a86ff 100%)",
+                    boxShadow: loading
+                      ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                      : "0 14px 28px rgba(58, 134, 255, 0.4), 0 10px 15px rgba(0, 0, 0, 0.12)",
+                    transform: loading ? "none" : "translateY(-3px)",
+                  },
+                  "&:active": {
+                    boxShadow: loading
+                      ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                      : "0 6px 12px rgba(58, 134, 255, 0.2)",
+                    transform: loading ? "none" : "translateY(-1px)",
+                  },
                 }}
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.02)")
-                }
-                onMouseOut={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
               >
                 {loading ? (
                   <>
                     <CircularProgress
                       size={20}
-                      style={{ marginRight: "10px", color: "#ffffff" }}
+                      sx={{ mr: 1, color: "#ffffff" }}
                     />
                     Đang xử lý...
                   </>
@@ -263,33 +392,63 @@ const RestPassword = () => {
                   "Đặt lại mật khẩu"
                 )}
               </Button>
-            </Box>
 
-            <Typography
-              variant="body2"
-              style={{
-                color: "#777777",
-                fontSize: "0.9rem",
-              }}
-            >
-              <a
-                href="/login"
-                style={{
-                  color: "#4F6DF5",
-                  textDecoration: "none",
-                  fontWeight: 500,
-                  transition: "color 0.2s",
+              <Paper
+                elevation={4}
+                sx={{
+                  textAlign: "center",
+                  py: 2.5,
+                  bgcolor: "#f8f9fa",
+                  borderRadius: 2,
+                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.06)",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    boxShadow: "0 10px 24px rgba(58, 134, 255, 0.1)",
+                    transform: "translateY(-2px)",
+                  },
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.color = "#6C63FF")}
-                onMouseOut={(e) => (e.currentTarget.style.color = "#4F6DF5")}
               >
-                Quay lại đăng nhập
-              </a>
-            </Typography>
-          </Box>
-        </Paper>
-      </Container>
-    </main>
+                <Typography variant="body2">
+                  Nhớ mật khẩu rồi?{" "}
+                  <Box
+                    component={Link}
+                    to="/login"
+                    sx={{
+                      color: "#3a86ff",
+                      fontWeight: "bold",
+                      textDecoration: "none",
+                      position: "relative",
+                      "&:hover": {
+                        color: "#0b4f9e",
+                        textDecoration: "underline",
+                      },
+                      "&::after": {
+                        content: '""',
+                        position: "absolute",
+                        bottom: -2,
+                        left: 0,
+                        width: "100%",
+                        height: "2px",
+                        background:
+                          "linear-gradient(90deg, #3a86ff, transparent)",
+                        transform: "scaleX(0)",
+                        transformOrigin: "left",
+                        transition: "transform 0.3s ease",
+                      },
+                      "&:hover::after": {
+                        transform: "scaleX(1)",
+                      },
+                    }}
+                  >
+                    Quay lại đăng nhập 
+                  </Box>
+                </Typography>
+              </Paper>
+            </Box>
+          </Paper>
+        </div>
+      </div>
+    </div>
   );
 };
 
