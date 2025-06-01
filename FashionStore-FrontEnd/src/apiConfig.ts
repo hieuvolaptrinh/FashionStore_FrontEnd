@@ -1,5 +1,5 @@
 const API_BASE_URL = "http://localhost:8080";
-// const API_BASE_URL = "http://192.168.1.6:8080";
+// const API_BASE_URL = "http://192.168.1.5:8080";
 
 const API_CONFIG = {
   types: `${API_BASE_URL}/types`,

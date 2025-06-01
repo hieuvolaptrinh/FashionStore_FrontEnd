@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 export default {
   server: {
-    host: "0.0.0.0",
+    host: "0.0.0.0", // cho phép truy cập từ mọi địa chỉ IP
     //   port: 3000,
 
     // config alias
