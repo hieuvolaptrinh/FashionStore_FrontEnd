@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminLayout from "./routes/AdminLayout";
 import UserLayout from "./routes/UserLayout";
 import HomePage from "./layouts/Client/HomePage";
-import CheckoutPage from "./pages/Client/CheckoutPage";
 import OrderPage_Checked from "./pages/Client/OrderPage";
 import LoginRequiredPage from "./pages/LoginRequiredPage";
 import CartPage_User from "./pages/Client/CartPage";
@@ -21,6 +20,9 @@ import ListProductNeed from "./components/Client/ProductNeed/ListProductNeed";
 import ReturnProductPage from "./pages/Client/ReturnProductPage";
 import ListOrder from "./pages/Shipper/ListOrder";
 import OrderDetail from "./pages/Shipper/OrderDetail";
+import CheckoutPage_Check from "./pages/Client/CheckoutPage";
+
+import LoginOauth2Success from "./pages/Client/LoginSuccess";
 
 function App() {
   return (
@@ -48,13 +50,14 @@ function App() {
               <Route path="/loginRequired" element={<LoginRequiredPage />} />
               <Route path="/orders" element={<OrderPage_Checked />} />
 
-              <Route path="/checkouts" element={<CheckoutPage />} />
+              <Route path="/checkouts" element={<CheckoutPage_Check />} />
               <Route path="/payment-result" element={<PaymentResult />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/need-products" element={<ListProductNeed />} />
               <Route path="/return-product" element={<ReturnProductPage />} />
               <Route path="/shipper" element={<ListOrder />} />
+              <Route path="/oauth2/redirect" element={<LoginOauth2Success />} />
               <Route
                 path="/shipper/orders/:orderId"
                 element={<OrderDetail />}

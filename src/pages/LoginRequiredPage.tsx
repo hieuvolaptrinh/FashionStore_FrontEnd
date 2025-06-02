@@ -5,7 +5,7 @@ const LoginRequiredPage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="d-flex align-items-center justify-content-center vh-100 bg bg-opacity-10 px-3">
+    <div className="d-flex align-items-center justify-content-center  bg bg-opacity-10 px-3">
       <div className="text-center p-4 bg-white shadow rounded-4">
         <div className="mb-4">
           <i className="bi bi-person-lock text-primary" style={{ fontSize: '4rem' }}></i>

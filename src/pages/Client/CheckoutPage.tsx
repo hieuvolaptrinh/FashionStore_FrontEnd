@@ -35,6 +35,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { bankAccountsFakeData } from "../../components/Client/Checkout/bankAccountFakeData";
+import RequireUser from "../../routes/RequireUser";
 
 interface BankAccount {
   id?: number;
@@ -362,4 +363,5 @@ const CheckoutPage: React.FC = () => {
   );
 };
 
-export default CheckoutPage;
+const CheckoutPage_Check = RequireUser(CheckoutPage);
+export default CheckoutPage_Check;

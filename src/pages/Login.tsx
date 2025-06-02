@@ -12,7 +12,8 @@ import {
   Box,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
+import { API_BASE_URL } from "../apiConfig";
+import GoogleIcon from "@mui/icons-material/Google";
 export default function Login() {
   const [formData, setFormData] = useState({
     userName: "",
@@ -39,7 +40,9 @@ export default function Login() {
       setSuccess("");
     }
   };
-
+  const handleSubmitWithGoogle = async () => {
+    window.location.href = `${API_BASE_URL}/api/v1/oauth2/google`;
+  };
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -241,7 +244,38 @@ export default function Login() {
               >
                 Đăng nhập
               </Button>
-
+              <Button
+                variant="outlined"
+                fullWidth
+                startIcon={<GoogleIcon sx={{ color: "#DB4437" }} />}
+                onClick={handleSubmitWithGoogle}
+                sx={{
+                  mt: 1.5,
+                  mb: 3.5,
+                  py: 1.5,
+                  borderRadius: 2,
+                  fontWeight: 700,
+                  textTransform: "none",
+                  fontSize: 16,
+                  color: "#444",
+                  backgroundColor: "#fff",
+                  border: "1px solid #ccc",
+                  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.06)",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "#f5f5f5",
+                    borderColor: "#aaa",
+                    boxShadow: "0 6px 14px rgba(0, 0, 0, 0.1)",
+                    transform: "translateY(-2px)",
+                  },
+                  "&:active": {
+                    boxShadow: "0 3px 6px rgba(0, 0, 0, 0.08)",
+                    transform: "translateY(0)",
+                  },
+                }}
+              >
+                Đăng nhập với Google
+              </Button>
               <Paper
                 elevation={4}
                 sx={{
