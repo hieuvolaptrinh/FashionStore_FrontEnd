@@ -63,6 +63,10 @@ const OrderItem: React.FC<{ order: ResponseOrder }> = ({ order }) => {
     window.location.href = paymentUrl; // Chuyển hướng đến VNPay
   };
 
+  const handleCancelOrder = () => {
+    alert("Đã hủy đơn hàng");
+  };
+
   return (
     <StyledCard>
       <div
@@ -90,18 +94,30 @@ const OrderItem: React.FC<{ order: ResponseOrder }> = ({ order }) => {
             <strong style={{ color: "#333" }}>Ngày đặt </strong>
             <span>{format(new Date(order.createAt), "dd/MM/yyyy")}</span>
           </div>
-          <div className="col-md-3 col-6">
-            <strong style={{ color: "#333" }}>Trạng thái: </strong>
+          <div className="col-md-2 col-6">
             <Badge className="status-badge" sx={getStatusColor(order.status)}>
               {order.status}
             </Badge>
           </div>
-          <div className="col-md-3 col-6">
+          <div className="col-md-4 col-6 d-flex justify-content-between align-items-center">
             {order.pay == true ? (
-              <p className="text-primary-emphasis">ĐÃ THANH TOÁN</p>
+              <p className="text-primary-emphasis mb-0">ĐÃ THANH TOÁN</p>
             ) : (
               <Button onClick={handlePayment} className="status-badge">
                 Thanh toán ngay
+              </Button>
+            )}
+
+            {order.status === "Chưa xử lý" && (
+              <Button
+                variant="danger"
+                className="ms-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCancelOrder();
+                }}
+              >
+                Hủy đơn
               </Button>
             )}
           </div>

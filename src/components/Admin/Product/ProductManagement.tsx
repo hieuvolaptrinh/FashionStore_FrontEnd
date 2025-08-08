@@ -212,9 +212,7 @@ const ProductManagement: React.FC = () => {
 
   const handleDeleteProduct = (productId: number) => {
     console.log("Xóa sản phẩm:", productId);
-    alert(
-      "Ở đây không nên xóa, chỉ nên cập nhật số lượng =0 thôi để thống kê và quản lý doanh thu sau này"
-    );
+    alert(`Đã xóa sản phẩm #${productId}`);
   };
 
   return (

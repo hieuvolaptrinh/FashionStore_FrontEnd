@@ -20,6 +20,7 @@ import ListProductNeed from "./components/Client/ProductNeed/ListProductNeed";
 import ReturnProductPage from "./pages/Client/ReturnProductPage";
 import ListOrder from "./pages/Shipper/ListOrder";
 import OrderDetail from "./pages/Shipper/OrderDetail";
+import ShipHistory from "./pages/Shipper/ShipHistory";
 import CheckoutPage_Check from "./pages/Client/CheckoutPage";
 
 import LoginOauth2Success from "./pages/Client/LoginSuccess";
@@ -57,6 +58,7 @@ function App() {
               <Route path="/need-products" element={<ListProductNeed />} />
               <Route path="/return-product" element={<ReturnProductPage />} />
               <Route path="/shipper" element={<ListOrder />} />
+              <Route path="/shipper/history" element={<ShipHistory />} />
               <Route path="/oauth2/redirect" element={<LoginOauth2Success />} />
               <Route
                 path="/shipper/orders/:orderId"

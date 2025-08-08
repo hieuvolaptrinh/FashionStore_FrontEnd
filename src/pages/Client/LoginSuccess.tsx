@@ -37,7 +37,7 @@ const LoginOauth2Success = () => {
 
         setTimeout(() => {
           setIsLoading(false);
-          navigate("/dashboard", { replace: true });
+          navigate("/", { replace: true });
         }, 2000);
       } catch (error) {
         console.error("Lỗi xử lý đăng nhập OAuth2:", error);

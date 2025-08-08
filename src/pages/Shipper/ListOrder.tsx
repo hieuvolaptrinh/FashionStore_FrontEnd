@@ -6,6 +6,9 @@ import {
   Typography,
   Snackbar,
   Alert,
+  Tabs,
+  Tab,
+  Box,
 } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
 import GenericTable from "../../components/GenericTable";
@@ -13,9 +16,14 @@ import { Order } from "../../models/OrderModel";
 import OrderStatusBadge from "../../components/Shipper/OrderStatusBadge";
 import OrderActionButtons from "../../components/Shipper/OrderActionButtons";
 import { mockOrders } from "../../components/Shipper/OrderFake";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import HistoryIcon from "@mui/icons-material/History";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ListOrder: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [notification, setNotification] = useState<{
     open: boolean;
@@ -49,6 +57,10 @@ const ListOrder: React.FC = () => {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const handleNavChange = (event: React.SyntheticEvent, newValue: string) => {
+    navigate(newValue);
   };
 
   const columns = [
@@ -86,9 +98,50 @@ const ListOrder: React.FC = () => {
     <Container className="py-4">
       <Row className="mb-4">
         <Col>
-          <Typography variant="h4" component="h1" color="primary" >
+          <Typography variant="h4" component="h1" color="primary">
             Quản lý đơn hàng
           </Typography>
+        </Col>
+      </Row>
+
+      <Row className="mb-3">
+        <Col>
+          <Box
+            sx={{
+              width: "100%",
+              bgcolor: "background.paper",
+              borderRadius: 1,
+              mb: 2,
+            }}
+          >
+            <Tabs
+              value={
+                location.pathname === "/shipper/history"
+                  ? "/shipper/history"
+                  : "/shipper"
+              }
+              onChange={handleNavChange}
+              variant="fullWidth"
+              indicatorColor="primary"
+              textColor="primary"
+              aria-label="shipper navigation tabs"
+            >
+              <Tab
+                icon={<LocalShippingIcon />}
+                iconPosition="start"
+                label="Đơn hàng hôm nay"
+                value="/shipper"
+                sx={{ textTransform: "none", fontWeight: "medium" }}
+              />
+              <Tab
+                icon={<HistoryIcon />}
+                iconPosition="start"
+                label="Lịch sử giao hàng"
+                value="/shipper/history"
+                sx={{ textTransform: "none", fontWeight: "medium" }}
+              />
+            </Tabs>
+          </Box>
         </Col>
       </Row>
 

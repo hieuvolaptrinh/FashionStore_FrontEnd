@@ -73,12 +73,12 @@ const Navbar: React.FC = () => {
     { name: "Trang Chủ", path: "/", icon: <HomeIcon fontSize="small" /> },
     {
       name: "Sản Phẩm",
-      path: "/products",
+      path: "/products/1",
       icon: <InfoIcon fontSize="small" />,
     },
     { name: "Giỏ Hàng", path: "/carts", icon: <BasketIcon fontSize="small" /> },
     {
-      name: "Đơn Hàng",
+    name: "Đơn Hàng",
       path: "/orders",
       icon: <ShippingIcon fontSize="small" />,
     },
