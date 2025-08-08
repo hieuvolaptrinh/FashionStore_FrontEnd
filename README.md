@@ -1,4 +1,397 @@
-# 🛍️ FashionStore Frontend - Website bán hàng thời trang
+# 🛍️ FashionStore Frontend - Fashion E-commerce Website
+
+**Owner:** [Hieuvolaptrinh](https://github.com/hieuvolaptrinh)
+
+## 📝 Project Description:
+
+**FashionStore** is a modern online fashion e-commerce website with comprehensive features from customer shopping to complete admin management. The system is built with separate frontend-backend architecture, ensuring high performance and good scalability.
+
+### 🎯 Key Features:
+
+#### 👥 For Customers:
+
+- **Registration/Login:** Secure authentication system with email verification
+- **Online Shopping:** Browse products by category, search, filter products
+- **Smart Shopping Cart:** Manage products, update quantities, automatic calculation
+- **Diverse Payment:** Support VNPAY, direct payment
+- **Order Management:** Track order status, purchase history
+- **Product Reviews:** Write reviews, view reviews from other customers
+- **Account Management:** Update personal information, change password
+
+#### 🔧 For Admin:
+
+- **Dashboard:** Revenue overview, detailed statistics
+- **Product Management:** Add, edit, delete, activate/deactivate products
+- **Order Management:** Process orders, update delivery status
+- **Voucher Management:** Create, update discount codes
+- **User Management:** Manage customer and shipper accounts
+- **Withdrawal System:** Process withdrawal requests, transaction history
+- **Revenue Reports:** Detailed statistics by time period
+
+#### 🚚 For Shipper:
+
+- **Order Management:** Receive and process assigned orders
+- **Delivery Tracking:** Update delivery status
+
+## 💻 Technologies Used:
+
+### **Frontend:**
+
+- **React 18:** Main framework for building modern user interfaces
+- **TypeScript:** Ensures type safety and improves maintainability
+- **Bootstrap 5:** CSS framework for responsive design
+- **Material-UI (MUI):** Beautiful and professional UI component library
+- **React Router:** SPA routing management
+- **Axios:** HTTP client for API calls
+- **React Hook Form:** Efficient form management
+- **React Query:** Server state management and caching
+
+### **Backend:**
+
+- **Java Spring Boot 3:** Main backend framework
+- **Spring Security 6:** Authentication and authorization management
+- **Spring Data JPA:** ORM and database management
+- **Spring Mail:** Automated email sending
+- **SQL Server:** Main database
+- **JWT (JSON Web Token):** Token-based authentication
+- **BCrypt:** Password encryption
+- **Jackson:** JSON serialization/deserialization
+
+### **Payment Integration:**
+
+- **VNPAY API:** Online payment gateway
+- **RESTful API:** Standard API architecture
+
+### **Tools & DevOps:**
+
+- **Vite:** Fast build tool and dev server
+- **ESLint & Prettier:** Code formatting and linting
+- **Postman:** API testing and documentation
+- **Git & GitHub:** Version control and collaboration
+- **Docker:** Containerization (planned)
+
+## 📸 Application Interface:
+
+### 🔐 Authentication and Security
+
+#### Login
+
+![Login](preview/Login.png)
+
+#### Registration
+
+![Registration](preview/Register.png)
+
+#### Forgot Password
+
+![Forgot Password](preview/ForgotPassword.png)
+
+#### Reset Password
+
+![Reset Password](preview/RestPassword.png)
+
+#### Registration Email
+
+![Registration Email](preview/Mail%20đăng%20kí%20tài%20khoản.png)
+
+#### Password Recovery Email
+
+![Password Recovery Email](preview/Mail%20lấy%20lại%20mật%20khẩu.png)
+
+#### Account Activation Success
+
+![Account Activation](preview/KichHoatTaiKhoanThanhCong.png)
+
+### 🛒 Customer Interface
+
+#### Product Homepage
+
+![Homepage](preview/TrangChuSanPham.png)
+
+#### Product Details
+
+![Product Details](preview/ChiTietSanPham.png)
+
+#### Product Description
+
+![Product Description](preview/mô%20tả%20sản%20phẩm.png)
+
+#### Product Reviews
+
+![Product Reviews](preview/DanhGiaSanPham.png)
+
+#### Shopping Cart
+
+![Shopping Cart](preview/Giỏ%20hàng.png)
+
+### 💳 Payment
+
+#### Order Payment
+
+![Order Payment](preview/Thanh%20toán%20đơn%20hàng.png)
+
+#### Direct Payment
+
+![Direct Payment](preview/ThanhToanTrucTiep.png)
+
+#### VNPAY Payment
+
+![VNPAY Payment](preview/Thanh%20toán%20qua%20ví%20VNPAY.png)
+
+#### Payment Success
+
+![Payment Success](preview/ThanhToanThanhCong.png)
+
+#### Payment Failed
+
+![Payment Failed](preview/ThanhToanThatBai.png)
+
+### 👤 Account Management
+
+#### Personal Information
+
+![Personal Info](preview/Thông%20tin%20cá%20nhân.png)
+
+#### Edit Personal Information
+
+![Edit Personal Info](preview/chỉnh%20sửa%20thông%20tin%20cá%20nhân.png)
+
+#### Edit User Information
+
+![Edit User Info](preview/ChinhSuaThongTinNguoiDung.png)
+
+#### Order List
+
+![Order List](preview/Danh%20sách%20đơn%20hàng.png)
+
+#### View Notifications
+
+![View Notifications](preview/XemThongBao.png)
+
+### 🚚 Shipper Interface
+
+#### Received Orders List
+
+![Shipper Orders](preview/DanhSachDonHangDaNhanCuaShipper.png)
+
+#### Payment History
+
+![Payment History](preview/LichSuNhanTien.png)
+
+### 🔧 Admin Interface
+
+#### Revenue Overview
+
+![Revenue Overview](preview/Tổng%20quan%20doanh%20thu%20-%20admin.png)
+
+#### Detailed Revenue
+
+![Detailed Revenue](preview/DOanh%20thu.png)
+
+#### Product Management
+
+![Product List](preview/DanhSachSanPham.png)
+
+#### Edit Product Information
+
+![Edit Product](preview/Sửa%20thông%20tin%20sản%20phẩm.png)
+
+#### Products on Sale
+
+![Products on Sale](preview/dangBanSanPham.png)
+
+#### Product Activation Failed
+
+![Activation Failed](preview/Kích%20hoạt%20sản%20phẩm%20thất%20bại.png)
+
+#### Return Product
+
+![Return Product](preview/TraSanPham.png)
+
+#### Order Management (Admin)
+
+![Admin Orders](preview/Đơn%20hàng%20admin%20quản%20lý.png)
+
+#### Voucher List
+
+![Voucher List](preview/DanhSachVoucher.png)
+
+#### Update Voucher
+
+![Update Voucher](preview/CapNhatVoucher.png)
+
+#### User List
+
+![User List](preview/DanhSachNguoiDung.png)
+
+#### Withdrawal
+
+![Withdrawal](preview/RutTien.png)
+
+#### Withdrawal History
+
+![Withdrawal History](preview/Lịch%20sử%20rút%20tiền.png)
+
+### 🗂️ Database ERD
+
+![Database ERD](preview/Erd%20backend.png)
+
+## 🏗️ Project Structure:
+
+```
+FashionStore-FrontEnd/
+├── public/                    # Static assets
+│   ├── images/               # Product images
+│   └── vite.svg             # Vite logo
+├── src/
+│   ├── components/          # Reusable components
+│   │   ├── Admin/          # Admin-specific components
+│   │   ├── Client/         # Client-specific components
+│   │   └── Shipper/        # Shipper-specific components
+│   ├── contexts/           # React contexts
+│   ├── hooks/              # Custom hooks
+│   ├── layouts/            # Layout components
+│   │   ├── Admin/          # Admin layout
+│   │   └── Client/         # Client layout
+│   ├── models/             # TypeScript interfaces
+│   ├── pages/              # Page components
+│   │   ├── Admin/          # Admin pages
+│   │   ├── Client/         # Client pages
+│   │   └── Shipper/        # Shipper pages
+│   ├── routes/             # Route configurations
+│   ├── service/            # API services
+│   │   └── API/            # API endpoints
+│   ├── utils/              # Utility functions
+│   └── assets/             # Stylesheets and resources
+├── preview/                # Screenshots for README
+└── package.json           # Dependencies and scripts
+```
+
+## 🚀 Key Features:
+
+### 🔒 High Security:
+
+- JWT token authentication
+- Bcrypt password hashing
+- Email verification
+- Role-based access control
+- CORS protection
+
+### 📱 Responsive Design:
+
+- Mobile-first approach
+- Bootstrap 5 responsive grid
+- Cross-browser compatibility
+- Touch-friendly interface
+
+### ⚡ Optimized Performance:
+
+- React 18 with Concurrent Features
+- Lazy loading components
+- Image optimization
+- API response caching
+- Code splitting
+
+### 🔄 Real-time Updates:
+
+- Order status tracking
+- Live notifications
+- Inventory updates
+- Payment status
+
+## 🛠️ Available Scripts:
+
+```bash
+# Development
+npm run dev          # Run development server
+npm run build        # Build production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint errors
+npm run type-check   # TypeScript type checking
+```
+
+## 🔗 Important Links:
+
+- **Frontend Repository:** [FashionStore_FrontEnd](https://github.com/hieuvolaptrinh/FashionStore_FrontEnd)
+- **Backend Repository:** [FashionStore_BackEnd](https://github.com/hieuvolaptrinh/FashionStore_BackEnd)
+- **Live Demo:** [Coming Soon]
+- **API Documentation:** [Postman Collection](link-to-postman)
+
+## 📋 Roadmap:
+
+### ✅ Completed:
+
+- [x] User authentication & authorization
+- [x] Product catalog with search & filter
+- [x] Shopping cart functionality
+- [x] Order management system
+- [x] Payment integration (VNPAY)
+- [x] Admin dashboard
+- [x] Responsive design
+- [x] Email notifications
+
+### 🔄 In Progress:
+
+- [ ] Real-time chat support
+- [ ] Advanced analytics
+- [ ] Mobile app (React Native)
+- [ ] Performance optimization
+
+### 📅 Planned:
+
+- [ ] Multi-language support
+- [ ] PWA features
+- [ ] Social media integration
+- [ ] Advanced recommendation system
+- [ ] Inventory forecasting
+
+## 🤝 Contributing:
+
+We always welcome contributions from the community!
+
+### How to contribute:
+
+1. Fork repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Create Pull Request
+
+### Contribution guidelines:
+
+- Follow coding standards
+- Write unit tests for new features
+- Update documentation
+- Follow commit message convention
+
+## 📄 License:
+
+This project is distributed under the MIT License. See `LICENSE` file for more details.
+
+## 📞 Contact:
+
+- **Developer:** Hieuvolaptrinh
+- **Email:** [vndhieuak@gmail.com]
+- **GitHub:** [@hieuvolaptrinh](https://github.com/hieuvolaptrinh)
+- **Facebook:** [[Hiếu Võ](https://www.facebook.com/HieuVo.hv)]
+
+## 🙏 Acknowledgments:
+
+- Thanks to [React Team](https://reactjs.org/) for the amazing framework
+- Thanks to [Spring Boot](https://spring.io/projects/spring-boot) for the powerful backend framework
+- Thanks to [VNPAY](https://vnpay.vn/) for the payment gateway
+- Thanks to the open source community for useful libraries
+
+---
+
+⭐ **If this project is useful, please give it a Star to support me!** ⭐
+
+- **VIETCOMBANK** >1025212713- Võ Nguyễn Đại Hiếu
+
+---
+
+# 🛍️ FashionStore Frontend - Website bán hàng thời trang (Tiếng Việt)
 
 **Chủ sở hữu:** [Hieuvolaptrinh](https://github.com/hieuvolaptrinh)
 
@@ -123,172 +516,6 @@
    - Development: `http://localhost:5173`
    - Production: Theo cấu hình server
 
-## 📸 Giao diện ứng dụng:
-
-### 🔐 Xác thực và Bảo mật
-
-#### Đăng nhập
-
-![Đăng nhập](preview/Login.png)
-
-#### Đăng ký tài khoản
-
-![Đăng ký](preview/Register.png)
-
-#### Quên mật khẩu
-
-![Quên mật khẩu](preview/ForgotPassword.png)
-
-#### Đặt lại mật khẩu
-
-![Đặt lại mật khẩu](preview/RestPassword.png)
-
-#### Email đăng ký tài khoản
-
-![Email đăng ký](preview/Mail%20đăng%20kí%20tài%20khoản.png)
-
-#### Email lấy lại mật khẩu
-
-![Email lấy lại mật khẩu](preview/Mail%20lấy%20lại%20mật%20khẩu.png)
-
-#### Kích hoạt tài khoản thành công
-
-![Kích hoạt thành công](preview/KichHoatTaiKhoanThanhCong.png)
-
-### 🛒 Giao diện khách hàng
-
-#### Trang chủ sản phẩm
-
-![Trang chủ](preview/TrangChuSanPham.png)
-
-#### Chi tiết sản phẩm
-
-![Chi tiết sản phẩm](preview/ChiTietSanPham.png)
-
-#### Mô tả sản phẩm
-
-![Mô tả sản phẩm](preview/mô%20tả%20sản%20phẩm.png)
-
-#### Đánh giá sản phẩm
-
-![Đánh giá sản phẩm](preview/DanhGiaSanPham.png)
-
-#### Giỏ hàng
-
-![Giỏ hàng](preview/Giỏ%20hàng.png)
-
-### 💳 Thanh toán
-
-#### Thanh toán đơn hàng
-
-![Thanh toán đơn hàng](preview/Thanh%20toán%20đơn%20hàng.png)
-
-#### Thanh toán trực tiếp
-
-![Thanh toán trực tiếp](preview/ThanhToanTrucTiep.png)
-
-#### Thanh toán qua VNPAY
-
-![Thanh toán VNPAY](preview/Thanh%20toán%20qua%20ví%20VNPAY.png)
-
-#### Thanh toán thành công
-
-![Thanh toán thành công](preview/ThanhToanThanhCong.png)
-
-#### Thanh toán thất bại
-
-![Thanh toán thất bại](preview/ThanhToanThatBai.png)
-
-### 👤 Quản lý tài khoản
-
-#### Thông tin cá nhân
-
-![Thông tin cá nhân](preview/Thông%20tin%20cá%20nhân.png)
-
-#### Chỉnh sửa thông tin cá nhân
-
-![Chỉnh sửa thông tin](preview/chỉnh%20sửa%20thông%20tin%20cá%20nhân.png)
-
-#### Chỉnh sửa thông tin người dùng
-
-![Chỉnh sửa người dùng](preview/ChinhSuaThongTinNguoiDung.png)
-
-#### Danh sách đơn hàng
-
-![Danh sách đơn hàng](preview/Danh%20sách%20đơn%20hàng.png)
-
-#### Xem thông báo
-
-![Xem thông báo](preview/XemThongBao.png)
-
-### 🚚 Giao diện Shipper
-
-#### Danh sách đơn hàng đã nhận
-
-![Đơn hàng shipper](preview/DanhSachDonHangDaNhanCuaShipper.png)
-
-#### Lịch sử nhận tiền
-
-![Lịch sử nhận tiền](preview/LichSuNhanTien.png)
-
-### 🔧 Giao diện Admin
-
-#### Tổng quan doanh thu
-
-![Tổng quan doanh thu](preview/Tổng%20quan%20doanh%20thu%20-%20admin.png)
-
-#### Doanh thu chi tiết
-
-![Doanh thu](preview/DOanh%20thu.png)
-
-#### Quản lý sản phẩm
-
-![Danh sách sản phẩm](preview/DanhSachSanPham.png)
-
-#### Sửa thông tin sản phẩm
-
-![Sửa sản phẩm](preview/Sửa%20thông%20tin%20sản%20phẩm.png)
-
-#### Đang bán sản phẩm
-
-![Đang bán sản phẩm](preview/dangBanSanPham.png)
-
-#### Kích hoạt sản phẩm thất bại
-
-![Kích hoạt thất bại](preview/Kích%20hoạt%20sản%20phẩm%20thất%20bại.png)
-
-#### Trả sản phẩm
-
-![Trả sản phẩm](preview/TraSanPham.png)
-
-#### Quản lý đơn hàng (Admin)
-
-![Đơn hàng admin](preview/Đơn%20hàng%20admin%20quản%20lý.png)
-
-#### Danh sách voucher
-
-![Danh sách voucher](preview/DanhSachVoucher.png)
-
-#### Cập nhật voucher
-
-![Cập nhật voucher](preview/CapNhatVoucher.png)
-
-#### Danh sách người dùng
-
-![Danh sách người dùng](preview/DanhSachNguoiDung.png)
-
-#### Rút tiền
-
-![Rút tiền](preview/RutTien.png)
-
-#### Lịch sử rút tiền
-
-![Lịch sử rút tiền](preview/Lịch%20sử%20rút%20tiền.png)
-
-### 🗂️ ERD Database
-
-![ERD Backend](preview/Erd%20backend.png)
-
 ## 🏗️ Cấu trúc dự án:
 
 ```
@@ -373,31 +600,31 @@ npm run type-check   # TypeScript type checking
 
 ## 📋 Roadmap:
 
-### ✅ Completed:
+### ✅ Đã hoàn thành:
 
-- [x] User authentication & authorization
-- [x] Product catalog with search & filter
-- [x] Shopping cart functionality
-- [x] Order management system
-- [x] Payment integration (VNPAY)
+- [x] Xác thực & phân quyền người dùng
+- [x] Catalog sản phẩm với tìm kiếm & lọc
+- [x] Tính năng giỏ hàng
+- [x] Hệ thống quản lý đơn hàng
+- [x] Tích hợp thanh toán (VNPAY)
 - [x] Admin dashboard
 - [x] Responsive design
 - [x] Email notifications
 
-### 🔄 In Progress:
+### 🔄 Đang phát triển:
 
-- [ ] Real-time chat support
+- [ ] Hỗ trợ chat real-time
 - [ ] Advanced analytics
 - [ ] Mobile app (React Native)
-- [ ] Performance optimization
+- [ ] Tối ưu hiệu suất
 
-### 📅 Planned:
+### 📅 Dự định:
 
-- [ ] Multi-language support
+- [ ] Hỗ trợ đa ngôn ngữ
 - [ ] PWA features
-- [ ] Social media integration
-- [ ] Advanced recommendation system
-- [ ] Inventory forecasting
+- [ ] Tích hợp social media
+- [ ] Hệ thống gợi ý thông minh
+- [ ] Dự báo kho hàng
 
 ## 🤝 Đóng góp:
 
@@ -425,9 +652,9 @@ Dự án này được phân phối dưới giấy phép MIT. Xem file `LICENSE`
 ## 📞 Liên hệ:
 
 - **Developer:** Hieuvolaptrinh
-- **Email:** [your-email@example.com]
+- **Email:** [vndhieuak@gmail.com]
 - **GitHub:** [@hieuvolaptrinh](https://github.com/hieuvolaptrinh)
-- **LinkedIn:** [Your LinkedIn Profile]
+- **Facebook:** [[Hiếu Võ](https://www.facebook.com/HieuVo.hv)]
 
 ## 🙏 Acknowledgments:
 
@@ -438,4 +665,59 @@ Dự án này được phân phối dưới giấy phép MIT. Xem file `LICENSE`
 
 ---
 
-⭐ **Nếu dự án này hữu ích, hãy cho một Star để ủng hộ chúng tôi!** ⭐
+⭐ **Nếu dự án này hữu ích, hãy cho một Star để ủng hộ tôi!** ⭐
+
+- **VIETCOMBANK** >1025212713- Võ Nguyễn Đại Hiếu
+
+## 🚀 Installation and Usage:
+
+### ⚙️ System Requirements:
+
+- **Node.js:** >= 18.x
+- **npm:** >= 8.x (or yarn >= 1.22.x)
+- **Browser:** Chrome, Firefox, Safari (latest versions)
+- **RAM:** Minimum 4GB
+- **Storage:** 500MB free space
+
+### 📦 Project Installation:
+
+1. **Clone repository:**
+
+   ```bash
+   git clone https://github.com/hieuvolaptrinh/FashionStore_FrontEnd.git
+   cd FashionStore_FrontEnd
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Environment configuration:**
+
+   ```bash
+   # Create .env.local file
+   cp .env.example .env.local
+
+   # Update environment variables
+   VITE_API_BASE_URL=http://localhost:8080/api
+   VITE_VNPAY_URL=https://sandbox.vnpayment.vn
+   ```
+
+4. **Run application:**
+
+   ```bash
+   # Development mode
+   npm run dev
+
+   # Production build
+   npm run build
+   npm run preview
+   ```
+
+5. **Access application:**
+   - Development: `http://localhost:5173`
+   - Production: According to server configuration
